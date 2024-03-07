@@ -1,0 +1,15 @@
+
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+
+
+
+
+.blob{
+    @apply w-80 h-80 bg-gradient-to-tr from-yellow-500 to-blue-300 blur-xl rounded-full opacity-30  absolute top-1 right-0;
+}
+.blob1 {
+    @apply w-80 h-80 bg-gradient-to-tr from-red-500 to-blue-300 blur-xl rounded-full opacity-30  absolute top-40 left-0;
+}
