@@ -1,60 +1,11 @@
-import { NavLink } from "react-router-dom"
+import { NavLink, useNavigate } from "react-router-dom"
 import ProgressBar from "./Progress"
 import { useEffect, useState } from "react"
 import { baseUrl } from "../../Share"
 import useFetch from "../hook/useFetch"
 import CreateCourse from "./CreateCourse"
 import ResultModal from "./ResultModal"
-/*
-const courses =[{
-    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQiG7YF2ZSfUsi0N-y4_yDAYvE0JkrLONyJerCeWVk0FTJXkqk8DhBzw7_DZzdj4rpxb7k&usqp=CAU",
-    title: "How to grow your Facebook Page",
-    description: "Follow these simple steps",
-    progress: 3/4,
-    href: "#", 
-    bgColor: "blue",
-    },
-    {
-    logo: "https://icons8.com/preloaders/dist/media/hero-preloaders.svg",
-    title: "Grow your community",
-    description: "Follow these easy and simple steps",
-    progress: 3/4,
-    href: "#",  
-    bgColor: "yellow",
-    },
-    {
-    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEGdhN_FZ8lDGke1fYv4-eBt-VRVGnf8JNfbF3dBqNRrxMF73uSNTYBNXBP3bJXpplJvk&usqp=CAU",
-    title: "Analytics Science Bootcamp",
-    description: "Follow these hard steps",
-    progress: 3/4,
-    href: "#",   
-    bgColor: "pink",
-    },
-    {
-        logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQiG7YF2ZSfUsi0N-y4_yDAYvE0JkrLONyJerCeWVk0FTJXkqk8DhBzw7_DZzdj4rpxb7k&usqp=CAU",
-        title: "How to grow your Instagram Page",
-        description: "Follow these simple steps",
-        progress: 3/4,
-        href: "#", 
-        bgColor: "green",
-        },
-    {
-    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEGdhN_FZ8lDGke1fYv4-eBt-VRVGnf8JNfbF3dBqNRrxMF73uSNTYBNXBP3bJXpplJvk&usqp=CAU",
-    title: "Space Science Workshops",
-    description: "Follow these hard steps",
-    progress: 3/4,
-    href: "#",   
-    bgColor: "violet",
-    },
-]
-
-*/ 
-
-
-
-
-
-
+ 
 
 
 export default function CourseActivity({profileData}){
@@ -68,6 +19,10 @@ export default function CourseActivity({profileData}){
       };
     const [addSuccessNotification, setAddSuccessNotification] = useState(false);
     const [addFailNotification, setAddFailNotification] = useState(false);
+    const courseTotal = localStorage.getItem('courseAuth').split('/').filter( item => item !== '').length;
+    const exerciseTotal = Object.keys(JSON.parse(localStorage.getItem('exerciseLog'))).length;
+    const [exerciseTotalCourses, setExerciseTotalCourses] =useState();
+    
 
     
     
@@ -90,9 +45,10 @@ export default function CourseActivity({profileData}){
     
     function addCourseKey(key){
         if (data) {
+
             let added = false ;
             let profileKeys = localStorage.getItem("courseKey");
-            let courseSave = localStorage.getItem("courseSave");
+            let courseAuth = localStorage.getItem("courseAuth");
             if(profileKeys.includes(key)) 
             {
                 setAddFailNotification(true); 
@@ -106,11 +62,11 @@ export default function CourseActivity({profileData}){
                             profileKeys += key;
                             profileKeys += '/';
 
-                            courseSave += c.id;
-                            courseSave += '/';
-                            console.log(courseSave,"courseSave");
+                            courseAuth += c.id;
+                            courseAuth += '/';
+                            console.log(courseAuth, "courseAuth");
 
-                            let profileUpdate = {courseKey: profileKeys, courseSave: courseSave};
+                            let profileUpdate = {courseKey: profileKeys, courseAuth: courseAuth };
                             const url = baseUrl + "/api/profile/"
                             fetch(url, {
                                 method:"PUT",
@@ -121,8 +77,8 @@ export default function CourseActivity({profileData}){
                                 console.log(response);
                                 if(response.status === 401) console.log("Authentication suck");
                                 if(response.ok){
-                                    localStorage.setItem("courseSave", courseSave);
-                                    localStorage.setItem("courseKey", courseKeys);
+                                    localStorage.setItem("courseAuth", courseAuth);
+                                    localStorage.setItem("courseKey", profileKeys);
                                 }
                             }).then((data) => {
                                 profileData.courseKey = profileKeys;
@@ -132,9 +88,9 @@ export default function CourseActivity({profileData}){
 
                             // Add the matched course to the authCourse array if needed
                             //setCourses( ...courses, c);
-                            console.log("AddCourseKey panel: ", profileData , c, courses, localStorage.getItem('courseSave'));
+                            console.log("AddCourseKey panel: ", profileData , c, courses, localStorage.getItem('courseAuth'));
                             setCourses([...courses, c]);
-                            setAddSuccessNotification(true)
+                            setAddSuccessNotification(true);
                             added = true;
                             return;
                         }
@@ -155,28 +111,34 @@ export default function CourseActivity({profileData}){
         setKey(e.target.value);
         console.log(e.target.value);
     }
+    const navigate = useNavigate();
     useEffect(() => {
 
         if (data) {
-            
+            setExerciseTotalCourses(data.exerciseTotalCourses);
             console.log(data);
             let authCourse = [];
-            let profileKeys = profileData.courseKey.split("/").filter((item) => { return item !== '' });
-            for (let c of data.courses) {
-                let courseKeys = c.courseKey.split("/");
-                for (let lock of courseKeys) {
-                    for (let key of profileKeys) {
-                        if (key === lock  ) {
-                            // Add the matched course to the authCourse array if needed
-                            authCourse.push(c);
-                            
+
+            if(localStorage.getItem('role') !== 'Administrator'){
+                
+                let profileKeys = profileData.courseKey.split("/").filter((item) => { return item !== '' });
+                for (let c of data.courses) {
+                    let courseKeys = c.courseKey.split("/");
+                    for (let lock of courseKeys) {
+                        for (let key of profileKeys) {
+                            if (key === lock  ) {
+                                // Add the matched course to the authCourse array if needed
+                                authCourse.push(c);
+                                
+                            }
                         }
                     }
+                    setCourses(authCourse);
                 }
-                setCourses(authCourse);
-                
-                
-                
+            }
+
+            else if(localStorage.getItem('role') === 'Administrator'){
+                setCourses(data.courses);
             }
 
 
@@ -212,15 +174,50 @@ export default function CourseActivity({profileData}){
     
     
     else if(courses) return(
-    <div className="flex flex-col  rounded-2xl bg-white px-7 pt-4 mt-10 shadow-lg ">
+        <>
+        {/* Breadcrumb */}
+
+    <div className="stats  shadow  mt-20 ">
+        
+        <div className="stat">
+            <div className="stat-figure text-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="inline-block w-8 h-8 stroke-current"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+            </div>
+            <div className="stat-title">Total Courses </div>
+            <div className="stat-value text-primary">{courseTotal} {courseTotal > 1 ? 'Courses' : 'Course'}</div>
+            <div className="stat-desc">{courseTotal} more than last year</div>
+        </div>
+        
+        <div className="stat">
+            <div className="stat-figure text-yellow-300">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="inline-block w-8 h-8 stroke-current"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+            </div>
+            <div className="stat-title ">Exercise Done</div>
+            <div className="stat-value text-yellow-300">{exerciseTotal} {exerciseTotal > 1 ? 'Exercies' : 'Exercise'} </div>
+            <div className="stat-desc"> {exerciseTotal} more than last year</div>
+        </div>
+        
+        <div className="stat">
+            
+            <div className="stat-value">{ Math.ceil( 100 - ((exerciseTotalCourses - exerciseTotal) * 100  / exerciseTotalCourses ) )  } %</div>
+            <div className="stat-title">Exercises done </div>
+            <div className="stat-desc text-secondary">{(exerciseTotalCourses - exerciseTotal)} exericse remaining</div>
+        </div>
+        
+    </div>
+
+
+    <div className="flex flex-col  rounded-2xl bg-white px-7 pt-2 mt-9 shadow-lg ">
+        
+
         
         
-        <div className="px-10 py-1 flex flex-col gap-y-1 bg-teal-900 text-white rounded-xl ">
+        <div className="px-10 py-1 mt-2 flex flex-col gap-y-1 bg-teal-900 text-white rounded-xl ">
             
                 <form className="flex flex-col w-full py-3" onSubmit={handleSearchSubmit}>
                     <p className="text-semibold text-white ml-4"> Search for your dream course here!</p>
                     
-                    <input type="text" id="key" name="key" value={key} onChange={handleChangeKey} required placeholder="Course code" className=" mb-4 bg-transparent border-2 rounded-full py-2 px-3 text-[16px] leading-[22.4px] font-light placeholder:text-white text-white"/>
+                    <input type="text" id="key" name="key" value={key} onChange={handleChangeKey} required placeholder="Course code" className=" mb-1 bg-transparent border-2 rounded-full py-2 px-3 text-[16px] leading-[22.4px] font-light placeholder:text-white text-white"/>
                     <button type="submit" className="max-w-[200px] h-auto rounded-full bg-white text-black py-2 px-2 ">
                         <span className="text-teal-900 font-semibold">Search</span>
                     </button>
@@ -230,7 +227,7 @@ export default function CourseActivity({profileData}){
         </div>  
         <div className="flex flex-row justify-between mt-8 mb-2">
             <div>
-                <h4 className="font-bold text-gray-400 py-0 mt-0"> Courses Activity</h4>
+                <h4 className="font-bold text-gray-400 py-0 mt-0"> Your Registered Courses</h4>
             </div>
             
         </div>
@@ -279,8 +276,15 @@ export default function CourseActivity({profileData}){
             </div>}
 
         {localStorage.getItem('role') === 'Administrator'  && <CreateCourse addOrUpdateCourse={addCourse}  />  }
+        
+        
+
+
 
     </div>
+
+        </>
+     
 
 
     )}

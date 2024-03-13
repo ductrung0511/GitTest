@@ -7,6 +7,7 @@ import 'swiper/css/navigation';
 import 'swiper/swiper-bundle.css';
 import SwiperCore, { FreeMode, Pagination } from 'swiper/modules';
 import {RxArrowTopRight} from 'react-icons/rx'
+import {v4 as uuidv4} from 'uuid'
 import {
     RxCrop,
     RxDesktop,
@@ -60,7 +61,7 @@ export default function Main()
         },
         {
             icon: RxRocket,
-            title: "Production",
+            title: "Production2",
             content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
             backgroundImage: "/10.jpg",
           },
@@ -72,10 +73,15 @@ export default function Main()
         {name: 'IELTS & TOEIC', color: 'green'},
 
         ]
-    const elements = [{},{},{}];
+    const scrollToPosition = (position) => {
+        window.scrollTo({
+          top: position,
+          behavior: 'smooth' // This gives a smooth scrolling effect
+        });
+      };
     return (
 
-    <section id="home" style={{backgroundImage: `url('https://thumbs.dreamstime.com/b/blue-pink-two-tone-diagonal-devided-color-paper-background-139763123.jpg')`}}>
+    <section id="home" style={{backgroundImage: `url('')`}}>
         <div className="flex flex-col gap-0 pt-14 mb-1 relative backdrop-blur-sm " >
             {/*
                 <div className="text-center m-auto mb-4 ">
@@ -91,13 +97,13 @@ export default function Main()
                 </div>
             */}
             <div className="p-4  mb-1  rounded-lg flex flex-col gap-2 items-center space-x-8 z-20">
-                <div className="text-3xl font-extrabold text-white text-left  ml-0 pl-0">Lộ trình học tập <br/> <span className='text-green-300 ml-20'> được thiết kế bởi các chuyên gia</span> </div>
-                        <div className=' mx-4 flex flex-row text-white mt-2 ml-10 capitalize font-bold gap-3 z-30'>
+                        <div className="text-3xl font-extrabold text-yellow-200 text-left  ml-0 pl-0">Lộ trình học tập <br/> <span className='text-green-300 ml-20'> được thiết kế bởi các chuyên gia</span> </div>
+                        <div className='  px-20 flex flex-row text-white mt-2 ml-10 capitalize font-bold gap-3 z-30'>
                             {category.map((item) => {
                                 return(
-                                    <div className={`rounded-lg text-white cursor-pointer hover:bg-${item.color}-100 bg-${item.color}-400 shadow-lg  px-3 py-2 w-72 text-2xl h-28 flex justify-center items-center`}>
+                                    <button key={uuidv4()} onClick={()=>{scrollToPosition(1870)}} className={`rounded-lg text-gray-500 cursor-pointer  bg-${item.color}-200 shadow-lg  px-3 w-64 py-2  text-2xl h-28 flex justify-center items-center`}>
                                     {item.name}
-                                    </div>
+                                    </button>
                                 )
                             })}
                             
@@ -158,7 +164,7 @@ Chào mừng bạn đến với Trung tâm Anh ngữ  New Zealand (NZEC) tại B
             
             >
                 {ServiceData.map( (item) => (
-                    <SwiperSlide key={item.title}>
+                    <SwiperSlide key={uuidv4()}>
                         <div className=' shadow-lg bg-gray-800 mb-10 text-white rounded-xl px-7 py-8 h-[200px] w-[280px] bg-cover' style={{backgroundImage : `url(${item.backgroundImage})`}}>   
 
                         </div>
@@ -178,6 +184,52 @@ Chào mừng bạn đến với Trung tâm Anh ngữ  New Zealand (NZEC) tại B
 
 
         </div>
+        {/* <ul className="timeline text-black my-7  mx-20">
+            <li>
+                <div className="timeline-start">1984</div>
+                <div className="timeline-middle">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" /></svg>
+                </div>
+                <div className="timeline-end timeline-box">First Macintosh computer</div>
+                <hr/>
+            </li>
+            <li>
+                <hr/>
+                <div className="timeline-start">1998</div>
+                <div className="timeline-middle">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" /></svg>
+                </div>
+                <div className="timeline-end timeline-box">iMac</div>
+                <hr/>
+            </li>
+            <li>
+                <hr/>
+                <div className="timeline-start">2001</div>
+                <div className="timeline-middle">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" /></svg>
+                </div>
+                <div className="timeline-end timeline-box">iPod</div>
+                <hr/>
+            </li>
+            <li>
+                <hr/>
+                <div className="timeline-start">2007</div>
+                <div className="timeline-middle">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" /></svg>
+                </div>
+                <div className="timeline-end timeline-box">iPhone</div>
+                <hr/>
+            </li>
+            <li>
+                <hr/>
+                <div className="timeline-start">2015</div>
+                <div className="timeline-middle">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" /></svg>
+                </div>
+                <div className="timeline-end timeline-box">Apple Watch</div>
+            </li>
+        </ul> */}
+        <div className='w-full mb-11 h-10'></div>
 
     </section>
 

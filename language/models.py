@@ -19,6 +19,7 @@ class Profile(models.Model):
     bio = models.TextField(blank=True, default="")
     school = models.CharField(blank=True, default="", max_length=80)
     courseKey= models.CharField(max_length= 100, blank=True, default = "")
+    courseAuth = models.CharField(max_length= 300, default="/")
     #courseList= models.CharField(max_length= 100, blank=True, default = "")
     courseSave = models.CharField(max_length= 300, default="/")
     blogSave = models.CharField(max_length= 300, default="/")

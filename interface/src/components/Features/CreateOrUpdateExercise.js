@@ -14,10 +14,15 @@ export default function CreateOrUpdateExercise({addOrUpdateExercise ,sessionID =
 }  }) { 
     let [isOpen, setIsOpen] = useState(false);
     const [exerciseData, setExerciseData] = useState(exercise);
+    const [questionsEmpty, setQuestionsEmpty] = useState(false);
 
     function handleAddExercise() {
         // Send courseData to your backend to add the course
         const url = baseUrl + "api/exercise_session/" + sessionID;
+        if(exerciseData.questions.length == 0){
+          setQuestionsEmpty(true);
+          return;
+        }
         fetch(url, {
           method: 'POST',
           headers: {
@@ -107,6 +112,8 @@ export default function CreateOrUpdateExercise({addOrUpdateExercise ,sessionID =
 
   return (
     <>
+              
+
       <div className=" flex items-center justify-center ">
         <button
           type="button"
@@ -143,6 +150,21 @@ export default function CreateOrUpdateExercise({addOrUpdateExercise ,sessionID =
                 leaveTo="opacity-0 scale-95"
               >
                 <Dialog.Panel className="w-full max-w-xl transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                        {
+                    questionsEmpty && <div id="toast-default" className="flex bg-gray-300 flex-col gap-2 z-70 shadow-xl fixed bottom-20 right-3 items-center w-full max-w-xs p-4 text-gray-500  rounded-lg  dark:text-gray-400 dark:bg-gray-800" role="alert">
+                    <div className="ms-3 text-sm  font-semibold text-black uppercase  ">Questions empty!</div>
+                    
+                    
+                    <div className="text-gray-800 w-full border-solid border-gray-800 border-1"></div>
+                    <button type="button" onClick={()=> { setQuestionsEmpty(false)}} className="ms-auto text-black -mx-1.5 -my-1.5 bg-yellow-300 duration-300 hover:bg-gray-300 hover:text-gray-700 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5  inline-flex items-center justify-center h-10 w-10" data-dismiss-target="#toast-default" aria-label="Close">
+                            <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                            </svg>
+                    </button>
+
+
+                    </div>   
+                }
                   <Dialog.Title
                     as="h3"
                     className="text-lg font-medium leading-6 text-gray-900"
@@ -237,7 +259,7 @@ export default function CreateOrUpdateExercise({addOrUpdateExercise ,sessionID =
                     rows={7} // Specify the number of rows
                 />
                 </div>
-                <div class="relative w-full min-w-[200px] h-10">
+                {/* <div class="relative w-full min-w-[200px] h-10">
                   <input
                     type="text"
                     name="type"
@@ -252,7 +274,29 @@ export default function CreateOrUpdateExercise({addOrUpdateExercise ,sessionID =
                       Type
                   </label>
                 </div>
-                <p className='font-thin text-xs'> Tip: System current support type  multiple_choice and vocabulary ! </p>
+                <p className='font-thin text-xs'> Tip: System current support type  multiple_choice and vocabulary ! </p> */}
+
+                <div className="relative w-full min-w-[200px]">
+                  <select
+                    name="type"
+                    id="type"
+                    value={exerciseData.type}
+                    onChange={handleInputChange}
+                    className="block w-full h-10 px-2 border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    defaultValue={'default'}
+                  >
+                    <option value="default" className='text-base'>Choose your Type of Execise</option>
+                    <option value="multiple_choice" className='text-base'>Multiple Choice</option>
+
+                    <option value="vocabulary" className='text-base'>Vocabulary</option>
+                  </select>
+                  <label
+                    htmlFor="type"
+                    className="block mt-2 font-thin text-xs text-gray-400"
+                  >
+                    Tip: System currently supports types "multiple_choice" and "vocabulary"!
+                  </label>
+                </div>
 
 {/* 
                 <div class="relative w-full min-w-[200px] h-10">

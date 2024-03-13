@@ -1,6 +1,6 @@
 export default function InDevelopment(){
     return(
-        <div className="bg-transparent p-4 ">
+        <div className="bg-transparent p-4 mt-10 ">
             <div className="text-3xl font-extrabold text-yellow-300">
                 Oops! Functionality is in Development!
             </div>

@@ -1,17 +1,20 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import Login from '../StaticComponent/Login&LogoutButton';
 import LoginLanguage from '../StaticComponent/LanguageOption';
+import UpdateProfile from './UpdateProfile';
+
 
 const navigation = [
   { name: 'Home', href: '/' },
   { name: 'Course', href: '/course' },
-  { name: 'Blog', href: '/blog' },
+//   { name: 'Blog', href: '/blog' },
   { name: 'Workspace', href: '/workspace/dashboard/' },
 ];
 
 export default function HeaderSpace() {
     let username= localStorage.getItem('username');
     let role = localStorage.getItem('role');
+    const navigate= useNavigate();
     
 
 
@@ -54,7 +57,15 @@ export default function HeaderSpace() {
                                 <p className="text-gray-800 text-lg my-0 py-0"> {username}</p>
                                 <p className="font-light text-blue-600 text-sm  text-right">{role} </p>
                             </div>
-                            <img  className="w-14 h-14 rounded-lg" src="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcSx9yBvquZ3z_DsxhnCNx2PBb1AdzBOF5iyMOqtgZJWeIs6_k9m" alt="avatar"/>
+                            <div className="dropdown dropdown-bottom dropdown-end">
+                                {/* <div  className="btn m-1">Click</div> */}
+                                <img  tabIndex={0} role="button" className="w-14 h-14 rounded-lg hover:opacity-30 duration-700" src="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcSx9yBvquZ3z_DsxhnCNx2PBb1AdzBOF5iyMOqtgZJWeIs6_k9m" alt="avatar"/>
+                                <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
+                                    <li><button onClick={()=> {navigate("/workspace/performance/")}}>Statistics</button> </li>
+                                    <li><button onClick={()=> {navigate("/workspace/resources/")}}>Resources</button> </li>
+
+                                </ul>
+                            </div>
                         </div>
 
                         <Login/>

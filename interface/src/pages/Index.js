@@ -63,7 +63,7 @@ export default function Home()
       } catch (error) {
         console.error("Error fetching data:", error);
       }
-    }
+    } 
   
     fetchData();
      // Call the fetchData function when the component mounts
@@ -77,7 +77,7 @@ export default function Home()
       <FirstView/>
       <Main/>
       {Object.keys(courseCategories).length !== 0 && <NewCoursesDisplay courseCategories={courseCategories}/> }
-      {blogs.length !== 0 && <HomeBlog blogs={blogs} /> }
+      {/* {blogs.length !== 0 && <HomeBlog blogs={blogs} /> } */}
       {/*
       {courseCategories != {} && <FeatureCoursesHUI courseCategories={courseCategories}/> }
       {courseCategories.length > 0 && <FeatureCoures  courseCategories={courseCategories} /> }

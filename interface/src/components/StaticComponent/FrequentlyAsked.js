@@ -1,5 +1,6 @@
 import { Disclosure } from '@headlessui/react'
 import { ChevronUpIcon } from '@heroicons/react/20/solid'
+import { v4 as uuidv4 } from 'uuid';
 
 const list= [
   {question:"Làm thế nào để đăng ký các khóa học của trung tâm?", answer:"Bạn chỉ cần để lại thông tin trong mục bên dưới hoặc liên hệ trực tiếp hotline của trung tâm để được hỗ trợ tư vấn miễn phí."},
@@ -13,15 +14,15 @@ export default function FrequentlyAsked() {
 
 
   return (
-    <div className="w-full px-4 pt-16 pb-20 h-screen" style={{backgroundImage: `url(${bgImg})`}}>
+    <div className="w-full px-4 pt-16 pb-20 h-screen bg-no-repeat bg-cover" style={{backgroundImage: `url(${bgImg})`}}>
 
         <h2 className='font-extrabold text-gray-700 mb-7 text-center '> Các câu hỏi thường gặp của Trung Tâm</h2>
-        <div className="mx-auto w-full max-w-4xl rounded-xl bg-transparent  p-2  backdrop-blur-sm">
+        <div className="mx-auto w-full max-w-4xl rounded-xl bg-transparent  p-2  ">
         
 
         {list.map((item, index)=>{
           return(
-            <Disclosure>
+            <Disclosure key={uuidv4()}>
             {({ open }) => (
               <>
                 <Disclosure.Button className="flex w-full my-2 justify-between rounded-lg bg-purple-100 px-20 py-2 text-left font-bold text-xl text-purple-900 hover:bg-purple-200 focus:outline-none focus-visible:ring focus-visible:ring-purple-500/75">

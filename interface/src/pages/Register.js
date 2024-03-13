@@ -65,6 +65,7 @@ export default function Register(){
                             localStorage.setItem('courseKey', data.courseKey);
                             localStorage.setItem('courseSave', data.courseSave);
                             localStorage.setItem('blogSave', data.blogSave);
+                            localStorage.setItem('courseAuth', data.courseAuth );
                             localStorage.setItem('exerciseLog', JSON.stringify(data.exerciseLog) );
 
 

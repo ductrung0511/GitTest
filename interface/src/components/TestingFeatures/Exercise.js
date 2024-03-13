@@ -86,6 +86,8 @@ function Exercise( { questionsData, instruction,  exerciseID}) {
         else if (exerciseLog[exerciseID]){
             dataPut[exerciseID].push(Math.ceil((correctScore/totalQuestion) * 100));
         }
+
+        console.log(dataPut,  'hello data PUT');
         const url = baseUrl + 'api/profile/';
         fetch(url, {
             method: "PUT",
@@ -104,6 +106,7 @@ function Exercise( { questionsData, instruction,  exerciseID}) {
         }).then((data) => {
             
            setExerciseLog(dataPut);
+           localStorage.setItem('exerciseLog',JSON.stringify(dataPut));
         })
         closeModal();
     }
@@ -228,7 +231,7 @@ function Exercise( { questionsData, instruction,  exerciseID}) {
 
                     { (askedCount < totalQuestion) &&
                     
-                    <div className="flex  col-span-4 justify-center h-[90vh] items-center my-2">
+                    <div className="flex  col-span-4 justify-center h-[90vh] items-center my-2 overflow-y-auto">
                         <div className="bg-white p-6 rounded-lg shadow-lg">
                             <h1 className="text-2xl font-bold mb-4">Quiz Game <span style={{"--value":180}} className='text-black'> hello</span></h1>
                             

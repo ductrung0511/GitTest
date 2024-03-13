@@ -5,20 +5,20 @@ import { Fragment } from 'react'
 const solutions = [
   {
     name: 'Homework',
-    description: 'Null to display',
-    href: '##',
+    description: 'Scroll down to Check your progress ',
+    href: '/#/workspace/dashboard/',
     icon: IconOne,
   },
   {
     name: 'Material',
-    description: 'Null to display',
-    href: '##',
+    description: 'Check your resources here',
+    href: '/#/workspace/resources/',
     icon: IconTwo,
   },
   {
     name: 'Reports',
-    description: 'Null to display',
-    href: '##',
+    description: 'Check your Statistics',
+    href: '/#/workspace/dashboard/',
     icon: IconThree,
   },
 ]
@@ -75,10 +75,11 @@ export default function NotificationModal() {
                   </div>
                   <div className="bg-gray-50 p-4">
                     <a
-                      href="##"
+                      href="https://docs.google.com/document/d/1nsR-eum4AM9iHk942zV24MWEeKeIuc4sQ2wIxkqLZ60/edit?usp=sharing"
                       className="flow-root no-underline rounded-md px-2 py-2 transition duration-150 ease-in-out hover:bg-gray-100 focus:outline-none focus-visible:ring focus-visible:ring-orange-500/50"
                     >
                       <span className="flex items-center">
+                        
                         <span className="text-sm font-medium text-gray-900">
                           Website Documentation
                         </span>

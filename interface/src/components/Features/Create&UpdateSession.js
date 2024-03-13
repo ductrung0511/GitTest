@@ -173,6 +173,8 @@ export default function CreateOrUpdateSession({addOrUpdateSession ,courseID = 1 
             onChange={handleInputChange}
             className="border-gray-300 border rounded-md p-2 w-full mb-4"
         />
+        <p className='font-thin text-xs'> Tip: max length for Links : 200 characters </p>
+
     </div>
     <div>
         <label htmlFor="CPTUrl" className="block text-sm font-medium text-gray-700">CPT URL</label>
@@ -199,7 +201,7 @@ export default function CreateOrUpdateSession({addOrUpdateSession ,courseID = 1 
         />
     </div>
     <div>
-        <label htmlFor="color" className="block text-sm font-medium text-gray-700">Color</label>
+        {/* <label htmlFor="color" className="block text-sm font-medium text-gray-700">Color</label>
         <input
             type="text"
             name="color"
@@ -208,7 +210,28 @@ export default function CreateOrUpdateSession({addOrUpdateSession ,courseID = 1 
             value={sessionData.color}
             onChange={handleInputChange}
             className="border-gray-300 border rounded-md p-2 w-full mb-4"
-        />
+        /> */}
+        <label htmlFor="color" className="block text-sm mt-4 font-medium text-gray-700">
+          Color
+        </label>
+        <select
+          id="color"
+          name="color"
+          value={sessionData.color}
+          onChange={handleInputChange}
+          className="block w-full m-2 h-10 px-2 border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+        >
+          <option value="">Select a color</option>
+          <option value="white">White</option>
+          <option value="black">Black</option>
+          <option value="red">Red</option>
+          <option value="blue">Blue</option>
+          <option value="green">Green</option>
+          <option value="yellow">Yellow</option>
+          <option value="purple">Purple</option>
+          {/* Add more color options as needed */}
+        </select>
+        
     </div>
     <div>
         <label htmlFor="level" className="block text-sm font-medium text-gray-700">Level</label>

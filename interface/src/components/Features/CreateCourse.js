@@ -71,6 +71,8 @@ export default function CreateCourse({addOrUpdateCourse , id = 1, course = {
     })
     .then((data) => {     
       addOrUpdateCourse(data);
+      console.log(data, "data");
+      
     })
     .catch(error => {
       alert('Error adding course:', error);
@@ -153,7 +155,7 @@ export default function CreateCourse({addOrUpdateCourse , id = 1, course = {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all backdrop-blur-[2px]">
+                <Dialog.Panel className="w-full max-w-3xl transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all backdrop-blur-[2px]">
                   <Dialog.Title
                     as="h3"
                     className="text-lg font-medium leading-6 text-gray-900"
@@ -168,6 +170,8 @@ export default function CreateCourse({addOrUpdateCourse , id = 1, course = {
                         onChange={handleInputChange}
                         placeholder="Name"
                         className="block w-full m-2 h-10 px-2 border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                        style={{ height: `${3 * 1.5}rem` }} 
+                        
                         />
                     <input
                       type="text"
@@ -175,6 +179,7 @@ export default function CreateCourse({addOrUpdateCourse , id = 1, course = {
                       value={courseData.serial}
                       onChange={handleInputChange}
                       placeholder="Serial"
+                      style={{ height: `${3 * 1.5}rem` }} 
                       className="block w-full m-2 h-10 px-2 border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                     />
                     <input
@@ -183,6 +188,7 @@ export default function CreateCourse({addOrUpdateCourse , id = 1, course = {
                       value={courseData.bgCardUrl}
                       onChange={handleInputChange}
                       placeholder="Background Card URL"
+                      style={{ height: `${2 * 1.5}rem` }} 
                       className="block w-full mt-2 m-2 h-10 px-2 border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                     />
                     <input
@@ -190,7 +196,9 @@ export default function CreateCourse({addOrUpdateCourse , id = 1, course = {
                       name="bgCardUrlSecondary"
                       value={courseData.bgCardUrlSecondary}
                       onChange={handleInputChange}
-                      placeholder="Background Card URL"
+                      placeholder="Second background Card URL "
+                      style={{ height: `${2 * 1.5}rem` }} 
+                      
                       className="block w-full mt-2 m-2 h-10 px-2 border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                     />
                     <input
@@ -201,26 +209,34 @@ export default function CreateCourse({addOrUpdateCourse , id = 1, course = {
                       placeholder="Address"
                       className="block w-full m-2 h-10 px-2 border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                     />
+
+                    <label htmlFor="duration" className="block mt-4 text-sm font-medium text-gray-700">
+                    Duration
+                  </label>
                     <input
                       type="number"
                       name="duration"
                       value={courseData.duration}
                       onChange={handleInputChange}
                       placeholder="Duration"
-                      className="block w-full m-2 h-10 px-2 border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                      className="block w-full  m-2 h-10 px-2 border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                     />
-                    <input
+                    
+                    <textarea
                       type="text"
                       name="description"
                       value={courseData.description}
                       onChange={handleInputChange}
                       placeholder="description"
                       className="block w-full m-2 h-10 px-2 border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                      style={{ height: `${4 * 1.5}rem` }} 
+
+
                     />
                     {/* conclusion : '',//
-        result: '',//
-        category: 1, //
-        courseKey: '', // */}
+                    result: '',//
+                    category: 1, //
+                    courseKey: '', // */}
                     <textarea
                       type="text"
                       name="conclusion"
@@ -228,7 +244,9 @@ export default function CreateCourse({addOrUpdateCourse , id = 1, course = {
                       onChange={handleInputChange}
                       placeholder="conclusion"
                       className="block w-full m-2 h-10 px-2 border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                      rows={4}
+                      style={{ height: `${4 * 1.5}rem` }} 
+
+
                     />
                     <textarea
                       type="text"
@@ -237,9 +255,9 @@ export default function CreateCourse({addOrUpdateCourse , id = 1, course = {
                       onChange={handleInputChange}
                       placeholder="result"
                       className="block w-full m-2 h-10 px-2 border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                      rows={4}
+                      style={{ height: `${4 * 1.5}rem` }} 
                     />
-                    <input
+                    {/* <input
                       type="number"
                       name="category"
                       value={courseData.category}
@@ -248,6 +266,27 @@ export default function CreateCourse({addOrUpdateCourse , id = 1, course = {
                       className="block w-full m-2 h-10 px-2 border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                     />
                     <p className='text-xs text-gray-400'>Tips: Beta Version only support 1: IELTS & TOEIC, 8: Flyer, 9: Starter, 10: Mover</p>
+                     */}
+                    <label htmlFor="category" className="block mt-4 text-sm font-medium text-gray-700">
+                      Category
+                    </label>
+                    <select
+                      id="category"
+                      name="category"
+                      value={courseData.category}
+                      onChange={handleInputChange}
+                      className="block w-full m-2 h-10 px-2 border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    >
+                      <option value="">Select a category</option>
+                      <option value="4">IELTS & TOEIC</option>
+                      <option value="3">Flyer</option>
+                      <option value="2">Starter</option>
+                      <option value="1">Mover</option>
+                    </select>
+                    <p className="text-xs text-gray-400">
+                      Tips: Beta Version only supports 4: IELTS & TOEIC, 3: Flyer, 2: Starter, 1: Mover
+                    </p>
+
                     <input
                       type="text"
                       name="courseKey"
@@ -265,22 +304,61 @@ export default function CreateCourse({addOrUpdateCourse , id = 1, course = {
                       placeholder="Text Book"
                       className="block w-full m-2 h-10 px-2 border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                     />
-                    <input
+                    {/* <input
                       type="text"
                       name="color"
                       value={courseData.color}
                       onChange={handleInputChange}
                       placeholder="White"
                       className="block w-full m-2 h-10 px-2 border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                    />
-                    <input
+                    /> */}
+                    <label htmlFor="color" className="block text-sm mt-4 font-medium text-gray-700">
+                      Color
+                    </label>
+                    <select
+                      id="color"
+                      name="color"
+                      value={courseData.color}
+                      onChange={handleInputChange}
+                      className="block w-full m-2 h-10 px-2 border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    >
+                      <option value="">Select a color</option>
+                      <option value="white">White</option>
+                      <option value="black">Black</option>
+                      <option value="red">Red</option>
+                      <option value="blue">Blue</option>
+                      <option value="green">Green</option>
+                      <option value="yellow">Yellow</option>
+                      <option value="purple">Purple</option>
+                      {/* Add more color options as needed */}
+                    </select>
+
+                    {/* <input
                       type="number"
                       name="sale"
                       value={courseData.sale}
                       onChange={handleInputChange}
                       placeholder="0"
                       className="block w-full m-2 h-10 px-2 border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                    />
+                    /> */}
+                    <label htmlFor="sale" className="block text-sm font-medium text-gray-700">
+                      Sale
+                    </label>
+                    <select
+                      id="sale"
+                      name="sale"
+                      value={courseData.sale}
+                      onChange={handleInputChange}
+                      className="block w-full m-2 h-10 px-2 border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    >
+                      <option value="">Select sale percentage</option>
+                      <option value="0">No Sale</option>
+                      <option value="10">10%</option>
+                      <option value="20">20%</option>
+                      <option value="30">30%</option>
+                      {/* Add more sale percentage options as needed */}
+                    </select>
+
                     <p className='font-thin text-xs'> Tip: type "/n" to make new paragraphs</p>
                   
                     

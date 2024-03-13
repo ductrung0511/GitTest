@@ -1,6 +1,7 @@
 import {  Link, NavLink } from "react-router-dom";
 import { baseUrl } from "../../Share";
 import useFetch from "../hook/useFetch";
+import {v4 as uuidv4} from 'uuid'
 
 import 'daisyui/dist/full.css';
 import React, { useEffect, useState } from "react";
@@ -9,6 +10,7 @@ import CreateSession from "./Create&UpdateSession";
 import { useLocation, useNavigate } from "react-router-dom";
 import CreateCourse from "./CreateCourse";
 import { useRef } from "react";
+import { Tooltip } from 'react-tooltip'
 export default function CourseComponentSpace(props){
     const [course, setCourse] = useState(props.course);
     
@@ -25,9 +27,10 @@ export default function CourseComponentSpace(props){
     let locks = props.course.courseKey.split('/').filter((item) =>  item !== '');
     for(let lock of locks){
     for(let key of keys){
-        if (lock === key){
-        coursePerm.current = true;
-        console.log("match", key, coursePerm.current);
+        if (lock === key)
+        {
+            coursePerm.current = true;
+            console.log("match", key, coursePerm.current);
         }
     }
     }
@@ -64,44 +67,15 @@ export default function CourseComponentSpace(props){
         
     }
     const relatedCategories = [
-        {name: "mẫu giáo ", href: "/course"},
-        {name: "Trung học", href: "/course"},
-        {name: "cao học", href: "/course"},
-        {name: "IELTS", href: "/course"},]
-    const courseAbout = " Enter the realm of Runway and AI-driven storytelling! Animated images have been one of the fastest growing fields in AI.\n With step-by-step instruction and hands-on exercises, you'll how to use AI to generate a story, create the images, and animate it. \n This course is designed to walk you through everything you need to know to begin your journey with Runway. These lessons are fit for artists and creatives of all levels, from those who are just getting started to those who want to experiment with AI animation. ";
-    const courseResult = " How to animate images with Runway to bring stories to life \n Crafting compelling narratives through ChatGPT \n The variety of animation styles you can achieve with Runway \n The workflow of creating images on Midjourney \n Using AI to organize your entire creative process";
-    const courseConclusion = "This is your chance to be at the forefront of AI-driven animation and storytelling with this AI Animation course. You'll receive all the support and inspiration you need as we explore the vast possibilities of AI-enhanced storytelling together. I'm thrilled to guide you through this exciting course – let's begin your adventure in animation with Runway!";
-    
-    const similarCourses = useRef()
+        {name: "Mẫu Giáo ", href: "/course"},
+        {name: "Trung Học", href: "/course"},
+        {name: "Thiếu Nhi", href: "/course"},
+        {name: "IELTS & TOEIC", href: "/course"},]
+
+    const [similarCourses, setSimilarCourses] = useState([])
 
 
-    // useEffect(()=>{
-    //     const url = baseUrl + "api/category/" + props.categoryID; 
-    //     console.log(url, "url");
-    //     fetch(url,{
-    //         method:"GET",
-    //         headers:{
-    //             'Content-Type': 'application/json',
-    //             Authorization: "Bearer" + localStorage.getItem('access') 
-    //         },
-            
-    //     }).then((response) => {
-    //         console.log(response.status, "status")
-            
-    //         if(response.status === 401) 
-    //         {
-    //           navigate("/login",{
-    //           state:{ previousUrl : location.pathname,}
-    //         })}
-    //     }).then((data) => {
-    //         console.log(data, "data recieved");
-    //     })
-    //     .catch(error => {
-    //       console.error('Error: ', error);
-    //       // Handle error appropriately (e.g., show error message to user)
-    //     });
 
-    // },[])
     useEffect(() => {
         async function fetchData() {
             
@@ -128,7 +102,7 @@ export default function CourseComponentSpace(props){
             }
             const data = await response.json();   
             console.log("Fetch panel",response.status,  data);
-            similarCourses.current= data;
+            setSimilarCourses(data);
 
           } catch (error) {
             console.error("Error fetching data:", error);
@@ -136,6 +110,8 @@ export default function CourseComponentSpace(props){
         }
       
         fetchData();
+        scrollToPosition(0);
+
         
          // Call the fetchData function when the component mounts
       }, []); 
@@ -168,20 +144,152 @@ export default function CourseComponentSpace(props){
         else return;
 
     }
+    const handleSaveCourse =(courseID) =>{
+        const putData = {courseSave:  localStorage.getItem("courseSave")  + courseID    + '/' }  ;
+        const url = baseUrl + "api/profile/";
+        async function updateCourseSave() {
+            try {
+              const response = await fetch(url, {
+                method: 'PUT',
+                headers:{
+                    'Content-Type': 'application/json',
+                    Authorization: 'Bearer ' + localStorage.getItem('access'),
+                },
+                body: JSON.stringify(putData),
+            });
+              if(response.status === 404) console.log("Not found");
+              if(response.status === 401) 
+              {
+                navigate("/login",{
+                state:{ previousUrl : location.pathname,}
+              });
+              
+            }
+              else if (!response.ok) {
+                console.error("Something went wrong");
+                return;
+              }
+                const data = await response.json();   
+                localStorage.setItem('courseSave',  data.courseSave );
+                setCourseSaveList(localStorage.getItem('courseSave').split('/'))
+                // console.log("Fetch Put Panel ",url , putData  , response.status, data , "courseSave:" , data.courseSave , localStorage.getItem('courseSave' )  );
+                
+            } catch (error) {
+                console.error("Error adding data:", error);
+            }
+            
+        }
+      
+         updateCourseSave();
+         setToast(true);
+
+         // Set a timeout to hide the toast after 4 seconds
+         setTimeout(() => {
+           setToast(false);
+         }, 4000);
+
+    }
+    const [toast, setToast] = useState(false);
+    const [courseSaveList, setCourseSaveList] = useState(localStorage.getItem('courseSave')? localStorage.getItem('courseSave').split('/'): '')
+
+    const handleUnSaveCourse =(courseID) =>{
+        
+        let newList = '/';
+        for(let item of courseSaveList){
+            if(item != courseID && item != ''){
+                newList += item;
+                newList += '/';
+            }
+        }
+
+        const putData = {courseSave: newList };
+        const url = baseUrl + "api/profile/";
+
+        async function updateCourseSave() {
+            try {
+              const response = await fetch(url, {
+                method: 'PUT',
+                headers:{
+                    'Content-Type': 'application/json',
+                    Authorization: 'Bearer ' + localStorage.getItem('access'),
+                },
+                body: JSON.stringify(putData),
+            });
+              if(response.status === 404) console.log("Not found");
+              if(response.status === 401) 
+              {
+                navigate("/login",{
+                state:{ previousUrl : location.pathname,}
+              });
+              
+            }
+              else if (!response.ok) {
+                console.error("Something went wrong");
+                return;
+              }
+                const data = await response.json();   
+                localStorage.setItem('courseSave',  data.courseSave );
+                setCourseSaveList(localStorage.getItem('courseSave').split('/'))
+                console.log("Fetch Put (unSave) Panel ", url , putData  , response.status, data , "courseSave:" , localStorage.getItem('courseSave'), 'deleted:', courseID  );
+                
+            } catch (error) {
+                console.error("Error adding data:", error);
+            }
+            
+        }
+        updateCourseSave();
+        
+
+    }
     const backgroundImageUrl = "https://tailwindcss.com/_next/static/media/installation.50c59fdd.jpg";
     const containerStyle = {
         backgroundImage: `url('${backgroundImageUrl}')`,
         // Add other styles as needed
     };
+    const scrollToPosition = (position) => {
+        console.log('scroll to ');
+        window.scrollTo({
+          top: position,
+          behavior: 'smooth' // This gives a smooth scrolling effect
+        });
+      };
+    const handleCopyText = async (text)=>{
+    try {
+        navigator.clipboard.writeText(text)
+    }
+    catch(error){
+        console.log("error copy data", error)
+    }
+    };
+    
     useEffect(()=>{
         console.log("Console panel", similarCourses, relatedCategories, sessions, coursePerm.current)
     },[similarCourses, relatedCategories, sessions])
+
+    
+
     return(
         
-            <div className="p-1 grid grid-cols-1 bg-color-vibrant/10 pl-1 ">
+            <div className="p-1 grid grid-cols-1 bg-color-vibrant/10 pl-1 mt-14">
                         {/*
                         <p className="text-sm mt-1 font-extrabold text-black text-left"> General Infomation</p>
                         */}
+                        {toast && <div id="toast-default" className="flex flex-col gap-2 z-30 shadow-xl fixed bottom-3 right-3 items-center w-full max-w-xs p-4 text-gray-500 bg-white rounded-lg  dark:text-gray-400 dark:bg-gray-800" role="alert">
+                            <div className="ms-3 text-sm  font-semibold text-black uppercase "> Course has been saved to </div>
+                            <div className="flex flex-row shadow-lg  justify-between items-center px-6 hover:bg-gray-400  duration-700 w-full h-10 text-black bg-blue-100 rounded-lg dark:bg-blue-800 dark:text-blue-200">
+                                <div className="ms-3 text-sm  font-light text-black  "> My Classes  </div>
+                                <svg className="w-4 h-4" aria-hidden="true" xmflns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 20">
+                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.147 15.085a7.159 7.159 0 0 1-6.189 3.307A6.713 6.713 0 0 1 3.1 15.444c-2.679-4.513.287-8.737.888-9.548A4.373 4.373 0 0 0 5 1.608c1.287.953 6.445 3.218 5.537 10.5 1.5-1.122 2.706-3.01 2.853-6.14 1.433 1.049 3.993 5.395 1.757 9.117Z"/>
+                                </svg>
+                            </div>
+                            <div className="text-gray-800 w-full border-solid border-gray-800 border-1"></div>
+                            <button type="button" onClick={() => {setToast(false)}} className="ms-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex items-center justify-center h-8 w-8 dark:text-gray-500 dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700" data-dismiss-target="#toast-default" aria-label="Close">
+                                <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                                </svg>
+                            </button>
+                        </div>
+            }
                         <div className= {`w-full h-[49vh] my-3 rounded-2xl bg-${course.color}-200 grid grid-cols-7 overflow-hidden hover:shadow-lg  cursor-pointer duration-700 `}>
                             <div className="  relative bg-blue-400 col-span-3"> 
                                 <img src={course.bgCardUrl} alt="bgIMG" className="object-cover ">
@@ -193,23 +301,33 @@ export default function CourseComponentSpace(props){
                                     <p className="text-sm font-extralight text-black text-left">{course.serial}-{course.id}</p>
 
                                     <p className=" text-base m-0 p-0">  Text Book:  <span className="font-semibold ">{course.textBook} </span></p>
-                                    <p className=" text-xs font-light m-0 p-0"> 288 students</p>
-
+                                    <p className="text-xs mt-2 text-gray-800"> {course.conclusion}
+                                    </p>
                                 </div>
                                 <div className="flex flex-row justify-between">
-                                    <p className="text-xs font-light  text-color-secondary  m-0 p-0">{course.duration} sessions</p>
-                                    <button className="bg-white text-black font-light">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 bg-gray-300">
+                                    <p className="text-xs font-light  text-color-secondary  m-0 p-0"> <span className="text-sm "> {course.duration}</span> sessions</p>
+                                    {courseSaveList.includes('' + course.id) ?
+                                                                
+                                    <button className=" text-black font-light  rounded-lg" onClick={()=>{handleUnSaveCourse(course.id)}}>
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+                                        <path d="M3.53 2.47a.75.75 0 0 0-1.06 1.06l18 18a.75.75 0 1 0 1.06-1.06l-18-18ZM20.25 5.507v11.561L5.853 2.671c.15-.043.306-.075.467-.094a49.255 49.255 0 0 1 11.36 0c1.497.174 2.57 1.46 2.57 2.93ZM3.75 21V6.932l14.063 14.063L12 18.088l-7.165 3.583A.75.75 0 0 1 3.75 21Z" />
+                                        </svg>
+
+                                    </button>:
+                                    <button className=" text-black font-light  rounded-lg" onClick={()=>{handleSaveCourse(course.id)}}>
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={`w-6 h-6  `}>
                                         <path strokeLinecap="round" strokeLinejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" />
                                         </svg>
                                     </button>
+
+                                    }
                                 </div>
                             </div>                     
                         </div>
                         {localStorage.getItem('role') === "Administrator" &&  <CreateCourse addOrUpdateCourse={updateCourse} id={course.id} course={updatedCourseData}/>}
-                        <div className="flex justify-center">
-                        <div className= {`pt-4 py-2 px-10 w-3/4  rounded-xl shadow-lg  bg-${course.color}-100 grid grid-cols-2 text-white `}>
-                            <div className=" pl-2 col-span-2 text-left rounded-lg text-black"> 
+                        <div className="flex justify-center my-4">
+                        <div className= {` py-2 px-10 w-3/4  rounded-xl shadow-lg  bg-${course.color}-100 grid grid-cols-2 text-white `}>
+                            {/* <div className=" pl-2 col-span-2 text-left rounded-lg text-black"> 
                                 <div className="flex flex-row justify-between">
 
                                         <p className="text-xl my-0 py-0  font-extrabold uppercase">
@@ -218,8 +336,7 @@ export default function CourseComponentSpace(props){
                                         <CourseSetting/>
                                 </div>
                                 <p className="text-sm mt-0 "> Unit 7 Chapter 8 </p>
-                                <p className="text-sm mt-0 "> {course.conclusion}
-                                </p>
+                                
 
 
                             </div>
@@ -230,30 +347,35 @@ export default function CourseComponentSpace(props){
                             <p className="text-sm text-gray-800"> Class Schedule: <strong>8:00 - 10:00</strong></p>
                             <p className="text-sm text-gray-800"> Text Book: <strong>{course.textBook}</strong></p>
                             <p className="text-sm text-gray-800"> Duration: <strong>{course.duration} sessions</strong></p>
-                            <p className="text-sm text-gray-800 "> Campus: <strong>VGU</strong></p>
+                            <p className="text-sm text-gray-800 "> Campus: <strong>VGU</strong></p> */}
                             <div className="w-full flex flex-row gap-1 items-center">
 
-                            <div className=" rounded-lg text-black w-1/2 py-2 h-8 bg-white flex flex-row justify-center items-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6 mr-1">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M15.91 11.672a.375.375 0 0 1 0 .656l-5.603 3.113a.375.375 0 0 1-.557-.328V8.887c0-.286.307-.466.557-.327l5.603 3.112Z" />
-                                </svg>
-                                <p className="font-bold text-md my-0">
-                                    Take all Exercise
-                                </p>
+                                <div className=" rounded-lg text-black w-1/2 py-2 h-8 bg-white flex flex-row justify-center items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6 mr-1">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.91 11.672a.375.375 0 0 1 0 .656l-5.603 3.113a.375.375 0 0 1-.557-.328V8.887c0-.286.307-.466.557-.327l5.603 3.112Z" />
+                                    </svg>
+                                    <button onClick={()=>{navigate('/workspace/dashboard/')}}>
 
-                            </div>
-                            <div className=" rounded-lg w-1/2 py-2 flex flex-row justify-center items-center text-gray-400">
-                                
-                                <p className="font-semibold text-sm my-0 pb-1">
-                                    Current Lesson 
-                                </p>
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" class="w-6 ml-1 h-6">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="m9 12.75 3 3m0 0 3-3m-3 3v-7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                </svg>
+                                    <p className="font-bold text-md my-0">
+                                        Take all Exercise
+                                    </p>
+                                    </button>
+
+                                </div>
+                                <div className=" rounded-lg w-1/2 py-2 flex flex-row justify-center items-center text-gray-400 hover:text-gray-800 duration-700">
+                                    <button onClick={ ()=>{  scrollToPosition(400)}} className="hover:border-1 hover:border-gray-400 rounded-lg">
+
+                                    <p className="font-semibold text-sm my-0 pb-1 ">
+                                        Current Lesson 
+                                    </p>
+                                    </button>
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" class="w-6 ml-1 h-6">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="m9 12.75 3 3m0 0 3-3m-3 3v-7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                    </svg>
 
 
-                            </div>
+                                </div>
                             </div>
                             {/*
                             <div className="flex flex-row "> 
@@ -264,12 +386,24 @@ export default function CourseComponentSpace(props){
                             */}
 
                             <div className="col-span-1 flex flex-row justify-start  my-3 ml-8 text-gray-400 gap-4"> 
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                            
+                                
+                                
+                                <Tooltip id="my-tooltip" />
+                                <svg data-tooltip-id="my-tooltip"
+                                data-tooltip-content={course.description}
+                                data-tooltip-place="top" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 ">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
                                 </svg>
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-12.814a2.25 2.25 0 1 0 3.933-2.185 2.25 2.25 0 0 0-3.933 2.185Z" />
-                                </svg>
+                                
+                                <button onClick={()=>{handleCopyText(baseUrl + '/workspace/courses/' + course.id)}} className=" rounded-xl ">
+
+                                    <svg data-tooltip-id="my-tooltip"
+                                data-tooltip-content="Copy the Link and share this lovely course to your friends"
+                                data-tooltip-place="top" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-12.814a2.25 2.25 0 1 0 3.933-2.185 2.25 2.25 0 0 0-3.933 2.185Z" />
+                                    </svg>
+                                </button>
 
 
                             </div>
@@ -280,30 +414,7 @@ export default function CourseComponentSpace(props){
                         </div>
                         </div>
 
-                        <p className="text-sm my-4 font-extralight text-gray-200 text-left border-1 "> </p> 
-                        <div className="flex flex-row justify-center gap-2">
-                            <div className="rounded-xl p-7  w-40 bg-white text-center shadow-lg text-sm"> <p className="text-2xl p-0 m-0 font-bold">{course.duration * 1.5}</p> study hours</div>
-                            <div className="rounded-xl p-7 w-40 bg-white text-center shadow-lg text-sm"> <p className="text-2xl font-bold p-0 m-0">{course.totalExercise}48 </p>Online exercise</div>
-                            {/* <div className="rounded-xl p-7 w-40 bg-white shadow-lg relative">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-10 h-10 top-10 left-14 absolute ">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z" />
-                            </svg> 
-                            </div> */}
-                        </div>
-                        <p className="text-sm my-4 font-extralight text-gray-200 text-left border-1 "> </p> 
-                        <div className=" bg-white shadow-lg ml-7 px-5  overflow-y-auto h-96 border-transparent  py-5 rounded-lg">
-                            <p className="font-bold text-xl text-black">About This Class</p>
-                            <p>{textToParagraphs(course.description)}</p>
-                            <p>In this class you'll learn:</p>
-                            <ul>
-                                {textToListItems(course.result)}
-                            </ul>
-                            <p> {textToParagraphs(course.conclusion)}</p>
-                        </div>
-                        <p className="text-sm my-4 font-extralight text-gray-200 text-left border-1 "> </p> 
-
-
-                        <div className="m-2 px-2  rounded-xl bg-white/30 grid ">
+                        <div className="m-2 px-2 mt-2 rounded-xl bg-white/30 grid ">
                             
                             {sessions.map((session, index) => {
                                 return (<div className="grid grid-cols-8 gap-1 rounded-lg drop-shadow-lg my-2 bg-gray-200" >
@@ -322,8 +433,6 @@ export default function CourseComponentSpace(props){
                                                 
                                                 <p className="text-xl font-extrabold text-color-secondary mt-4 mb-0">{session.overview}</p>
                                                 <p className="text-xs  text-color-secondary">Basic Geometry Concept and Formula</p>
-    
-    
                                             </div>
                                             <button className=" rounded-full ">
                                                 <Link to={ (coursePerm.current || localStorage.getItem('role')=== 'Administrator') ?  "/workspace/session/" + session.id : "#" }>
@@ -333,12 +442,25 @@ export default function CourseComponentSpace(props){
                                                     </svg>
                                                 </Link>
                                             </button>
+                                            
+                                            {localStorage.getItem('role') === "Administrator" &&
                                             <button onClick={() => {handleDeleteSession(session.id)}} className=" rounded-lg bg-gray-300 p-2 m-4 mt-4 border-color-primary-dark">Delete</button>
+                                             }
+                                             { (localStorage.getItem('role') !== "Administrator" && coursePerm.current) && 
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className=" mt-4 w-6 h-6">
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 10.5V6.75a4.5 4.5 0 1 1 9 0v3.75M3.75 21.75h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H3.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
+                                                </svg>
+                                             }
+                                             { (localStorage.getItem('role') !== "Administrator" && !coursePerm.current) && 
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className=" mt-7 w-6 h-6">
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
+                                              </svg>
+                                              
+                                             }
                                             {/*
                                             <p className="col-span-1 uppercase text-sm pt-3"> • {session.teacher}</p>
                                             */}
                                         </div>)
-                                        
                                         
                                     
                                 })}
@@ -347,6 +469,47 @@ export default function CourseComponentSpace(props){
                                 
                             
                         </div>
+                        <p className="text-sm my-4 font-extralight text-gray-200 text-left border-1 "> </p> 
+
+                        <div className="flex flex-row justify-center gap-2">
+                            <div className="rounded-xl p-7  w-40 bg-white text-center shadow-lg text-sm"> <p className="text-2xl p-0 m-0 font-bold">{course.duration * 1.5}</p> study hours</div>
+                            <div className="rounded-xl p-7 w-40 bg-white text-center shadow-lg text-sm"> <p className="text-2xl font-bold p-0 m-0">{course.totalExercise}48 </p>Online exercise</div>
+                            {/* <div className="rounded-xl p-7 w-40 bg-white shadow-lg relative">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-10 h-10 top-10 left-14 absolute ">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z" />
+                            </svg> 
+                            </div> */}
+                        </div>
+                        <p className="text-sm my-4 font-extralight text-gray-200 text-left border-1 "> </p> 
+                        <div className=" bg-white shadow-lg ml-7 px-5  overflow-y-auto  h-96 border-transparent  py-5 rounded-lg">
+                            <a
+                            data-tooltip-id="my-tooltip"
+                            data-tooltip-content="Hello world! This is my second update "
+                            data-tooltip-place="top"
+                            className="ml-8 no-underline text-gray-400"
+                            >
+                            ◕‿‿◕
+                            </a>
+                            <p className="font-bold text-xl text-black">About This Class</p>
+                            <p>{textToParagraphs(course.description)}</p>
+                            <p>In this class you'll learn:</p>
+                            <ul>
+                                {textToListItems(course.result)}
+                            </ul>
+                            <p> {textToParagraphs(course.conclusion)}</p>
+                        </div>
+                        <p className="text-sm my-4 font-extralight text-gray-200 text-left border-1 "> </p> 
+                        
+
+
+
+
+
+
+
+
+
+                        
                         <p className="text-sm my-4 font-extralight mx-7 text-gray-200 text-left border-1 "> </p> 
                         <div className="ml-7 px-5">
                             <p className="font-bold text-xl text-black">Related Categories</p>
@@ -367,41 +530,47 @@ export default function CourseComponentSpace(props){
                         <div className="ml-7 px-5">
                             <p className="font-bold text-xl text-black">Similar Classes</p>
                             <div className='grid grid-cols-3 gap-1'>
-                                {similarCourses?.current?.map((course) => {
-                                        return (
-                                    <NavLink to={'/workspace/' + course.name} className='no-underline'>
-                                        <div key={course.name} className="col-span-1 shadow-md shadow-white flex flex-col mx-2  bg-white   h-[60vh] mt-2 mb-20 rounded-lg  ">
-                                            <div className=" relative flex flex-row gap-1 h-3/4 overflow-hidden">
-                                                <img className="peer h-[40vh] w-full rounded-lg object-cover " src={course.bgCardUrl} />
-                                            <span className="absolute top-1 left-1 m-2 rounded-full bg-white/70 px-2 text-center text-xs font-medium text-gray-800">{course.sale} % OFF</span>
-                                            </div>
-                                                <div className="flex flex-col px-2 pt-0 ">
-                                                    <div className="flex flex-row justify-between">
-                                                    <p className="text-xs font-light  text-color-secondary  m-0 p-0"> {course.totalStudent ? course.totalStudent : 101 } Students enrolled</p>
-                                                    <p className="text-xs font-light  text-color-secondary  m-0 p-0"> {course.duration} sessions</p>
-                                                    </div>
-                                                    <div className="text-xs mb-3 mt-2 text-center rounded-lg font-extrabold hover:bg-blue-300/10 text-color-secondary  capitalize">
-                                                        {course.name}</div>
-                                                    <div className="flex flex-row justify-between">
-                                                        <p className="text-xs font-light  text-color-secondary  m-0 p-0"> {course.textBook}</p>
-                                                        <button className="bg-white text-black font-light">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                                                            <path strokeLinecap="round" strokeLinejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" />
-                                                            </svg>
-                                                        </button>
-                                                    </div>
-                                                    
-
-                                                    
-                                                <Link to={"/workspace/courses/" + course.id} className="no-underline"> 
+                                {similarCourses?.map((course) => {
+                                        if(course !== undefined) return (
+                                            <div key={course.name} className="col-span-1 shadow-md shadow-white flex flex-col mx-2  bg-white   h-[60vh] mt-2 mb-20 rounded-lg  ">
+                                                <NavLink to={'/workspace/courses/' + course.id} className='no-underline  h-3/4'>
                                                 
-                                                </Link>
-
-                                                </div>
-                                        </div>
-                                    </NavLink>
-                                            
-                                        );
+                                                    <div className=" relative flex flex-row gap-1 overflow-hidden">
+                                                        <img className="peer h-[40vh] w-full rounded-lg object-cover " src={course.bgCardUrl} />
+                                                        <span className="absolute top-1 left-1 m-2 rounded-full bg-white/70 px-2 text-center text-xs font-medium text-gray-800">{course.sale}% OFF</span>
+                                                
+                                                    </div>
+                                                </NavLink>
+                                                    <div className="flex flex-col px-2 pt-0 ">
+                                                        <div className="flex flex-row justify-between">
+                                                        <p className="text-xs font-light  text-color-secondary  m-0 p-0"> {course.totalStudent} 188 students</p>
+                                                        <p className="text-xs font-light  text-color-secondary  m-0 p-0"> {course.duration} 100m</p>
+                                                        </div>
+                                                        <div className="text-xs mb-3 text-center rounded-lg font-extrabold hover:bg-blue-300/10 text-color-secondary  capitalize">
+                                                            {course.name}</div>
+                                                        
+                                                        <div className="flex flex-row justify-between">
+                                                            <p className="text-xs font-light  text-color-secondary  m-0 p-0"> {course.textBook} Oxford destination</p>
+                                                            {courseSaveList.includes('' + course.id) ?
+                                                                
+                                                                <button className=" text-black font-light  rounded-lg" onClick={()=>{handleUnSaveCourse(course.id)}}>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+                                                                    <path d="M3.53 2.47a.75.75 0 0 0-1.06 1.06l18 18a.75.75 0 1 0 1.06-1.06l-18-18ZM20.25 5.507v11.561L5.853 2.671c.15-.043.306-.075.467-.094a49.255 49.255 0 0 1 11.36 0c1.497.174 2.57 1.46 2.57 2.93ZM3.75 21V6.932l14.063 14.063L12 18.088l-7.165 3.583A.75.75 0 0 1 3.75 21Z" />
+                                                                    </svg>
+        
+                                                                </button>:
+                                                                <button className=" text-black font-light  rounded-lg" onClick={()=>{handleSaveCourse(course.id)}}>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={`w-6 h-6  `}>
+                                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" />
+                                                                    </svg>
+                                                                </button>
+                                                                }
+                                                        </div>
+        
+                                                    </div>
+                                            </div>
+                                                
+                                            );
                                     })}
                                 
                             </div>

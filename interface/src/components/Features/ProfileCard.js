@@ -12,36 +12,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 
 export default function ProfileCard({profileData}){
-    const [badges, setBadges] = useState([{
-                            name: 'Badge 1',
-                            urlimg: 'https://hrcdn.net/fcore/assets/badges/problem-solving-ecaf59a612.svg',
-                            info: 'Information about Badge 1',
-                          },
-                          {
-                            name: 'Badge 2',
-                            urlimg: 'https://hrcdn.net/fcore/assets/badges/problem-solving-ecaf59a612.svg',
-                            info: 'Information about Badge 2',
-                          }]);
-    const challanges = [{
-      title: "Target Audience Training",
-      description: "Save time and make your business more effective by promoting...",
-      percentage: 40,
-      color: "blue"
-    },
-    {
-      title: "The Complete Web Dev",
-      description: "20 challanges for web Dev in 20 days",
-      percentage: 80,
-      color: "red"
-    },
-    {
-      title: "Grow your analytic skills",
-      description: "from easy to hard",
-      percentage: 10,
-      color: "purple"
-    },
-  ];
-
+   
   
   let role = localStorage.getItem('role');
   let username= localStorage.getItem('username');
@@ -70,16 +41,6 @@ export default function ProfileCard({profileData}){
     const location = useLocation();
 
 
-    // const [data, setData] = useState();
-    // useEffect(()=>{
-      //   fetch(url,  {
-        //     method:'GET', 
-        //     headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + localStorage.getItem('access'),}
-        // }).then((response)=>{console.log(response)}).then((data)=> {
-          //   console.log(data, "data from fetch");
-          //   setData(data);}
-          //   )
-          // }, [])
     const url = baseUrl + 'api/exercises/';
     const { data , loading, error } =  useFetch(url, {
         method:'GET', 
@@ -90,28 +51,38 @@ export default function ProfileCard({profileData}){
         state:{ previousUrl : location.pathname,}
       });
     }
-    console.log("Profile panel:", data);
     
-
+    const  [doneExercise, setDoneExercise] =  useState( Object.keys(JSON.parse(localStorage.getItem('exerciseLog')))  );
+    console.log("ProfileCard panel:", data?.filter(exercise => !doneExercise.includes('' + exercise.id)).slice(0, 3) );
+    // const [toDoExercise, setToDoExerice] = useState([]);
+    
     if (data) return (
 
       <div className="flex flex-col mx-3">
-          <div className="flex flex-row justify-between mt-10">
+          {/* <div className="flex flex-row justify-between mt-10">
             <div className="flex flex-col gap-1 mt-2 ml-2">
                 <NotificationModal/>
-                <UpdateProfile profile={profileData}/>
+                
             </div>
             <div className="flex flex-row justify-center">
                 <div className="flex flex-col mx-3">
                   <p className="font-bold text-gray-800 text-xl my-0 py-0"> {username}</p>
                   <p className="font-bold text-blue-600 text-sm ">{role} </p>
                 </div>
-                <img  className="w-14 h-14 rounded-lg" src="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcSx9yBvquZ3z_DsxhnCNx2PBb1AdzBOF5iyMOqtgZJWeIs6_k9m" alt="avatar"/>
+               <img  className="w-14 h-14 rounded-lg" src="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcSx9yBvquZ3z_DsxhnCNx2PBb1AdzBOF5iyMOqtgZJWeIs6_k9m" alt="avatar"/> 
+                <div className="dropdown dropdown-bottom dropdown-end">
+                                <div  className="btn m-1">Click</div> 
+                                <img  tabIndex={0} role="button" className="w-14 h-14 rounded-lg hover:opacity-80 duration-300" src="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcSx9yBvquZ3z_DsxhnCNx2PBb1AdzBOF5iyMOqtgZJWeIs6_k9m" alt="avatar"/>
+                                <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
+                                    <li><UpdateProfile profile={profileData}/></li>
+                                </ul>
+                            </div>
             </div>
 
           </div>
+
+           */}
           <div className="flex flex-col px-4 mt-4">
-            <h5 className="text-gray-400 font-semibold mr-8 tracking-wide">Exercises</h5>
            
 
            {/* { challanges.map((challange) => {return(
@@ -134,7 +105,7 @@ export default function ProfileCard({profileData}){
 
 
 
-          <div className="flex items-center justify-center py-3 px-4">
+          <div className="flex items-center justify-center py-3 mt-32 px-4  rounded-lg">
 
             <div className="max-w-sm w-full shadow-lg">
                 <div className="md:p-3 p-2 dark:bg-gray-800 bg-white rounded-t">
@@ -159,8 +130,10 @@ export default function ProfileCard({profileData}){
                     
                 </div>
                 <div className="md:py-8 py-2 md:px-16 px-5 dark:bg-gray-700 bg-gray-100 rounded-b">
+                    <p className="text-base mt-1 font-bold text-black">Your Daily Exercises!</p>
+                    
                     <div className="px-4 bg-gray-300 rounded-lg">
-                        {data?.map((exercise) => {
+                        {data?.filter(exercise => !doneExercise.includes('' + exercise.id)).slice(0, 3).map((exercise) => {
                           return(
 
                           <div className="border-b  py-4 border-gray-400 border-dashed ">
@@ -174,7 +147,7 @@ export default function ProfileCard({profileData}){
                               
                               
                               {exercise.type === "multiple_choice"  && <Exercise questionsData={exercise.questions} instruction={exercise.instruction} exerciseID={exercise.id}   /> }
-                               {exercise.type === "vocabulary" && <VocabFlashCard vocabList={exercise.questions} instruction={exercise.instruction}  /> }
+                              {exercise.type === "vocabulary" && <VocabFlashCard vocabList={exercise.questions} instruction={exercise.instruction}  exerciseID={exercise.id}   /> }
                                
                           </div>
                           )
@@ -185,7 +158,7 @@ export default function ProfileCard({profileData}){
                     </div>
                     {data.length === 0 && <div className="flex flex-col justify-center">
                       <img alt=" " className="w-full h-auto" src="https://img.freepik.com/free-vector/book-readers-concept_74855-6263.jpg?size=626&ext=jpg&ga=GA1.1.1395880969.1709424000&semt=sph"/>
-                      <p className="text-base text-center text-blue-700 font-bold"> No Exercise to display yet !</p>
+                      <p className="text-base text-center text-black font-bold"> No Exercise to display yet !</p>
                       
                       
                       

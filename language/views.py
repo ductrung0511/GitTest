@@ -32,19 +32,44 @@ def index(request):
         if serializer.is_valid():
             serializer.save()
             return Response( serializer.data , status = status.HTTP_201_CREATED) #why return response ...
+        
+@api_view(["GET", "POST"])
+def courseHome(request):
+    if request.method == "GET":
+        
+        categories = Category.objects.all()
+        courseCategories= {}
+        for category in categories:
+            courseCategories[category.name] = ModelCourseserializer(category.modelcourse_set.all() , many=True).data
+        returnData = { "courseCategories" : courseCategories }
+        return Response(returnData , status = status.HTTP_200_OK)
+
+
+
 @api_view(["GET", "POST", "PUT"])
 @permission_classes([IsAuthenticated])
 def courses(request):
     if request.method == "GET":
+        profile = Profile.objects.get(user= request.user)
+        totalExercise = 0
+        for i in profile.courseAuth.split('/'):
+            if i != '':
+                course = ModelCourse.objects.get(pk= i)
+                sessions =  course.modelsession_set.all()
+                for session in sessions:
+                    exercises = session.exercise_set.all()
+                    totalExercise += len(exercises)
+                    
+
+
         courses = ModelCourse.objects.all()
         coursesserializer = ModelCourseserializer(courses, many=True)
-        responseData  = { 'courses' : coursesserializer.data }
+        responseData  = { 'courses' : coursesserializer.data, 'exerciseTotalCourses': totalExercise }
         return Response(responseData , status = status.HTTP_200_OK)
     elif request.method == "POST":
         request_data = request.data.copy()
         request_data['duration'] = int(request_data.get('duration', 0))
         request_data['sale'] = int(request_data.get('sale', 0))
-        print(request.data['category'])
          
         category_id = request.data.get('category')  # Extract course ID from request data
         try:
@@ -146,7 +171,7 @@ def session(request, id):
         }
         return Response(response_data, status=status.HTTP_200_OK)
     elif request.method == 'POST':
-        print(request.data)
+        # print(request.data)
         course_id = request.data.get('course')  # Extract course ID from request data
         try:
             course = ModelCourse.objects.get(pk=course_id)
@@ -182,7 +207,7 @@ def section(request, id):
             return Response("data not found", status= status.HTTP_404_NOT_FOUND) 
     if request.method == 'POST':
         sessionID = request.data.get('sessionID')  # Extract course ID from request data
-        print(sessionID)
+        # print(sessionID)
         try:
             session = ModelSession.objects.get(pk=sessionID)
         except ModelSession.DoesNotExist:
@@ -245,7 +270,7 @@ def register(request):
             'refresh' : str(refresh),
             'access' : str(refresh.access_token ),
         }
-        print(tokens," MM")
+        # print(tokens," MM")
 
         return Response(tokens, status = status.HTTP_201_CREATED)
     return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
@@ -296,7 +321,7 @@ def exercise_session(request, id):
         
         dataSerialize = request.data.copy()
         # dataSerialize['questions'] = json.loads(request.data['questions'] )
-        print(dataSerialize['questions'])
+        # print(dataSerialize['questions'])
         serializer = ExerciseSerializer(data=dataSerialize)
 
         if serializer.is_valid():
@@ -338,11 +363,11 @@ def exercises(request):
         if request.user.is_staff :
             postExercises = exercises
         if request.user.is_staff == False:
+            courseAuth = profile.courseAuth.split('/')
             for exercise  in exercises:
                 course_id = exercise.session.course.id
-                if str(course_id)  in profile.courseSave.split('/'): 
+                if str(course_id)  in courseAuth: 
                     postExercises.append(exercise)
-        print(profile.courseSave.split('/'))           
 
         postData = ExerciseSerializer(postExercises, many=True).data
         return Response(postData, status= status.HTTP_200_OK)
@@ -429,7 +454,7 @@ def category(request, id):
             return Response({"error": "  Category not found"}, status=status.HTTP_404_NOT_FOUND)
         courses = category.modelcourse_set.all()
         data = ModelCourseserializer(courses, many=True).data
-        print(data)
+        # print(data)
         return Response(data, status = status.HTTP_200_OK)
 
 @api_view(['GET','POST'])
@@ -452,26 +477,44 @@ def performance(request):
     if request.method == 'GET':
         profile = Profile.objects.get(user= request.user)
         courses = []
-        for i in profile.courseSave.split('/'):
+        exerciseTotalCourses = 0
+        
+        for i in profile.courseAuth.split('/'):
             if i != '':
                 course = ModelCourse.objects.get(pk= i)
                 sessions =  course.modelsession_set.all()
                 totalSession = len(sessions)
                 totalExercise = 0
+                sessionsExercise = []
 
                 exerciseIDs = []
                 for session in sessions:
+                    exerciseDone = 0
                     exercises = session.exercise_set.all()
+
                     totalExercise += len(exercises)
                     for exercise in exercises :
                         exerciseIDs.append(exercise.id)
-                
+                        # print(profile.exerciseLog.keys(),"keys")
+                        for key in profile.exerciseLog.keys():
+                            if exercise.id == int(key):
+                                exerciseDone += 1
+                    sessionsExercise.append({ 'name': session.overview, 'id':session.id, 'progress': exerciseDone/len(exercises)})
 
-                courseData = { **ModelCourseserializer(course).data, 'totalSession' :  totalSession, 'totalExercise': totalExercise}
+                exerciseDone = {}
+                for lock in exerciseIDs :
+                    for key in profile.exerciseLog.keys():
+                        if lock == int(key):
+                            exerciseDone[key] =  profile.exerciseLog[key]
+
+                courseData = { **ModelCourseserializer(course).data, 'totalSession' :  totalSession, 'totalExercise': totalExercise, 'exerciseDone': exerciseDone,'sessionsExercise': sessionsExercise}
                 courses.append(courseData)
-
-        data = { 'courses' :courses, 'exerciseLog': profile.exerciseLog}
-        
+                exerciseTotalCourses += totalExercise
+        log = {}
+        for key in profile.exerciseLog.keys():
+            exercise = Exercise.objects.get(pk = key)
+            log[exercise.name] = profile.exerciseLog[key]
+        data = { 'courses' :courses, 'exerciseLog': log ,  'exerciseTotalCourses': exerciseTotalCourses}
         return Response(data, status = status.HTTP_200_OK)
         
 # @api_view(['PUT', 'GET'])

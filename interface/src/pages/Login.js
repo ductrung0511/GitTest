@@ -56,6 +56,7 @@ export default function Login(){
                         localStorage.setItem('profile_image', data.profile_image);
                         localStorage.setItem('courseKey', data.courseKey);
                         localStorage.setItem('courseSave', data.courseSave);
+                        localStorage.setItem('courseAuth', data.courseAuth );
                         localStorage.setItem('blogSave', data.blogSave);
                         localStorage.setItem('exerciseLog', JSON.stringify(data.exerciseLog) );
 

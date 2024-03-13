@@ -8,7 +8,7 @@ export default function HeaderStatic(props)
     const navigation = [
         { name: 'Home', href: '/' },
         { name: 'Course', href: '/course' },
-        { name: 'Blog', href: '/blog' },
+        // { name: 'Blog', href: '/blog' },
         { name: 'Workspace', href: '/space' },
         
       ];

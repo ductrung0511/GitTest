@@ -23,15 +23,18 @@ export default function HomeSpace(){
 
     return(
         <div className="grid grid-cols-7">
-            <div className="col-span-4" id="COURSE ACTIVITY">
-                
+
+
+
+
+
+            <div className="col-span-4 mb-48" id="COURSE ACTIVITY">
                 {!loading && <CourseActivity profileData={data} /> }
             </div>
-            <div className="col-span-3">
-                {!loading && <ProfileCard profileData={data} /> }
-
-                
+            <div className="col-span-3 mt-16">
+                {!loading && <ProfileCard profileData={data} /> } 
             </div>
+
         </div>
         //<CourseDisplay/>
 

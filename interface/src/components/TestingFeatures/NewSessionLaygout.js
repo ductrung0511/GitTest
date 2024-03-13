@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom"
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Disclosure } from '@headlessui/react'
 import { ChevronUpIcon } from '@heroicons/react/20/solid'
 import CreateOrUpdateSession from "../Features/Create&UpdateSession";
@@ -13,6 +13,12 @@ export default function NewSessionLayout({sessionData, sectionsData, sessionID, 
     const [session, setSession] = useState(sessionData);
     const [sections, setSections] = useState(sectionsData);
     const [exercises, setExercises] = useState(exercisesData);
+    useEffect(()=>{
+
+
+        scrollToPosition(0);
+
+    },[])
     
     function updateSession (newSession){
         setSession(newSession);
@@ -165,9 +171,9 @@ return(
                             <button onClick={() => scrollToPosition(700)}>
                             <div className=" bg-gray-800 rounded-lg w-full font-bold text-lg px-4 py-2 text-white">  Content</div>
                             </button>
-                            <button onClick={() => scrollToPosition(500)}>
+                            {/* <button onClick={() => scrollToPosition(500)}>
                             <div className=" bg-gray-800 rounded-lg w-full font-bold text-lg px-4 py-2 text-white">  Introduction</div>
-                            </button>
+                            </button> */}
                             
                             
                             
@@ -251,7 +257,7 @@ return(
                             </div>
                             
                             {exercise.type === "multiple_choice"  && <Exercise questionsData={exercise.questions} instruction={exercise.instruction} exerciseID={exercise.id}   /> }
-                            {exercise.type === "vocabulary" && <VocabFlashCard vocabList={exercise.questions} instruction={exercise.instruction}  /> }
+                            {exercise.type === "vocabulary" && <VocabFlashCard vocabList={exercise.questions} instruction={exercise.instruction} exerciseID={exercise.id}   /> }
                             
                             <div className="px-2 h-1/5 mt-1 flex flex-col items-center">
                                 {/* <Exercise questionsData={exercises[0].questions}/> */}

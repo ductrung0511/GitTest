@@ -21,13 +21,15 @@ const MyChartComponent = ({ jsonData }) => {
       };
 
       const chartOptions = {
+        maintainAspectRatio: false, 
         scales: {
-          yAxes: [{
+          y: {
             ticks: {
               beginAtZero: true
             }
-          }]
-        }
+          }
+        },
+        barPercentage: 0.5,
       };
 
       if (chartRef.current) {
@@ -48,8 +50,8 @@ const MyChartComponent = ({ jsonData }) => {
   }, [jsonData]);
 
   return (
-    <div style={{ height: '50vh' }}> {/* Set height to 50% of viewport height */}
-      <canvas ref={chartRef} id="myChart" style={{ height: '100%' }}></canvas> {/* Set height to 100% of parent container height */}
+    <div style={{ height: '50vh' }} className='w-full h-full'> {/* Set height to 50% of viewport height */}
+      <canvas ref={chartRef} id="myChart" style={{ height: '100%'  }}></canvas> {/* Set height to 100% of parent container height */}
     </div>
   );
 };

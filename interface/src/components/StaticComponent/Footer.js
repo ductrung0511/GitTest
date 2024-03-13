@@ -41,7 +41,7 @@ export default function Footer()
 {
 
     return(
-        <section className="bg-gray-900 h-[70vh] pb-20 " >
+        <section className="bg-gray-900 h-[70vh] pb-20  z-40" >
             <div className="w-full h-4 shadow-2xl bg-gray-900"></div>
             <div className="grid grid-cols-4 gap-3 mt-10 px-14">
                 {keys.map((key) =>{return(
