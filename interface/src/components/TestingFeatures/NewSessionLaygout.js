@@ -9,6 +9,7 @@ import QuizAppInternal from "./QuizzAppInternalData";
 import Exercise from "./Exercise";
 import VocabFlashCard from "./VocabFlashCard";
 import CreateOrUpdateExercise from "../Features/CreateOrUpdateExercise";
+import { Tooltip } from "react-tooltip";
 export default function NewSessionLayout({sessionData, sectionsData, sessionID, exercisesData}){
     const [session, setSession] = useState(sessionData);
     const [sections, setSections] = useState(sectionsData);
@@ -161,15 +162,53 @@ export default function NewSessionLayout({sessionData, sectionsData, sessionID, 
     
 
 return(
-    <>              <div className="grid grid-cols-4">
-                        <div className="flex flex-col-reverse  gap-2 py-2">
+    <>
+    {localStorage.getItem('exerciseLog') === '{}' &&
+            <div className=" fixed top-20 right-2 bg-yellow-200  rounded-lg w-72 z-40    ">
+            <Disclosure>
+            {({ open }) => (
+                <>
+                <Disclosure.Button className="flex  w-full justify-between bg-yellow-200 shadow-lg rounded-t-lg  px-4 py-2 text-left text-sm font-medium ">
+                    <div className=" text-xs font-medium">
+                        Xem hướng dẫn đọc làm bài tập nào bạn ơi📋!
+                    </div>
+                    
+                </Disclosure.Button>
+                <Disclosure.Panel className="px-4 pb-2 pt-4 text-sm text-gray-500  rounded-b-lg bg-yellow-100">
+                    <p className="text-light text-xs text-black">
+                        💡Kéo xuống dưới hoặc nhấn vào nút bên dưới bạn sẽ thấy các bài tập về nhà mà mình  cần làm!
+                           <br/>     <button onClick={ ()=>{scrollToPosition(400)}} className="bg-white rounded-lg  p-2 my-1" > Nhấn vào đây để làm bài nào! </button> <br/>
+
+                        ⚔️Và cuối cùng là thống kê điểm số của các bài tập sẽ được lưu lại trong hệ thống  <br/>
+
+                    Các phần hướng dẫn chức năng sẽ hiện lên khi bạn rê chuột lên các phần mô tả nên đừng ngần ngại khám phá nha!💭💭<br/> Phần hướng dẫn này sẽ biến mất sau khi bạn thực hiện một bài tập nào đó trong hệ thống!                        
+                    </p>
+                </Disclosure.Panel>
+                </>
+            )}
+            </Disclosure>
+                {/* <input type="checkbox" /> 
+                
+
+                <div className="collapse-content"> 
+                    
+                </div> */}
+        </div>
+    } 
+                  <div className="grid grid-cols-4">
+                        <Tooltip id='tooltip-session' className="absolute z-30"/>
+                        <div
+                            data-tooltip-content='Bài tập về nhà của buổi học' data-tooltip-id="tooltip-session" data-tooltip-place="bottom"
+                         className="flex flex-col-reverse  gap-2 py-2">
                             <button onClick={() => scrollToPosition(800)}>
                                 <div className=" bg-gray-800 rounded-lg w-full font-bold text-lg px-4 py-2 text-white">  Exercise</div>
                             </button>
 
 
                             <button onClick={() => scrollToPosition(700)}>
-                            <div className=" bg-gray-800 rounded-lg w-full font-bold text-lg px-4 py-2 text-white">  Content</div>
+                            <div 
+                            data-tooltip-content='Nội dung của buổi học' data-tooltip-id="tooltip-session"
+                             className=" bg-gray-800 rounded-lg w-full font-bold text-lg px-4 py-2 text-white">  Content</div>
                             </button>
                             {/* <button onClick={() => scrollToPosition(500)}>
                             <div className=" bg-gray-800 rounded-lg w-full font-bold text-lg px-4 py-2 text-white">  Introduction</div>
@@ -182,9 +221,11 @@ return(
                         <div style={containerStyle} className={`m-2 col-span-3 relative rounded-lg bg-cover  pt-8 pb-2 bg-${session.color}-400 bg-green-200 grid grid-cols-3 overflow-hidden`} >
                             <div className="col-span-2 px-8 z-30">
                                 <p className="text-3xl font-extrabold text-white pt-3">{session.overview}</p>
+                                {(localStorage.getItem('role') === 'Administrator' || localStorage.getItem('role') === "Staff") && 
                                 <div className="flex flex-row">
                                         <Link to={session.PPTFileUrl} className="no-underline"> <button className="ml-2 my-2 p-2 text-md font-semibold text-black no-underline bg-white  rounded-lg"> Guideline for Student (PPT) </button> </Link>
                                 </div>
+                                }
                                 <div className="flex flex-row">
                                         <Link to={session.CPTUrl} className="no-underline"> <button className="ml-2 my-2 p-2 text-md text-black font-semibold no-underline bg-white  rounded-lg"> Text Book (CPT)</button> </Link>
                                 </div>
@@ -195,10 +236,13 @@ return(
                     {localStorage.getItem('role') === "Administrator" &&  <CreateOrUpdateSession addOrUpdateSession={updateSession} sessionID={sessionID} session={session}/> }
 
                     
-                    <div className={`m-2 px-4 rounded-lg   p-4 `} >
+                    <div
+                            data-tooltip-content='Nội dung bài học' data-tooltip-id="tooltip-session"
+                     className={`m-2 px-4 rounded-lg   p-4 `} >
                         <div className={`mx-auto w-full  rounded-xl     `}>
                             {sections.map((section, index) => {
-                                return(
+                                
+                                if (index<3) return(
                                 
                                 <Disclosure key={section.index} className=" ">
                                 {({ open }) => (
@@ -234,17 +278,59 @@ return(
                                     </Disclosure.Panel>
                                     </>
                                 )}
-                                </Disclosure>
-                                
+                                </Disclosure> 
+                                )
 
-                            )})}
+                                
+                                if (index >= 3 &&  (localStorage.getItem('role') === 'Administrator'  || localStorage.getItem('role') === 'Staff')) return(
+
+                                    <Disclosure key={section.index} className=" ">
+                                    {({ open }) => (
+                                        <>
+                                        <Disclosure.Button  className="flex w-full px-5 my-1   shadow-lg justify-between rounded-lg   py-3 text-left text-md font-medium text-purple-900 hover:bg-yellow-100">
+                                            
+                                            <span >{section.name}</span>  
+                                            <ChevronUpIcon
+                                            className={`${
+                                                open ? 'rotate-90 transform transition-all duration-700' : ''
+                                            } h-5 w-5 text-purple-500`}
+                                            />
+                                        </Disclosure.Button>
+                                        <Disclosure.Panel className=" bg-white  rounded-md px-4 pb-2 pt-4 text-sm text-gray-500 transition-all ease-in-out duration-1000">
+                                            
+                                            <div className="flex flex-row justify-between">
+                                                <div></div>
+                                                <button onClick={ () => (handleCopyText(JSON.stringify(section.content))) }>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 7.5V6.108c0-1.135.845-2.098 1.976-2.192.373-.03.748-.057 1.123-.08M15.75 18H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08M15.75 18.75v-1.875a3.375 3.375 0 0 0-3.375-3.375h-1.5a1.125 1.125 0 0 1-1.125-1.125v-1.5A3.375 3.375 0 0 0 6.375 7.5H5.25m11.9-3.664A2.251 2.251 0 0 0 15 2.25h-1.5a2.251 2.251 0 0 0-2.15 1.586m5.8 0c.065.21.1.433.1.664v.75h-6V4.5c0-.231.035-.454.1-.664M6.75 7.5H4.875c-.621 0-1.125.504-1.125 1.125v12c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V16.5a9 9 0 0 0-9-9Z" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                            {textToParagraphs(section.content)}
+                                            <div className="flex flex-row gap-3"> 
+                                            {localStorage.getItem('role') === "Administrator" &&  
+                                            <button className="rounded-lg border-1 border-black text-black px-3 py-2 font-bold" onClick={() => deleteSection(section.id)}>Delete</button>
+                                             }
+    
+                                            {localStorage.getItem('role') === "Administrator" &&  <CreateOrUpdateSection addOrUpdateSection={updateSection} sectionID={section.id} section={section} /> }
+                                            
+                                            </div>
+                                        </Disclosure.Panel>
+                                        </>
+                                    )}
+                                    </Disclosure> 
+
+                                )
+                            })}
                             
                         </div>
                     </div>
                     {localStorage.getItem('role') === "Administrator" &&  <CreateOrUpdateSection sessionID={sessionID} addOrUpdateSection={addSection}  /> }
 
                     
-                    <div className="grid grid-cols-2 gap-3 px-8 py-3 mx-7">
+                    <div 
+                    data-tooltip-content='Bài tập về nhà' data-tooltip-id="tooltip-session"
+                    className="grid grid-cols-2 gap-3 px-8 py-3 mx-7">
                         {exercises.map((exercise, index) => {
                         return <div key={exercise.name} className="rounded-lg h-70 shadow-lg bg-white flex flex-col overflow-hidden pb-2 relative">
                             <img className="h-4/5 w-full object-cover" src={exercise.bgCardUrl} alt="bg"/>

@@ -5,6 +5,7 @@ import { ChevronUpIcon } from '@heroicons/react/20/solid'
 import { baseUrl } from '../../Share';
 import { Fragment } from 'react'
 import {v4 as uuidv4} from 'uuid'
+import { Tooltip } from 'react-tooltip';
 function VocabFlashCard( {vocabList, instruction, exerciseID}) {
     let [isOpen, setIsOpen] = useState(false);
     const [list, setList] = useState(vocabList);
@@ -120,10 +121,14 @@ function VocabFlashCard( {vocabList, instruction, exerciseID}) {
             <button
               type="button"
               onClick={openModal}
+              data-tooltip-content='Nhấp vào đây để rèn luyện từ vựng thôi!'
+              data-tooltip-id="tooltip-vocab"
               className="rounded-md bg-black px-4 py-2 text-sm font-medium text-white hover:bg-black/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75"
             >
               View Vocabulary List
             </button>
+            <Tooltip id='tooltip-vocab' />
+
 
           </div>
     

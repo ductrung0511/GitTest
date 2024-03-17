@@ -7,6 +7,7 @@ import CreateOrUpdateResourses from "../components/Features/createOrUpdateResour
 import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import DeleteCountDown from "../components/Features/DeleteCountDown";
+import { Tooltip } from "react-tooltip";
 export default function Resources(){
 
     const [notFound, setNotFound] = useState(false);   
@@ -226,7 +227,8 @@ export default function Resources(){
 
     </div>;
     else if(localStorage.getItem('role') === "Student") return(<div className="flex flex-col">
-      <div className="text-3xl font-bold text-red-400 my-10 mt-20"> Sorry, Resource currently do not support Student</div>
+      <Tooltip id="tooltip-intro"/>
+      <div data-tooltip-content='Rất tiếc, Tài nguyên hiện hiện chỉ hỗ trợ Giáo Viên' data-tooltip-id="tooltip-intro" className="text-3xl font-bold text-red-400 my-10 mt-20">Sorry, Resource currently do not support Student</div>
       <img className="h-screen w-full object-cover" src="https://img.freepik.com/free-vector/high-school-concept-illustration_114360-8329.jpg?t=st=1709715929~exp=1709719529~hmac=d1a9b9b2b2e94dbfca4ec01698d06597af0c60f3f06fe325178b50092d941cc0&w=826" alt=""/>
       
 

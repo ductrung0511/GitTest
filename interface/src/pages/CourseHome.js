@@ -11,6 +11,7 @@ import { useEffect } from "react";
 import { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import ToastComponent from "../components/Features/Toast";
+import { Tooltip } from "react-tooltip";
 
 
 export default function CourseHome()
@@ -24,6 +25,13 @@ export default function CourseHome()
     const [features, setFeatures] = useState([]);
     const [populars, setPopulars] = useState([]);
     const [toast, setToast] = useState(false);
+
+    const scrollToPosition = (position) => {
+        window.scrollTo({
+          top: position,
+          behavior: 'smooth' // This gives a smooth scrolling effect
+        });
+      };
 
     useEffect(() => {
         async function fetchData() {
@@ -65,6 +73,7 @@ export default function CourseHome()
         } 
       
         fetchData();
+        scrollToPosition(0);
       }, []);
 
     const handleSaveCourse =(courseID) =>{
@@ -195,14 +204,30 @@ export default function CourseHome()
 
             
             <div className="grid grid-cols-8  bg-color-vibrant bg-opacity-20 pt-28" id="BASE">
+                <Tooltip id="my-tooltip" className="absolute z-50"/>
                 <div id="LEFT SIDE BAR/ CATEGORIES" className="col-span-2 px-3">
                     <div className=" w-full h-full flex flex-col items-center  max-w-7xl px-2 rounded-xl  border-0  pt-2">
-                        
                         
                         {categories?.map((item, index) => (
                                 <NavLink
                                 key={item.name}
                                 to={item.href}
+                                {...(item.name === 'All Courses' 
+                                ? {
+                                    'data-tooltip-id': 'my-tooltip',
+                                    'data-tooltip-content': '🗂️ This is where you\'ll find an overview of all course categories.',
+                                    'data-tooltip-place': 'top'
+                                }
+                                : {})}
+                                {...(item.name !== 'All Courses' 
+                                ? {
+                                    'data-tooltip-id': 'my-tooltip',
+                                    'data-tooltip-content': '🚧 🚧 This is where the categories of courses will be displayed in detail (functionality is currently in development).',
+                                    'data-tooltip-place': 'top',
+                                }
+                                : {})}
+
+
                                 className={({ isActive }) => {
                                     if( item.name  === "All Courses" & isActive )
                                     return 'no-underline px-4 py-2 w-4/5 mb-2 h-10 rounded-md text-sm font-bold capitalize bg-color-secondary/90 text-white'
@@ -219,6 +244,7 @@ export default function CourseHome()
 
                             ))}
                         
+                        
                     </div>
                     
                 </div>
@@ -232,7 +258,7 @@ export default function CourseHome()
                             <p className=" text-3xl font-extrabold">  Online Classes </p>
                             <p className=" text-sm font-bold"> Find what fascinates you as you explore these online classes.</p>
                             <p className=" text-xs font-light"> Contact your Teacher for access to your course</p>
-                            <button className="rounded-lg font-bold text-black bg-green-600 text-xl p-2" onClick={() => { localStorage.getItem('access')? navigate('/workspace/dashboard/') : navigate('/login/')}} > Start  Now </button>
+                            <button data-tooltip-id="my-tooltip" data-tooltip-content=" 🔍 🖥️ This will direct you to the workspace page where you can search for your courses." className="rounded-lg font-bold text-black bg-green-600 text-xl p-2" onClick={() => { localStorage.getItem('access')? navigate('/workspace/performance/') : navigate('/login/')}} > Start  Now </button>
 
                             </div>
                     </div>
@@ -240,13 +266,13 @@ export default function CourseHome()
                     
 
                     {featureCourse.current && 
-                    <div className="w-full h-[43vh]  shadow-md   rounded-2xl bg-white grid grid-cols-2 overflow-hidden hover:shadow-lg  cursor-pointer duration-700">
-                            <div className="  relative bg-blue-400"> 
-                                <NavLink to={'/workspace/courses/' + featureCourse.current.id} className='no-underline  h-3/4'>
+                    <div className="w-full h-[43vh]  shadow-md rounded-2xl bg-white grid grid-cols-2 overflow-hidden hover:shadow-lg  cursor-pointer duration-700">
+                            <div className="  relative bg-white  overflow-hidden"> 
+                                <NavLink to={'/workspace/courses/' + featureCourse.current.id} className='no-underline '>
 
                                     <img src={featureCourse.current.bgCardUrl} alt="" className="object-fill ">
                                     </img>
-                                    <div className="rounded-3xl   bg-green-400 font-semibold border-1  border-black text-black absolute bottom-7 left-2 px-2"> New</div>
+                                    <div className="rounded-3xl bg-green-400 font-semibold border-1  border-black text-black absolute bottom-7 left-7 px-2"> New</div>
                                 </NavLink>
                             </div>
                             <div className="p-3 flex justify-between flex-col relative">
@@ -286,8 +312,8 @@ export default function CourseHome()
                                             </Transition>
                                         </Menu>
                                     </div>
-                                    <p className=" text-sm font-light m-0 p-0" > {featureCourse.current.textBook} </p>
-                                    <p className=" text-sm font-light m-0 p-0">{featureCourse.current.totalStudent} XXX students</p>
+                                    <p className=" text-sm font-semibold mb-1 p-0" > {featureCourse.current.textBook} </p>
+                                    <p className=" text-sm font-light m-0 p-0">{featureCourse.current.conclusion}</p>
                                 </div>
                                 <div className="flex flex-row justify-between">
                                     <p className="text-xs font-light  text-color-secondary  m-0 p-0">{featureCourse.current.duration} sessions</p>

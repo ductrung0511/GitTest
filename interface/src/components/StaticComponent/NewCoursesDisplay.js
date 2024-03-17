@@ -171,21 +171,22 @@ export default function NewCoursesDisplay({courseCategories}){
         </div>
         <div className='grid grid-cols-3 gap-4 justify-center items-center pt-10 px-10'>
 
-            <div className=" rounded-xl p-7  w-49 bg-white text-yellow-400   text-center shadow-lg"> 
+            <div className=" rounded-xl p-7  w-49 bg-white text-yellow-400 2xl:py-10  text-center shadow-lg"> 
                 <p className="text-2xl p-0 m-0 font-bold text-blue-800">1000+</p> Học Sinh
             </div>
 
-            <div className={`rounded-xl p-7 w-49 bg-white text-yellow-400 text-center  shadow-lg hover:bg-black ease-in duration-700`}>
-                <p className="text-2xl font-bold p-0 m-0 text-blue-800">28+</p>Lớp Học</div>
-            <div className="rounded-xl p-7 w-49 bg-white  text-yellow-400 text-center shadow-lg">
+            <div className={`rounded-xl p-7 w-49 bg-white text-yellow-400 2xl:py-10 text-center  shadow-lg hover:bg-black ease-in duration-700`}>
+                <p className="text-2xl font-bold p-0 m-0 text-blue-800 ">28+</p>Lớp Học</div>
+            <div className="rounded-xl p-7 w-49 bg-white  text-yellow-400 2xl:py-10 text-center shadow-lg">
                 <p className="text-2xl font-bold p-0 m-0 text-blue-800">6</p> Năm Kinh Nghiệm</div>
             
         </div>
         <div className="grid grid-cols-8 gap-3 px-10 mt-10 ">
-            <div className=" mb-5 col-span-5 grid grid-cols-5 border border-transparent rounded-lg duration-700 bg-orange-200 hover:shadow-lg hover:bg-orange-300 w-full h-48">
-                <div className="flex flex-col col-span-2 justify-center">
-                    <img src="https://img.freepik.com/free-vector/back-school-background-with-elements_23-2147855886.jpg?t=st=1709708704~exp=1709712304~hmac=fc92de1a612a4280d75bd5b1390df241e8ee9755af8c2c4971fefe4eed72167a&w=740" className="w-24  h-auto ml-24 rounded-lg"/>
-                    <p className="font-extrabold text-lg text-blue-800 text-center"> Anh Văn Mẫu giáo <br/> <span className="font-semibold">  Super Stars</span>  </p>
+            <div className=" mb-5 col-span-5 grid grid-cols-5 border border-transparent rounded-lg duration-700 bg-orange-200 hover:shadow-lg hover:bg-orange-300 w-full 2xl:h-56 h-48 ">
+                <div className="flex flex-col col-span-2 justify-center items-center">
+                    <p className="font-extrabold text-lg text-blue-800 text-center">
+                    <img src="https://img.freepik.com/free-vector/back-school-background-with-elements_23-2147855886.jpg?t=st=1709708704~exp=1709712304~hmac=fc92de1a612a4280d75bd5b1390df241e8ee9755af8c2c4971fefe4eed72167a&w=740" className="w-24  h-auto ml-10 rounded-lg"/>
+                         Anh Văn Mẫu giáo <br/> <span className="font-semibold">  Super Stars</span>  </p>
                 </div>
                 <button onClick={()=>{scrollToPosition(2680)}}  className=" col-span-3 bg-white shadow-md hover:bg-yellow-200 rounded-lg w-4/5 h-full my-4 px-4 py-2">
                     <h3 className="text-semibold text-xl text-blue-700">Khơi mở niềm đam mê</h3>
@@ -194,10 +195,10 @@ export default function NewCoursesDisplay({courseCategories}){
                          </p>
                 </button>
             </div>
-            <div className=" pr-2 mb-30 col-span-3  grid grid-cols-7 border border-transparent rounded-lg duration-700 bg-yellow-200 hover:shadow-lg hover:bg-green-300 w-full h-48">
-                <div className="flex flex-col col-span-3  items-start mt-3">
-                    <img src="https://img.freepik.com/premium-vector/travel-around-world_51194-27.jpg?w=740" className="w-24 h-auto ml-10 rounded-lg"/>
-                    <p className="font-extrabold text-lg text-blue-700 text-center"> Anh Văn Thiếu nhi  <span className="font-semibold">Explorers</span> </p>
+            <div className=" pr-2 mb-30 col-span-3  grid grid-cols-7 border border-transparent rounded-lg duration-700 bg-yellow-200 hover:shadow-lg hover:bg-yellow-400 w-full h-48 2xl:h-56">
+                <div className="flex flex-col col-span-3  items-center justify-center mt-3">
+                    <img src="https://img.freepik.com/premium-vector/travel-around-world_51194-27.jpg?w=740" className="w-24 h-auto ml-7 rounded-lg"/>
+                    <p className="font-extrabold text-lg text-blue-700 text-center"> Anh Văn Thiếu nhi <br/> <span className="font-semibold">Explorers</span> </p>
                 </div>
                 <button onClick={()=>{scrollToPosition(3300)}} className=" col-span-3 bg-white hover:bg-yellow-200 rounded-lg  shadow-lg  h-full  my-1 mt-4 w-72 px-4 py-1 ">
                     <h3 className="text-semibold text-xl text-blue-700"> Khám phá thế giới</h3>
@@ -207,10 +208,11 @@ export default function NewCoursesDisplay({courseCategories}){
                          </p>
                 </button>
             </div>
-            <div className=" col-span-4 grid grid-cols-5 border border-transparent rounded-lg duration-700 bg-blue-200 hover:shadow-lg hover:bg-blue-300 w-full h-48">
-                <div className="flex flex-col col-span-2 justify-center mb-7">
-                    <img src="https://img.freepik.com/free-vector/illustration-kids-concept_53876-26954.jpg?t=st=1709708803~exp=1709712403~hmac=f5a6c2cafca5a783230f5f79e77bdfe325b7858f033c72d7c0c708eabcea3139&w=900" className="w-24  h-auto ml-16 rounded-lg"/>
-                    <p className="font-extrabold text-lg text-blue-700 text-center pb-0"> Anh Văn Thiếu Niên <br/> <span className="font-semibold">Leaders</span> </p>
+            <div className=" col-span-4 grid grid-cols-5 border border-transparent rounded-lg duration-700 bg-blue-200 hover:shadow-lg hover:bg-blue-300 w-full h-48 2xl:h-56">
+                <div className="flex flex-col col-span-2 justify-center items-center">
+                    <p className="font-extrabold text-lg text-blue-700 text-center pb-0">
+                    <img src="https://img.freepik.com/free-vector/illustration-kids-concept_53876-26954.jpg?t=st=1709708803~exp=1709712403~hmac=f5a6c2cafca5a783230f5f79e77bdfe325b7858f033c72d7c0c708eabcea3139&w=900" className="w-24  h-auto ml-10 rounded-lg"/>
+                         Anh Văn Thiếu Niên <br/> <span className="font-semibold">Leaders</span> </p>
                 </div>
                 <button onClick={()=>{scrollToPosition(4000)}}  className=" col-span-3 bg-white shadow-lg hover:bg-yellow-200 rounded-lg w-4/5 h-full  my-4 px-4 py-1">
                     <h3 className="text-semibold text-xl text-blue-700"> Làm chủ tương lai  </h3>
@@ -219,10 +221,11 @@ export default function NewCoursesDisplay({courseCategories}){
                     </p>
                 </button>
             </div>
-            <div className=" col-span-4 grid grid-cols-5 border border-transparent rounded-lg duration-700 bg-green-200 hover:shadow-lg hover:bg-green-300 w-full h-48">
-                <div className="flex flex-col col-span-2 justify-center mb-14">
-                    <img src="https://img.freepik.com/free-vector/hand-drawn-back-school-background_23-2149031981.jpg?t=st=1709708654~exp=1709712254~hmac=46bb39064aa2f53209eeab2ed987d6c93385e932d4853f2b1336fe72c3ede620&w=826" className="w-24  h-auto ml-16 rounded-lg"/>
-                    <p className="font-extrabold text-lg text-blue-700 text-center"> Luyện Thi IELTS <br/><span className="font-semibold"> Fly to the world </span></p>
+            <div className=" col-span-4 grid grid-cols-5 border border-transparent rounded-lg duration-700 bg-green-200 hover:shadow-lg hover:bg-green-300 w-full h-48 2xl:h-56">
+                <div className="flex flex-col col-span-2  justify-center items-center">
+                    <p className="font-extrabold text-lg text-blue-700 text-center">
+                    <img src="https://img.freepik.com/free-vector/hand-drawn-back-school-background_23-2149031981.jpg?t=st=1709708654~exp=1709712254~hmac=46bb39064aa2f53209eeab2ed987d6c93385e932d4853f2b1336fe72c3ede620&w=826" className="w-24  h-auto ml-4 rounded-lg"/>
+                    Luyện Thi IELTS <br/><span className="font-semibold"> Fly to the world </span></p>
                 </div>
                 <button onClick={()=>{scrollToPosition(4670)}}  className=" col-span-3 bg-white shadow-lg hover:bg-yellow-200 rounded-lg w-4/5 h-full my-4 px-4 py-1">
                     <h3 className="text-semibold text-xl text-blue-700"> Công dân toàn cầu</h3>

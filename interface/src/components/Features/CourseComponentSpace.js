@@ -1,16 +1,15 @@
 import {  Link, NavLink } from "react-router-dom";
 import { baseUrl } from "../../Share";
-import useFetch from "../hook/useFetch";
 import {v4 as uuidv4} from 'uuid'
 
 import 'daisyui/dist/full.css';
 import React, { useEffect, useState } from "react";
-import CourseSetting from "./CourseSetting";
 import CreateSession from "./Create&UpdateSession";
 import { useLocation, useNavigate } from "react-router-dom";
 import CreateCourse from "./CreateCourse";
 import { useRef } from "react";
 import { Tooltip } from 'react-tooltip'
+import { Disclosure } from '@headlessui/react'
 export default function CourseComponentSpace(props){
     const [course, setCourse] = useState(props.course);
     
@@ -133,9 +132,7 @@ export default function CourseComponentSpace(props){
             {text.split('\n').map((paragraph, index) => (
 
              <li key={index} className="flex flex-row mb-1">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 mr-1">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 0 1-3.296-1.043 3.745 3.745 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 0 1 1.043-3.296 3.746 3.746 0 0 1 3.296-1.043A3.746 3.746 0 0 1 12 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.296A3.745 3.745 0 0 1 21 12Z" />
-                </svg>
+                
 
                 {paragraph}
                 </li>
@@ -271,9 +268,6 @@ export default function CourseComponentSpace(props){
     return(
         
             <div className="p-1 grid grid-cols-1 bg-color-vibrant/10 pl-1 mt-14">
-                        {/*
-                        <p className="text-sm mt-1 font-extrabold text-black text-left"> General Infomation</p>
-                        */}
                         {toast && <div id="toast-default" className="flex flex-col gap-2 z-30 shadow-xl fixed bottom-3 right-3 items-center w-full max-w-xs p-4 text-gray-500 bg-white rounded-lg  dark:text-gray-400 dark:bg-gray-800" role="alert">
                             <div className="ms-3 text-sm  font-semibold text-black uppercase "> Course has been saved to </div>
                             <div className="flex flex-row shadow-lg  justify-between items-center px-6 hover:bg-gray-400  duration-700 w-full h-10 text-black bg-blue-100 rounded-lg dark:bg-blue-800 dark:text-blue-200">
@@ -289,19 +283,67 @@ export default function CourseComponentSpace(props){
                                 </svg>
                             </button>
                         </div>
-            }
+                        }
+                        
+                        
+                        {localStorage.getItem('exerciseLog') === '{}' &&
+                             <div className=" fixed top-10 right-20 bg-yellow-200  rounded-lg z-100  w-48 ">
+
+                                <Disclosure>
+                                {({ open }) => (
+                                    <>
+                                    <Disclosure.Button className="flex  w-full justify-between bg-yellow-200 shadow-lg rounded-t-lg  px-4 py-2 text-left text-sm font-medium ">
+                                        <div className=" text-xs font-medium">
+                                            Mở ra để xem phần hướng dẫn thui📋!
+                                        </div>
+                                        
+                                    </Disclosure.Button>
+                                    <Disclosure.Panel className="px-4 pb-2 pt-4 text-sm text-gray-500 rounded-b-lg bg-yellow-100">
+                                        <p className="text-light text-xs text-black">
+                                        Các phần hướng dẫn chức năng sẽ hiện lên khi bạn rê chuột lên các phần mô tả nên đừng ngần ngại khám phá nha!💭💭<br/> Phần hướng dẫn này sẽ biến mất sau khi bạn thực hiện một bài tập nào đó trong hệ thống!                        
+                                        </p>
+                                    </Disclosure.Panel>
+                                    </>
+                                )}
+                                </Disclosure>
+                                    {/* <input type="checkbox" /> 
+                                    
+
+                                    <div className="collapse-content"> 
+                                        
+                                    </div> */}
+                            </div>
+                          } 
+
                         <div className= {`w-full h-[49vh] my-3 rounded-2xl bg-${course.color}-200 grid grid-cols-7 overflow-hidden hover:shadow-lg  cursor-pointer duration-700 `}>
                             <div className="  relative bg-blue-400 col-span-3"> 
-                                <img src={course.bgCardUrl} alt="bgIMG" className="object-cover ">
+                                <img src={course.bgCardUrl} alt="bgIMG" className="object-cover h-full ">
                                 </img>
                             </div>
+
+                            {(localStorage.getItem('courseAuth').split('/').length<4 && localStorage.getItem('role') === 'Staff') && <Tooltip id="course-tooltip"/> }
+                            
+
                             <div className="p-3 flex justify-between flex-col col-span-4">
                                 <div>
-                                    <p className=" text-xl font-bold">  {course.name}</p>
-                                    <p className="text-sm font-extralight text-black text-left">{course.serial}-{course.id}</p>
+                                    <p className=" text-xl font-bold" 
+                                    data-tooltip-content = '🎓 Course Name'
+                                    data-tooltip-id = 'course-tooltip' >  {course.name}</p>
+                                    <p
+                                    data-tooltip-content = '📘 Course Series '
+                                    data-tooltip-id = 'course-tooltip'
+                                    data-tooltip-place="left"
+                                    className="text-sm font-extralight text-black text-left">{course.serial}-{course.id}</p>
 
-                                    <p className=" text-base m-0 p-0">  Text Book:  <span className="font-semibold ">{course.textBook} </span></p>
-                                    <p className="text-xs mt-2 text-gray-800"> {course.conclusion}
+                                    <p
+                                    
+                                    className=" text-base m-0 p-0">  Text Book:  <span className="font-semibold ">{course.textBook} </span></p>
+                                    <p
+                                    data-tooltip-content = '🏁 Course Conclusion'
+                                    data-tooltip-id = 'course-tooltip'
+                                    data-tooltip-place="bottom"
+
+                                    className="text-xs mt-2 text-gray-800"> {course.conclusion}
                                     </p>
                                 </div>
                                 <div className="flex flex-row justify-between">
@@ -357,7 +399,11 @@ export default function CourseComponentSpace(props){
                                     </svg>
                                     <button onClick={()=>{navigate('/workspace/dashboard/')}}>
 
-                                    <p className="font-bold text-md my-0">
+                                    {localStorage.getItem('exerciseLog') === '{}' &&  <Tooltip id="tooltip-student" className="absolute z-40"/> }
+                                    <p
+                                    data-tooltip-content='Head to your dashboard and complete the exercises for this course! 📝🏁'
+                                    data-tooltip-id="tooltip-student"
+                                     className="font-bold text-md my-0">
                                         Take all Exercise
                                     </p>
                                     </button>
@@ -427,12 +473,22 @@ export default function CourseComponentSpace(props){
                                             
                                             <div className="col-span-1  text-sm   flex flex-col items-center pt-10">
                                                 
-                                                <strong>{session.date} 8:00 - 10:00</strong>
+                                                <strong
+                                                data-tooltip-content='🏆Session Level'
+                                                data-tooltip-id="tooltip-student"
+                                                > {session.level}</strong>
                                             </div>
                                             <div className="col-span-4 ml-5 ">
                                                 
-                                                <p className="text-xl font-extrabold text-color-secondary mt-4 mb-0">{session.overview}</p>
-                                                <p className="text-xs  text-color-secondary">Basic Geometry Concept and Formula</p>
+                                                <p
+                                                data-tooltip-content='📜Session Overview'
+                                                data-tooltip-id="tooltip-student"
+                                                 className="text-xl font-extrabold text-color-secondary mt-4 mb-0">{session.overview}</p>
+                                                <p
+                                                data-tooltip-content=' 🎯Session Topics'
+                                                data-tooltip-id="tooltip-student"
+                                                data-tooltip-place="bottom"
+                                                className="text-xs  text-color-secondary">{session.topics}</p>
                                             </div>
                                             <button className=" rounded-full ">
                                                 <Link to={ (coursePerm.current || localStorage.getItem('role')=== 'Administrator') ?  "/workspace/session/" + session.id : "#" }>
@@ -446,13 +502,18 @@ export default function CourseComponentSpace(props){
                                             {localStorage.getItem('role') === "Administrator" &&
                                             <button onClick={() => {handleDeleteSession(session.id)}} className=" rounded-lg bg-gray-300 p-2 m-4 mt-4 border-color-primary-dark">Delete</button>
                                              }
+                                             <Tooltip id='tooltip-session'/>
                                              { (localStorage.getItem('role') !== "Administrator" && coursePerm.current) && 
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className=" mt-4 w-6 h-6">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className=" mt-10 w-6 h-6" data-tooltip-content='📋Khóa học đã được mở'
+                                                data-tooltip-id="tooltip-session"
+                                                data-tooltip-place="bottom">
                                                 <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 10.5V6.75a4.5 4.5 0 1 1 9 0v3.75M3.75 21.75h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H3.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
                                                 </svg>
                                              }
                                              { (localStorage.getItem('role') !== "Administrator" && !coursePerm.current) && 
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className=" mt-7 w-6 h-6">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className=" mt-10 w-6 h-6" data-tooltip-content='📋Khóa học chưa được đăng kí'
+                                                data-tooltip-id="tooltip-session"
+                                                data-tooltip-place="bottom">
                                                 <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
                                               </svg>
                                               
@@ -472,8 +533,8 @@ export default function CourseComponentSpace(props){
                         <p className="text-sm my-4 font-extralight text-gray-200 text-left border-1 "> </p> 
 
                         <div className="flex flex-row justify-center gap-2">
-                            <div className="rounded-xl p-7  w-40 bg-white text-center shadow-lg text-sm"> <p className="text-2xl p-0 m-0 font-bold">{course.duration * 1.5}</p> study hours</div>
-                            <div className="rounded-xl p-7 w-40 bg-white text-center shadow-lg text-sm"> <p className="text-2xl font-bold p-0 m-0">{course.totalExercise}48 </p>Online exercise</div>
+                            <div className="rounded-xl p-7  w-40 bg-white text-center shadow-lg text-sm"> <p className="text-2xl p-0 m-0 font-bold">{course.duration * 1.5}</p> Tổng số Giờ Học</div>
+                            <div className="rounded-xl p-7 w-40 bg-white text-center shadow-lg text-sm"> <p className="text-2xl font-bold p-0 m-0">{course.totalExercise} </p>Tổng số Bài Tập</div>
                             {/* <div className="rounded-xl p-7 w-40 bg-white shadow-lg relative">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-10 h-10 top-10 left-14 absolute ">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z" />
@@ -481,7 +542,7 @@ export default function CourseComponentSpace(props){
                             </div> */}
                         </div>
                         <p className="text-sm my-4 font-extralight text-gray-200 text-left border-1 "> </p> 
-                        <div className=" bg-white shadow-lg ml-7 px-5  overflow-y-auto  h-96 border-transparent  py-5 rounded-lg">
+                        <div className=" bg-white shadow-lg ml-7 px-5  overflow-y-auto  h-[100vh] border-transparent  py-5 rounded-lg">
                             <a
                             data-tooltip-id="my-tooltip"
                             data-tooltip-content="Hello world! This is my second update "
@@ -490,7 +551,7 @@ export default function CourseComponentSpace(props){
                             >
                             ◕‿‿◕
                             </a>
-                            <p className="font-bold text-xl text-black">About This Class</p>
+                            <p className="font-bold text-xl text-black">Đôi Chút Về Khóa Học</p>
                             <p>{textToParagraphs(course.description)}</p>
                             <p>In this class you'll learn:</p>
                             <ul>
@@ -528,7 +589,7 @@ export default function CourseComponentSpace(props){
 
                         <p className="text-sm my-4  mx-7 font-extralight text-gray-200 text-left border-1 "> </p> 
                         <div className="ml-7 px-5">
-                            <p className="font-bold text-xl text-black">Similar Classes</p>
+                            <p className="font-bold text-xl text-black">Các Khóa Học Tương Tự</p>
                             <div className='grid grid-cols-3 gap-1'>
                                 {similarCourses?.map((course) => {
                                         if(course !== undefined) return (
@@ -576,7 +637,7 @@ export default function CourseComponentSpace(props){
                             </div>
                             <div className="flex justify-center">
                                 <Link to={"/course"} className="no-underline">
-                                    <button className="rounded-lg px-4 h-7 text-xs  border-black border-1 text-black font-bold"> View All </button>
+                                    <button className="rounded-lg px-4 h-7 text-xs  border-black border-1 text-black font-bold"> Xem tất cả </button>
                                 </Link>
                             </div>
                         </div>

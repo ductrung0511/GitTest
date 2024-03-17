@@ -12,9 +12,6 @@ import QuizApp from './components/TestingFeatures/MultiQuestionTesting';
 import Session from './pages/Session';
 import HomeSpace from './pages/HomeSpace';
 import Login from './pages/Login';
-import Example from './components/Features/BeforeInAfterSectionBeta';
-import FrequentlyAsked from './components/StaticComponent/FrequentlyAsked';
-import ThemeSelecting from './components/Features/ThemeSelecting';
 import { baseUrl } from './Share';
 import Register from './pages/Register';
 import PopularPosts from './components/StaticComponent/PopularPost';
@@ -31,7 +28,7 @@ function App() {
   useEffect(()=>{
     const minute = 1000 * 60;
     function refreshToken() {
-      if(localStorage.refresh){
+      if(localStorage.getItem('refresh')){
 
         const url= baseUrl + 'api/token/refresh/';
         fetch(url, {

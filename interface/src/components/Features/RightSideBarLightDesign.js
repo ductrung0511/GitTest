@@ -1,14 +1,15 @@
 
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
+import { Tooltip } from "react-tooltip";
 export default function RightSideBarLightDesign(){
     const categories = [
-        {name: "Dashboard", href: "/workspace/dashboard"},
-        {name: "", href: "/"},
-        {name: "Courses", href :"/workspace/performance"},
-        {name: "Resources", href :"/workspace/resources"},
-        {name: "Calendar", href :"/workspace/calendar"},
-        {name: "Assignment", href :"/workspace/assignment"},  
+        {name: "Dashboard", href: "/workspace/dashboard", tip:'📈 Theo dõi hiệu suất, khóa học, phiên và bài tập của bạn. '},
+        {name: "", href: "/workspace/dashboard/#", tip: 'Đừng chạm vào tôi!'},
+        {name: "Courses", href :"/workspace/performance", tip:'🔍🗝️ Tìm kiếm khóa học của bạn theo Code từ giáo viên của bạn tại đây.' },
+        {name: "Resources", href :"/workspace/resources" , tip:'📋Theo dõi tài nguyên của bạn ở đây.'},
+        {name: "Calendar", href :"/workspace/calendar", tip:'📅 Theo dõi các tiết học và bài tập của bạn tại đây.'},
+        {name: "Assignment", href :"/workspace/assignment", tip:'🎯Theo dõi kết quả và câu trả lời của các bài kiểm tra và bài tập'},  
     ];
     const [isFixed, setIsFixed] = useState(false);
     const [isHidden, setIsHidden] = useState(false);
@@ -35,7 +36,7 @@ export default function RightSideBarLightDesign(){
     return(
     <div id="LEFT SIDE BAR/ CATEGORIES" className="px-3 pt-28">
         <div className=" w-full h-full flex flex-col items-center  max-w-7xl px-2 rounded-xl  border-0  pt-2">
-            
+            <Tooltip id="my-tooltip" className="absolute z-40"/>
             
             {categories.map((item, index) => (
                     
@@ -43,6 +44,14 @@ export default function RightSideBarLightDesign(){
                     <NavLink
                     key={item.name}
                     to={item.href}
+                    {...((localStorage.getItem('courseAuth')?.split('/').length < 5 || !localStorage.getItem('courseAuth')  )
+                                ? {
+                                    'data-tooltip-id': 'my-tooltip',
+                                    'data-tooltip-content':item.tip,
+                                      
+                                    'data-tooltip-place': 'top'
+                                  }
+                                : {})} 
                     className={({ isActive }) => {
                         if( item.name  === "Dashboard" & isActive )
                         return 'no-underline px-4 py-2 w-4/5 mb-2 h-10 rounded-md text-sm font-bold capitalize bg-black text-white hover:bg-gray-700 duration-700'

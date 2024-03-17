@@ -68,6 +68,9 @@ export default function Register(){
                             localStorage.setItem('courseAuth', data.courseAuth );
                             localStorage.setItem('exerciseLog', JSON.stringify(data.exerciseLog) );
 
+                            localStorage.setItem('bio', data.bio );
+                            localStorage.setItem('school', data.school );
+
 
                             let role = "Administrator";
                             if (!data.is_staff && !data.is_superuser) {
@@ -131,18 +134,18 @@ return(
                   </div>
                   <div>
                       <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your email</label>
-                      <input type="text" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                      placeholder="name@company.com" required="" onChange={(e) => {setEmail(e.target.value)}}/>
+                      <input type="email" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                      placeholder="name@school.com" required="" onChange={(e) => {setEmail(e.target.value)}}/>
                   </div>
                   <div>
                       <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
                       <input type="password" name="password" id="password" placeholder="••••••••" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                      required="" onChange={(e) => {setPassword(e.target.value)}}/>
+                      required="" onChange={(e) => {setPassword(e.target.value)}}  onCopy="return false" onCut="return false" onPaste="return false" />
                   </div>
                   <div>
                       <label htmlFor="reenterPassword" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Enter your password again</label>
                       <input type="password" name="rePassword" id="rePassword" placeholder="••••••••" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                      required="" onChange={(e)=> {setRePassword(e.target.value)}} />
+                      required="" onChange={(e)=> {setRePassword(e.target.value)}} onCopy="return false" onCut="return false" onPaste="return false" />
                   </div>
                   <div className="flex items-center justify-between">
                       <div className="flex items-start">

@@ -7,14 +7,14 @@ const list= [
   {question:"Lịch học của trung tâm như thế nào?", answer:"Trung tâm có lịch học các lớp linh hoạt, học viên sẽ được kiểm tra xếp lớp phù hợp với trình độ và thời gian cá nhân."},
   {question:"Trung tâm có cấp chứng chỉ không?", answer:"Tại NZEC, học viên được đào tạo phát triển 4 kỹ năng từ căn bản đến nâng cao để đủ khả năng thi và đạt các Chứng chỉ Tiếng anh quốc tế được cấp bởi các tổ chức uy tín."},
 ]
-const bgImg= "https://st4.depositphotos.com/3206865/21452/i/450/depositphotos_214528520-stock-photo-triangle-blue-pink-light-green.jpg";
+const bgImg= "https://t4.ftcdn.net/jpg/02/15/64/95/240_F_215649564_1qIEiuNHAwcE3QbdDwLpK4vG4C14qS9i.jpg";
 
 
 export default function FrequentlyAsked() {
 
 
   return (
-    <div className="w-full px-4 pt-16 pb-20 h-screen bg-no-repeat bg-cover" style={{backgroundImage: `url(${bgImg})`}}>
+    <div className="w-full px-4 pt-32 pb-20 h-screen bg-no-repeat bg-cover" style={{backgroundImage: `url(${bgImg})`}}>
 
         <h2 className='font-extrabold text-gray-700 mb-7 text-center '> Các câu hỏi thường gặp của Trung Tâm</h2>
         <div className="mx-auto w-full max-w-4xl rounded-xl bg-transparent  p-2  ">

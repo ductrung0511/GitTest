@@ -5,14 +5,11 @@ import { baseUrl } from "../../Share"
 import useFetch from "../hook/useFetch"
 import CreateCourse from "./CreateCourse"
 import ResultModal from "./ResultModal"
+import { Tooltip } from "react-tooltip"
  
 
 
 export default function CourseActivity({profileData}){
-    // const [data, setData] = useState();
-    // const [loading, setLoading] = useState(false);
-    // const [error, setError] = useState();
-    // const [isLoaded, setIsLoaded] = useState(false);
 
     const addCourse = (newCourse) => {
         setCourses([...courses, newCourse]);
@@ -35,11 +32,7 @@ export default function CourseActivity({profileData}){
         method:'GET', 
         headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + localStorage.getItem('access'),}
     });
-    // setData(data);
-    // setLoading(loading);
-    // setError(error);
-    // setIsLoaded(true);
-    
+
     const [courses, setCourses] = useState(null);
     const [key, setKey] = useState('');
     
@@ -127,7 +120,6 @@ export default function CourseActivity({profileData}){
                     for (let lock of courseKeys) {
                         for (let key of profileKeys) {
                             if (key === lock  ) {
-                                // Add the matched course to the authCourse array if needed
                                 authCourse.push(c);
                                 
                             }
@@ -176,10 +168,12 @@ export default function CourseActivity({profileData}){
     else if(courses) return(
         <>
         {/* Breadcrumb */}
+        <Tooltip id="tooltip-intro"/>
 
     <div className="stats  shadow  mt-20 ">
+
         
-        <div className="stat">
+        <div data-tooltip-content='Tổng số các khóa học'  data-tooltip-id = 'tooltip-intro' className="stat">
             <div className="stat-figure text-primary">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="inline-block w-8 h-8 stroke-current"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
             </div>
@@ -188,7 +182,7 @@ export default function CourseActivity({profileData}){
             <div className="stat-desc">{courseTotal} more than last year</div>
         </div>
         
-        <div className="stat">
+        <div data-tooltip-content='Tổng số các bài tập'  data-tooltip-id = 'tooltip-intro' className="stat">
             <div className="stat-figure text-yellow-300">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="inline-block w-8 h-8 stroke-current"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
             </div>
@@ -197,7 +191,7 @@ export default function CourseActivity({profileData}){
             <div className="stat-desc"> {exerciseTotal} more than last year</div>
         </div>
         
-        <div className="stat">
+        <div data-tooltip-content='Tỉ lệ phần trăm số bài tập đã hoàn thành'   data-tooltip-id = 'tooltip-intro' className="stat">
             
             <div className="stat-value">{ Math.ceil( 100 - ((exerciseTotalCourses - exerciseTotal) * 100  / exerciseTotalCourses ) )  } %</div>
             <div className="stat-title">Exercises done </div>
@@ -208,11 +202,15 @@ export default function CourseActivity({profileData}){
 
 
     <div className="flex flex-col  rounded-2xl bg-white px-7 pt-2 mt-9 shadow-lg ">
+        <Tooltip id="tooltip-search"/>
         
 
         
         
-        <div className="px-10 py-1 mt-2 flex flex-col gap-y-1 bg-teal-900 text-white rounded-xl ">
+        <div
+        data-tooltip-content=' 🔭 Nhập mã code mà bạn đã nhận được vào ô phía dưới và tìm kiếm ngay thôi '
+        data-tooltip-id="tooltip-search"
+         className="px-10 py-1 mt-2 flex flex-col gap-y-1 bg-teal-900 text-white rounded-xl ">
             
                 <form className="flex flex-col w-full py-3" onSubmit={handleSearchSubmit}>
                     <p className="text-semibold text-white ml-4"> Search for your dream course here!</p>
@@ -226,8 +224,8 @@ export default function CourseActivity({profileData}){
                 {addFailNotification && <ResultModal setClose={setAddFailNotification} messageTitle={"Course cannot be added to your list"} messageBody={"Either because it is already in your list or your code is not correct"}/> }
         </div>  
         <div className="flex flex-row justify-between mt-8 mb-2">
-            <div>
-                <h4 className="font-bold text-gray-400 py-0 mt-0"> Your Registered Courses</h4>
+            <div data-tooltip-content=' Các khóa học đã đăng kí' data-tooltip-id="tooltip-search">
+                <h4 className="font-bold text-gray-400 py-0 mt-0">Registered courses</h4>
             </div>
             
         </div>
@@ -241,7 +239,7 @@ export default function CourseActivity({profileData}){
         {courses.map((course) => {return(
 
         
-        <NavLink to={"/workspace/courses/" + course.id} key={course.name} className="no-underline">
+        <NavLink data-tooltip-content=' Khóa học đã đăng kí' data-tooltip-id="tooltip-search" to={"/workspace/courses/" + course.id} key={course.name} className="no-underline">
         <div className= {`mt-2 rounded-xl bg-gray-400 grid grid-cols-9 py-2 no-underline mb-2 h-30`}>
             <div className="col-span-7 px-2 py-1 grid grid-cols-5">
                 <img className="object-cover col-span-4 h-40 w-full px-2 rounded-2xl " src={course.bgCardUrl} alt=""/>
@@ -251,7 +249,7 @@ export default function CourseActivity({profileData}){
                 </div>
             </div>
             <div className="col-span-2 m-1 flex flex-col justify-center">
-                <div className="bg-white  text-black text-center font-bold rounded-lg text-sm flex items-center justify-center w-3/4 h-10 no-underline px-3 py-7" >{course.duration} sessions</div>
+                <div data-tooltip-content='Tổng số tiết học của khóa' data-took className="bg-white  text-black text-center font-bold rounded-lg text-sm flex items-center justify-center w-3/4 h-10 no-underline px-3 py-7" >{course.duration} sessions</div>
                 <div className="font-light text-white text-sm">{}</div>
             </div>
             <div className="col-span-6 mt-3">

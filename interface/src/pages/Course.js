@@ -40,6 +40,7 @@ export default function Course(){
             console.log(data,"data");
             setCourse(data.course);
             setSessions(data.sessions);
+            console.log(data, "data and url", url);
             
           } catch (error) {
             console.error("Error fetching data:", error);
@@ -59,7 +60,7 @@ export default function Course(){
       }
     
     if (!course || !sessions) {
-        return <div>Loading...</div>;
+        return <div >Loading... the component</div>;
       }
     
     return <CourseComponentSpace course={course} sessions={sessions} id={id} categoryID={course.category} />;

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment } from 'react'
 import { baseUrl } from '../../Share';
+import { Tooltip } from 'react-tooltip';
 function Exercise( { questionsData, instruction,  exerciseID}) {
     const [exerciseLog, setExerciseLog]  = useState( JSON.parse(localStorage.getItem("exerciseLog")));
     console.log(exerciseLog, "ExerciseLog in Exercise");
@@ -115,12 +116,15 @@ function Exercise( { questionsData, instruction,  exerciseID}) {
         <>
           <div className=" flex items-center justify-center">
             <button
-              type="button"
-              onClick={openModal}
+                type="button"
+                onClick={openModal}
+                data-tooltip-content='Nhấp vào để làm bài trắc nghiệm thôi!'
+                data-tooltip-id="tooltip-exercise"
               className="rounded-md bg-black px-4 py-2 text-sm font-medium text-white hover:bg-black/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75"
             >
               View Question
             </button>
+            <Tooltip id='tooltip-exercise' />
 
 
 

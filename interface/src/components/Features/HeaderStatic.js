@@ -1,19 +1,21 @@
 import Login from "../StaticComponent/Login&LogoutButton";
 import LoginLanguage from "../StaticComponent/LanguageOption";
 import { NavLink } from "react-router-dom";
+import { Tooltip } from "react-tooltip";
 export default function HeaderStatic(props)
 {
     const color= props.color;
     console.log(color);
     const navigation = [
         { name: 'Home', href: '/' },
-        { name: 'Course', href: '/course' },
+        { name: 'Course', href: '/course', tip:'📖 Tham quan các khóa học của Trung tâm nào!' },
         // { name: 'Blog', href: '/blog' },
-        { name: 'Workspace', href: '/space' },
+        { name: 'Workspace', href: '/space', tip:'📁Theo dõi các Khóa học bạn đã đăng kí tại đây' },
         
       ];
     return(
         <div className={`flex flex-row justify-between  h-20  px-3 py-3 bg-color-${color}`}>
+            <Tooltip id="tooltip-header"/>
 
             <div className="flex">
                 <img
@@ -27,6 +29,8 @@ export default function HeaderStatic(props)
                                     <NavLink
                                     key={item.name}
                                     to={item.href}
+                                    data-tooltip-content={item.tip}
+                                    data-tooltip-id='tooltip-header'
                                     className={({ isActive }) => {
                                         return ' no-underline px-3 py-2 rounded-md text-sm font-medium ' + (!isActive ?
                                         'text-gray-100 hover:bg-gray-700 hover:text-white' : 'bg-gray-900 text-white')

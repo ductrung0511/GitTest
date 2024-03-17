@@ -9,6 +9,7 @@ import VocabFlashCard from "../TestingFeatures/VocabFlashCard";
 import NotificationModal from "./NotifcationModal";
 import UpdateProfile from "./UpdateProfile";
 import { useLocation, useNavigate } from "react-router-dom";
+import { Tooltip } from "react-tooltip";
 
 
 export default function ProfileCard({profileData}){
@@ -110,7 +111,11 @@ export default function ProfileCard({profileData}){
             <div className="max-w-sm w-full shadow-lg">
                 <div className="md:p-3 p-2 dark:bg-gray-800 bg-white rounded-t">
                     <div className="px-4 flex items-center justify-between">
-                        <span  tabIndex="0" className="focus:outline-none  text-base font-bold dark:text-gray-100 text-gray-800">{currentDate}</span>
+                        <span 
+                        data-tooltip-content='Ngày hôm nay'
+                        data-tooltip-id="tooltip-exercise"
+                          
+                          tabIndex="0" className="focus:outline-none  text-base font-bold dark:text-gray-100 text-gray-800">{currentDate}</span>
                         <div className="flex items-center">
                             <button aria-label="calendar backward" className="focus:text-gray-400 hover:text-gray-400 text-gray-800 dark:text-gray-100">
                             <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
@@ -130,7 +135,10 @@ export default function ProfileCard({profileData}){
                     
                 </div>
                 <div className="md:py-8 py-2 md:px-16 px-5 dark:bg-gray-700 bg-gray-100 rounded-b">
-                    <p className="text-base mt-1 font-bold text-black">Your Daily Exercises!</p>
+                    <p 
+                    data-tooltip-content='Bài tập mỗi ngày'
+                    data-tooltip-id="tooltip-exercise"
+                    className="text-base mt-1 font-bold text-black">Your Daily Exercises!</p>
                     
                     <div className="px-4 bg-gray-300 rounded-lg">
                         {data?.filter(exercise => !doneExercise.includes('' + exercise.id)).slice(0, 3).map((exercise) => {
@@ -139,8 +147,14 @@ export default function ProfileCard({profileData}){
                           <div className="border-b  py-4 border-gray-400 border-dashed ">
                               <div className="flex flex-row justify-between">
 
-                                <p className="text-xs font-light leading-3 text-gray-500 dark:text-gray-300">{exercise.questions.length} Questions</p>
-                                <p className="text-xs font-light leading-3 text-gray-500 dark:text-gray-300">{exercise.type}</p>
+                                <p
+                                data-tooltip-content='Số lượng câu hỏi của bài'
+                                data-tooltip-id="tooltip-exercise"
+                                 className="text-xs font-light leading-3 text-gray-500 dark:text-gray-300">{exercise.questions.length} Questions</p>
+                                <p 
+                                data-tooltip-content={exercise.type === 'multiple_choice' ? 'Câu hỏi nhiều đáp án': 'Rèn luyện từ vựng'}
+                                data-tooltip-id="tooltip-exercise"
+                                 className="text-xs font-light leading-3 text-gray-500 dark:text-gray-300">{exercise.type}</p>
                               </div>
                               <a tabIndex="0" className="focus:outline-none text-lg font-medium leading-5 text-gray-800 dark:text-gray-100 mt-2">{exercise.name}</a>
                               <p className="text-sm pt-2 leading-4  text-gray-600 dark:text-gray-300">{exercise.description}</p>
@@ -148,12 +162,13 @@ export default function ProfileCard({profileData}){
                               
                               {exercise.type === "multiple_choice"  && <Exercise questionsData={exercise.questions} instruction={exercise.instruction} exerciseID={exercise.id}   /> }
                               {exercise.type === "vocabulary" && <VocabFlashCard vocabList={exercise.questions} instruction={exercise.instruction}  exerciseID={exercise.id}   /> }
-                               
+                              
                           </div>
                           )
-
+                          
                         })}
                        
+                        <Tooltip id="tooltip-exercise" />
                         
                     </div>
                     {data.length === 0 && <div className="flex flex-col justify-center">

@@ -163,6 +163,8 @@ export default function CreateCourse({addOrUpdateCourse , id = 1, course = {
                     Fill out the Details
                   </Dialog.Title>
                   <div className="mt-2" id='INPUT SECTION'>
+                  
+                    <label htmlFor='name' className='text-sm font-bold ' > Name </label>
                     <input
                         type="text"
                         name="name"
@@ -173,6 +175,9 @@ export default function CreateCourse({addOrUpdateCourse , id = 1, course = {
                         style={{ height: `${3 * 1.5}rem` }} 
                         
                         />
+
+                    <label htmlFor='serial' className='text-sm font-semibold ' > Serial </label>
+
                     <input
                       type="text"
                       name="serial"
@@ -182,6 +187,8 @@ export default function CreateCourse({addOrUpdateCourse , id = 1, course = {
                       style={{ height: `${3 * 1.5}rem` }} 
                       className="block w-full m-2 h-10 px-2 border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                     />
+
+                    <label htmlFor='bgCardUrl' className='text-sm font-semibold ' > Background Image Url </label>
                     <input
                       type="text"
                       name="bgCardUrl"
@@ -191,6 +198,9 @@ export default function CreateCourse({addOrUpdateCourse , id = 1, course = {
                       style={{ height: `${2 * 1.5}rem` }} 
                       className="block w-full mt-2 m-2 h-10 px-2 border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                     />
+
+
+                    <label htmlFor='bgCardUrlSecondary' className='text-sm font-semibold ' >Secondary Background Image Url </label>
                     <input
                       type="text"
                       name="bgCardUrlSecondary"
@@ -201,6 +211,8 @@ export default function CreateCourse({addOrUpdateCourse , id = 1, course = {
                       
                       className="block w-full mt-2 m-2 h-10 px-2 border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                     />
+
+                    <label htmlFor='address' className='text-sm font-semibold mt-1' >Address</label>
                     <input
                       type="text"
                       name="address"
@@ -221,7 +233,8 @@ export default function CreateCourse({addOrUpdateCourse , id = 1, course = {
                       placeholder="Duration"
                       className="block w-full  m-2 h-10 px-2 border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                     />
-                    
+
+                    <label htmlFor='description' className='text-sm font-bold mt-5' > Description </label>
                     <textarea
                       type="text"
                       name="description"
@@ -229,25 +242,17 @@ export default function CreateCourse({addOrUpdateCourse , id = 1, course = {
                       onChange={handleInputChange}
                       placeholder="description"
                       className="block w-full m-2 h-10 px-2 border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                      style={{ height: `${4 * 1.5}rem` }} 
+                      style={{ height: `${7 * 1.5}rem` }} 
 
 
                     />
+
                     {/* conclusion : '',//
                     result: '',//
                     category: 1, //
                     courseKey: '', // */}
-                    <textarea
-                      type="text"
-                      name="conclusion"
-                      value={courseData.conclusion}
-                      onChange={handleInputChange}
-                      placeholder="conclusion"
-                      className="block w-full m-2 h-10 px-2 border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                      style={{ height: `${4 * 1.5}rem` }} 
-
-
-                    />
+                    
+                    <label htmlFor='result' className='text-sm font-bold mt-5' > Result </label>
                     <textarea
                       type="text"
                       name="result"
@@ -255,7 +260,20 @@ export default function CreateCourse({addOrUpdateCourse , id = 1, course = {
                       onChange={handleInputChange}
                       placeholder="result"
                       className="block w-full m-2 h-10 px-2 border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                      style={{ height: `${4 * 1.5}rem` }} 
+                      style={{ height: `${17 * 1.5}rem` }} 
+                    />
+
+                    <label htmlFor='conclusion' className='text-sm font-bold mt-5' > Conclusion </label>
+                    <textarea
+                      type="text"
+                      name="conclusion"
+                      value={courseData.conclusion}
+                      onChange={handleInputChange}
+                      placeholder="conclusion"
+                      className="block w-full m-2 h-10 px-2 border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                      style={{ height: `${7 * 1.5}rem` }} 
+
+
                     />
                     {/* <input
                       type="number"
@@ -287,6 +305,7 @@ export default function CreateCourse({addOrUpdateCourse , id = 1, course = {
                       Tips: Beta Version only supports 4: IELTS & TOEIC, 3: Flyer, 2: Starter, 1: Mover
                     </p>
 
+                    <label htmlFor='courseKey' className='text-sm font-semibold mt-1' >Course Key <span className='text-xs font-light'> (⚠️ Edit with care)</span></label>
                     <input
                       type="text"
                       name="courseKey"
@@ -296,6 +315,8 @@ export default function CreateCourse({addOrUpdateCourse , id = 1, course = {
                       className="block w-full m-2 h-10 px-2 border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                     />
                     <p className='text-xs text-gray-400'>Tips: seperate keys by "/" to acquire more keys</p>
+
+                    <label htmlFor='textBook' className='text-sm font-semibold mt-1' >Text Book / Material<span className='text-xs font-light'></span></label>
                     <input
                       type="text"
                       name="textBook"

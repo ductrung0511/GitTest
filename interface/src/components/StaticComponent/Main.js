@@ -54,17 +54,26 @@ export default function Main()
           backgroundImage: "/8.jpg",
         },
         {
-          icon: RxRocket,
-          title: "Production",
-          content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+          
           backgroundImage: "/9.jpg",
         },
         {
-            icon: RxRocket,
-            title: "Production2",
-            content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
             backgroundImage: "/10.jpg",
-          },
+        },
+        { backgroundImage: "/11.jpg" },
+        { backgroundImage: "/12.jpg" },
+        { backgroundImage: "/13.jpg" },
+        { backgroundImage: "/14.jpg" },
+        // { backgroundImage: "/15.jpg" },
+        // { backgroundImage: "/16.jpg" },
+        // { backgroundImage: "/17.jpg" },
+        // { backgroundImage: "/18.jpg" },
+        // { backgroundImage: "/19.jpg" },
+        { backgroundImage: "/20.jpg" },
+        { backgroundImage: "/21.jpg" },
+        { backgroundImage: "/22.jpg" },
+        { backgroundImage: "/23.jpg" },
+        { backgroundImage: "/24.jpg" },
       ];
     const category = [
         {name: 'Mẫu Giáo', color: 'orange'},
@@ -96,7 +105,7 @@ export default function Main()
                     
                 </div>
             */}
-            <div className="p-4  mb-1  rounded-lg flex flex-col gap-2 items-center space-x-8 z-20">
+            <div className="p-4  mb-4  rounded-lg flex flex-col gap-2 items-center space-x-8 z-20">
                         <div className="text-3xl font-extrabold text-yellow-200 text-left  ml-0 pl-0">Lộ trình học tập <br/> <span className='text-green-300 ml-20'> được thiết kế bởi các chuyên gia</span> </div>
                         <div className='  px-20 flex flex-row text-white mt-2 ml-10 capitalize font-bold gap-3 z-30'>
                             {category.map((item) => {
@@ -111,7 +120,7 @@ export default function Main()
             </div>
 
 
-            <div className="flex flex-row items-center gap-1  mx-3  ">
+            <div className="flex flex-row items-center gap-1  mt-7 mx-3  ">
  
             
                 <div className="text-center w-1/2 col-span-2 font-bold  ">
@@ -144,7 +153,7 @@ Chào mừng bạn đến với Trung tâm Anh ngữ  New Zealand (NZEC) tại B
             
 
         </div>
-        <div className='mt-8 backdrop-blur-sm'>
+        <div className='mt-8 px-5 backdrop-blur-sm'>
             
             <Swiper
             breakpoints={{
@@ -160,12 +169,12 @@ Chào mừng bạn đến với Trung tâm Anh ngữ  New Zealand (NZEC) tại B
             freeMode={true }
             pagination={{clickable:true}}
             modules={[FreeMode, Pagination]}
-            className='max-w-[90%]'
+            className='w-full '
             
             >
                 {ServiceData.map( (item) => (
                     <SwiperSlide key={uuidv4()}>
-                        <div className=' shadow-lg bg-gray-800 mb-10 text-white rounded-xl px-7 py-8 h-[200px] w-[280px] bg-cover' style={{backgroundImage : `url(${item.backgroundImage})`}}>   
+                        <div className=' shadow-lg mb-10 text-white rounded-xl px-7 py-8 h-[200px] w-[290px] 2xl:h-[240px] 2xl:w-[370px] bg-cover' style={{backgroundImage : `url(${item.backgroundImage})`}}>   
 
                         </div>
 

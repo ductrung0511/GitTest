@@ -499,7 +499,11 @@ def performance(request):
                         for key in profile.exerciseLog.keys():
                             if exercise.id == int(key):
                                 exerciseDone += 1
-                    sessionsExercise.append({ 'name': session.overview, 'id':session.id, 'progress': exerciseDone/len(exercises)})
+                                
+                    if(len(exercises) != 0 ):
+                        sessionsExercise.append({ 'name': session.overview, 'id':session.id, 'progress': exerciseDone/len(exercises)})
+                    else :
+                        sessionsExercise.append({ 'name': session.overview, 'id':session.id, 'progress': 0})
 
                 exerciseDone = {}
                 for lock in exerciseIDs :

@@ -1,3 +1,4 @@
+import {v4 as uuidv4} from 'uuid'
 export default function Features(){
 
     const people = [
@@ -6,7 +7,13 @@ export default function Features(){
         {name: "Marques Brownlees", school: "Thcs Nguyễn Trãi 12a1", image:"/student3.jpg" },
         {name: "Tom Platz", school:"Thpt Lam Sơn 12a1", image:"/student4.jpg" },
         {name: "Amelie Satzger", school:"Thcs Nguyễn Trãi 12a1", image:"/student7.jpg" },
-        {name: "Marques Brownleez", school:"Thpt Thăng Long 12a1", image:"/student2.jpg" },
+        {name: "Marques Brownleez", school:"Thpt Thăng Long 12a1", image:"/student8.jpg" },
+        {name: "Marques Brownleez", school:"Thpt Thăng Long 12a1", image:"/student9.jpg" },
+        {name: "Marques Brownleez", school:"Thpt Thăng Long 12a1", image:"/student10.jpg" },
+        {name: "Marques Brownleez", school:"Thpt Thăng Long 12a1", image:"/student11.jpg" },
+        {name: "Marques Brownleez", school:"Thpt Thăng Long 12a1", image:"/student12.jpg" },
+        {name: "Marques Brownleez", school:"Thpt Thăng Long 12a1", image:"/student13.jpg" },
+        {name: "Marques Brownleez", school:"Thpt Thăng Long 12a1", image:"/student14.jpg" },
     ]
 
     
@@ -22,7 +29,7 @@ return(
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 px-14  py-8 gap-2 bg-gray-100 overflow-hidden">
             {people.map((person)=>{
-                return <div  key={person.name} className="relative w-full h-80 px-5 bg-cover " style={{backgroundImage: `url(${person.image})`}}>
+                return <div  key={uuidv4()} className="relative w-full h-80 px-5 bg-cover " style={{backgroundImage: `url(${person.image})`}}>
                     <div className="absolute bottom-0 w-full  left-10 ">
                         <p className="text-3xl font-extrabold text-white"> _</p>
                         <p className="text-base font-extrabold text-white"> _</p>
