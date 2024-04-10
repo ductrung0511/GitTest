@@ -23,7 +23,7 @@ return(
     <section id="feature" className=" flex flex-col mb-1 bg-gray-100"
   
     >
-        <h4 className="text-color-secondary-dark font-bold mb-1 text-center text-bold text-3xl mt-20">Vinh danh các học viên </h4>
+        <h4 className="text-color-secondary-dark font-bold mb-1 text-center text-bold text-3xl mt-20 uppercase">Vinh danh học viên xuất sắc </h4>
             
 
 

@@ -57,14 +57,14 @@ export default function Header(props) {
                   </div>
                   <div className="hidden sm:ml-6 sm:block">
                     <div className="flex space-x-4 pt-2">
-                      {navigation.map((item) => (
+                      {navigation?.map((item) => (
                         <NavLink
                           key={item.name}
                           to={item.href}
                           // data-tooltip-id ='my-tooltip'
                           // data-tooltip-content={item.tip}
                           // data-tooltip-place="bottom"
-                          {...((localStorage.getItem('courseAuth').split('/').length < 4 || !localStorage.getItem('courseAuth'))
+                          {...((localStorage.getItem('courseAuth')?.split('/').length < 4 || !localStorage.getItem('courseAuth'))
                                   ? {
                                       'data-tooltip-id': 'my-tooltip',
                                       'data-tooltip-content': item.tip,
@@ -85,7 +85,7 @@ export default function Header(props) {
                 </div>
 
                 
-                <div data-tooltip-content='Đăng nhập hoặc đăng xuất hoặc đăng kí tài khoản tại đây' data-tooltip-id='my-tooltip' data-tooltip-place='bottom' className=' flex flex-row bg-transparent'>
+                <div data-tooltip-content='Đăng nhập, đăng xuất hoặc đăng kí tài khoản' data-tooltip-id='my-tooltip' data-tooltip-place='bottom' className=' flex flex-row bg-transparent'>
                   <Login/>
                 
 
@@ -98,11 +98,11 @@ export default function Header(props) {
                           <img src='https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcSx9yBvquZ3z_DsxhnCNx2PBb1AdzBOF5iyMOqtgZJWeIs6_k9m' alt='Profile'
                           className='rounded-full bg-black w-10 h-10' /> 
                         )} */}
-                      <div {...((localStorage.getItem('courseAuth').split('/').length < 4 || !localStorage.getItem('courseAuth'))
+                      <div {...((localStorage.getItem('courseAuth')?.split('/').length < 4 || !localStorage.getItem('courseAuth'))
                                   ? {
                                       'data-tooltip-id': 'my-tooltip',
                                       'data-tooltip-content':
-                                        'Menu này sẽ cung cấp cho bạn các tùy chọn để tận dụng tối đa tài khoản của bạn!📋🔧',
+                                        'Menu này sẽ cung cấp cho bạn các tùy chọn📋🔧',
                                       'data-tooltip-place': 'bottom'
                                     }
                                   : {})}  className="dropdown dropdown-bottom dropdown-end">
@@ -114,7 +114,7 @@ export default function Header(props) {
 
                                   className="w-12 h-12 rounded-full hover:opacity-30 duration-300" src="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcSx9yBvquZ3z_DsxhnCNx2PBb1AdzBOF5iyMOqtgZJWeIs6_k9m" alt="avatar"/>
                                 <ul 
-                                {...((localStorage.getItem('courseAuth').split('/').length < 5 )
+                                {...((localStorage.getItem('courseAuth')?.split('/').length < 5 )
                                 ? {
                                     'data-tooltip-id': 'my-tooltip',
                                     'data-tooltip-content':

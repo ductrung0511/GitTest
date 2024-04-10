@@ -45,9 +45,9 @@ export default function Home()
   
 
   useEffect(() => {
-    console.log("initiating the fetch");
+    console.log("initiating the fetch at", baseUrl  + "api/index/" );
     async function fetchData() {
-      const url =  baseUrl + "api/index/";
+      const url =  'https://nzec.edu.vn/' + "api/index/";
       try {
         const response = await fetch(url);
         if(response.status === 404) setNotFound(true);

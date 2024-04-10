@@ -246,14 +246,14 @@ export default function NewCoursesDisplay({courseCategories}){
                 <div className=" grid grid-cols-4 col-span-5">
 
                 {
-                    Starter.map((course)=>{              
+                    Starter?.map((course)=>{              
                         return (
                             <div className="col-span-2 relative" key={course.name}> 
 
                             
                                 <NavLink to={'/workspace/courses/' + course.id} className='no-underline '>
-                                            <div className=" relative overflow-hidden px-8 shadow-md shadow-white flex flex-col mx-2  bg-white   h-[48vh] mt-2 mb-2 rounded-lg ">
-                                                <img className="peer h-[40vh] w-full rounded-lg object-cover " src={course.bgCardUrlSecondary} />
+                                            <div className=" relative overflow-hidden px-8  shadow-white flex flex-col mx-2  bg-white   h-[48vh] mt-2 mb-2 rounded-lg ">
+                                                <img className="peer h-[40vh] w-full rounded-lg object-cover shadow-md " src={course.bgCardUrlSecondary} />
                                                 {/* <span className="absolute top-1 left-12 m-2 rounded-full bg-white/70 px-2 text-center text-xs font-medium text-gray-800">{course.sale}% OFF</span> */}
                                             </div>
                                 </NavLink>
@@ -310,14 +310,14 @@ export default function NewCoursesDisplay({courseCategories}){
                             
                     <div className=" grid grid-cols-4 col-span-5">
                         {
-                            Mover.map((course)=>{              
+                            Mover?.map((course)=>{              
                                 return (
                                     <div className="col-span-2 relative" key={course.name}> 
 
                                     
                                         <NavLink to={'/workspace/courses/' + course.id} className='no-underline '>
-                                                    <div className=" relative overflow-hidden px-8 shadow-md shadow-white flex flex-col mx-2  bg-white   h-[48vh] mt-2 mb-2 rounded-lg ">
-                                                        <img className="peer h-[40vh] w-full rounded-lg object-cover " src={course.bgCardUrlSecondary} />
+                                                    <div className=" relative overflow-hidden px-8  shadow-white flex flex-col mx-2  bg-white   h-[48vh] mt-2 mb-2 rounded-lg ">
+                                                        <img className="peer h-[40vh] w-full rounded-lg object-cover shadow-md  " src={course.bgCardUrlSecondary} />
                                                         {/* <span className="absolute top-1 left-12 m-2 rounded-full bg-white/70 px-2 text-center text-xs font-medium text-gray-800">{course.sale}% OFF</span> */}
                                                     </div>
                                         </NavLink>
@@ -378,14 +378,14 @@ export default function NewCoursesDisplay({courseCategories}){
                 <div className=" grid grid-cols-4 col-span-5">
 
                 {
-                    Flyer.map((course)=>{              
+                    Flyer?.map((course)=>{              
                         return (
                             <div className="col-span-2 relative" key={course.name}> 
 
                             
                                 <NavLink to={'/workspace/courses/' + course.id} className='no-underline '>
-                                            <div className=" relative overflow-hidden px-8 shadow-md shadow-white flex flex-col mx-2  bg-white   h-[48vh] mt-2 mb-2 rounded-lg ">
-                                                <img className="peer h-[40vh] w-full rounded-lg object-cover " src={course.bgCardUrlSecondary} />
+                                            <div className=" relative overflow-hidden px-8  shadow-white flex flex-col mx-2  bg-white   h-[48vh] mt-2 mb-2 rounded-lg ">
+                                                <img className="peer h-[40vh] w-full rounded-lg object-cover shadow-md " src={course.bgCardUrlSecondary} />
                                                 {/* <span className="absolute top-1 left-12 m-2 rounded-full bg-white/70 px-2 text-center text-xs font-medium text-gray-800">{course.sale}% OFF</span> */}
                                             </div>
                                 </NavLink>
@@ -440,14 +440,14 @@ export default function NewCoursesDisplay({courseCategories}){
                             
                     <div className=" grid grid-cols-4 col-span-5">
                         {
-                            IELTS_TOEIC.map((course)=>{              
+                            IELTS_TOEIC?.map((course)=>{              
                                 return (
                                     <div className="col-span-2 relative" key={course.name}> 
 
                                     
                                         <NavLink to={'/workspace/courses/' + course.id} className='no-underline '>
-                                                    <div className=" relative overflow-hidden px-8 shadow-md shadow-white flex flex-col mx-2  bg-white   h-[48vh] mt-2 mb-2 rounded-lg ">
-                                                        <img className="peer h-[40vh] w-full rounded-lg object-cover " src={course.bgCardUrlSecondary} />
+                                                    <div className=" relative overflow-hidden px-8   flex flex-col mx-2  bg-white   h-[48vh] mt-2 mb-2 rounded-lg ">
+                                                        <img className="peer h-[40vh] w-full rounded-lg shadow-md object-cover " src={course.bgCardUrlSecondary} />
                                                         {/* <span className="absolute top-1 left-12 m-2 rounded-full bg-white/70 px-2 text-center text-xs font-medium text-gray-800">{course.sale}% OFF</span> */}
                                                     </div>
                                         </NavLink>

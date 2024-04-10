@@ -46,6 +46,8 @@ urlpatterns = [
     
     path("api/questions/", views.questionView, name="questionView"),
     #path("api/blog/", views.blog, name="blog"),
+    path("api/dashboard/", views.dashboard),
+
     path("api/blog/<int:id>", views.blogDetails, name="blogDetails"),
     path( '', TemplateView.as_view(template_name= 'index.html')),
 

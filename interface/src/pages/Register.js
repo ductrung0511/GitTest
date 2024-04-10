@@ -1,14 +1,17 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useRef } from "react";
 import { baseUrl } from "../Share";
 import { useLocation, useNavigate } from "react-router-dom";
 import { loginContext } from "../App";
-import useFetch from "../components/hook/useFetch";
+import Alert from "../components/Features/Alert";
 export default function Register(){
     const [loggedIn, setLoggedIn] = useContext(loginContext);
     const[username , setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [rePassword, setRePassword] = useState('');
     const [email, setEmail] = useState('');
+    const [isAlert, setIsAlert] = useState(false);
+    const message = useRef('');
+    const [alertTime, setAlertTime] = useState(0);
 
     const location = useLocation();
     const navigate = useNavigate();
@@ -89,33 +92,75 @@ export default function Register(){
                 }
                 else if(data.username[0] === "A user with that username already exists." )
                 {
-                    alert('A user with that username already exists.');
+                    // alert('A user with that username already exists.');
+                    message.current = "Tài khoản với tên đăng nhập đã có trong hệ thống! Vui lòng sử dụng tên khác";
+                    setAlertTime((prev) => prev + 1);
+                    setIsAlert(true);
+
+
+                    
                 }
                 
             });
         }
         if(rePassword!== password){
-            alert("Password does not match!");
-            console.log(rePassword, password);
+            // alert("Password does not match!");
+            message.current = "Mật khẩu và xác nhận mật khẩu không trùng khớp! Vui lòng nhập lại"; 
+            setAlertTime((prev) => prev + 1);
+            setIsAlert(true);
+
+
             return;
         }
         else if(rePassword.length < 9 ){
-            alert("Password not long enough, it supposed to be more than 8 characters");
+            // alert("Password not long enough, it supposed to be more than 8 characters");
+            message.current = "Mật khẩu bạn dùng không đủ dài! Vui lòng nhập nhiều hơn 8 kí tự"; 
+            setAlertTime((prev) => prev + 1);
+            setIsAlert(true);
+
+
             return;
+        }
+        else if(username.trim().length === 0 ){
+            // alert("Password not long enough, it supposed to be more than 8 characters");
+            message.current = "Vui lòng nhập tên đăng nhập"; 
+            setAlertTime((prev) => prev + 1);
+            setIsAlert(true);
+
+
+            return;
+        }
+        else if(email.trim().length === 0 ){
+            // alert("Password not long enough, it supposed to be more than 8 characters");
+            message.current = "Vui lòng nhập email của bạn"; 
+            setAlertTime((prev) => prev + 1);
+            setIsAlert(true);
+            return;
+        }
+        else if(username.trim().includes(' ')){
+            setIsAlert(true);
+            message.current = "Tên đăng nhập bạn dùng không được chứa khoảng trống"; 
+            setAlertTime((prev) => prev + 1);
+
+            return;
+
         }
         else if(password === rePassword && password.length > 8) {
             fetchRegister();
         }
         console.log(username, password, email, rePassword);
+    }
 
         
 
-    }
+    
 return(
     
     <section className="bg-gray-50 dark:bg-gray-900 " 
     style={{backgroundImage: `url('https://image.slidesdocs.com/responsive-images/background/green-flat-style-environmental-agency-simple-powerpoint-background_1f596db9e5__960_540.jpg')`}} 
     >
+        {isAlert && <Alert message={message.current} dataValue={4} alertTime={alertTime} setIsAlert={setIsAlert}/>}
+
   <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
       <a href="#" className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
           <img className="w-8 h-8 mr-2" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg" alt="logo"/>
@@ -140,12 +185,12 @@ return(
                   <div>
                       <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
                       <input type="password" name="password" id="password" placeholder="••••••••" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                      required="" onChange={(e) => {setPassword(e.target.value)}}  onCopy="return false" onCut="return false" onPaste="return false" />
+                      required="" onChange={(e) => {setPassword(e.target.value)}}  onCopy="return false" onCut="return false" onPaste={()=>{return false;}} />
                   </div>
                   <div>
                       <label htmlFor="reenterPassword" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Enter your password again</label>
                       <input type="password" name="rePassword" id="rePassword" placeholder="••••••••" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                      required="" onChange={(e)=> {setRePassword(e.target.value)}} onCopy="return false" onCut="return false" onPaste="return false" />
+                      required="" onChange={(e)=> {setRePassword(e.target.value)}} onCopy="return false" onCut="return false" onPaste={()=>{return false;}}  />
                   </div>
                   <div className="flex items-center justify-between">
                       <div className="flex items-start">
@@ -172,4 +217,4 @@ return(
 </section>
 
 )
-}
+}   

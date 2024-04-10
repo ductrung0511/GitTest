@@ -60,7 +60,7 @@ export default function CourseActivity({profileData}){
                             console.log(courseAuth, "courseAuth");
 
                             let profileUpdate = {courseKey: profileKeys, courseAuth: courseAuth };
-                            const url = baseUrl + "/api/profile/"
+                            const url = baseUrl + "api/profile/"
                             fetch(url, {
                                 method:"PUT",
                                 headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + localStorage.getItem('access'),},

@@ -345,7 +345,7 @@ export default function CourseHome()
                                 
                                 features?.map((course) => { 
                                     if(course !== undefined) return (
-                                    <div key={course.name} className="col-span-1 shadow-md shadow-white flex flex-col mx-2  bg-white   h-[60vh] mt-2 mb-20 rounded-lg  ">
+                                    <div key={uuidv4()} className="col-span-1 shadow-md shadow-white flex flex-col mx-2  bg-white   h-[60vh] mt-2 mb-20 rounded-lg  ">
                                         <NavLink to={'/workspace/' + course.name} className='no-underline  h-3/4'>
                                         
                                             <div className=" relative flex flex-row gap-1 overflow-hidden">
@@ -441,7 +441,7 @@ export default function CourseHome()
                     {Object?.keys(courseCategories).map( (category) => {
                         
                         return(
-                        <div id="EACH CATEGORY">
+                        <div id="EACH CATEGORY" key={uuidv4()}>
                             <div className="flex flex-row justify-between mb-2"> 
     
                                 <h2 className="text-black font-bold text-2xl capitalize">{category}</h2>
@@ -503,7 +503,9 @@ export default function CourseHome()
                     }
                     <div >
                         <h2 className="text-black font-bold text-3xl capitalize"> Explore Your Knowledge </h2>
-                        <p  className=" text-sm pr-4"> Take the next step on your creative journey. With these Skillshare classes, you can explore a range of topics, tools, and techniques, from photography and graphic design, to drawing and animation. Whether you’re looking for art classes for beginners or you’re an experienced professional, you can take your skills to the next level with online classes in software like Photoshop, Procreate and After Effects, or learning handmade techniques in painting, hand lettering, and illustration. Make a film, give your home a makeover, start a freelance business. There’s so much inspiration to explore on Skillshare, and you’ll get hands-on experience by completing and sharing your own projects.</p>
+                        <p  className=" text-sm pr-4"> 
+                        Take the next step on your creative journey with the NZEC Language Center. With our diverse range of classes, you can delve into various language topics, tools, and techniques. Whether you're interested in improving your language proficiency, mastering communication skills, or exploring cultural nuances, we offer classes tailored to your needs. Whether you're a beginner or an experienced learner, you can enhance your skills with courses in grammar, vocabulary expansion, conversation practice, and more. Immerse yourself in our virtual classrooms, where you can learn from experienced instructors and interact with fellow language enthusiasts. From mastering new language software to honing your speaking and writing abilities, the NZEC Language Center is your gateway to linguistic excellence. Start your language journey today and unlock a world of opportunities!
+                        </p>
                     </div>
                     <FrequentlyAsked/>
                     <Contact/>

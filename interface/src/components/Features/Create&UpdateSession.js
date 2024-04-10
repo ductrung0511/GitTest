@@ -141,7 +141,7 @@ export default function CreateOrUpdateSession({addOrUpdateSession ,courseID = 1 
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="w-full max-w-2xl transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                   <Dialog.Title
                     as="h3"
                     className="text-lg font-medium leading-6 text-gray-900"
@@ -177,7 +177,7 @@ export default function CreateOrUpdateSession({addOrUpdateSession ,courseID = 1 
 
     </div>
     <div>
-        <label htmlFor="CPTUrl" className="block text-sm font-medium text-gray-700">CPT URL</label>
+        <label htmlFor="CPTUrl" className="block text-sm font-medium text-gray-700">Additional Resource Link</label>
         <input
             type="text"
             name="CPTUrl"

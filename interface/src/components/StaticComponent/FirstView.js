@@ -18,7 +18,7 @@ function classNames(...classes) {
 export default function FirstView()
 
 {
-    const backgroundImageUrl = 'https://i.ibb.co/3Wdms3y/z5193581124391-caab4eb919973361c0f6e880aa5275c8.jpg';
+    const backgroundImageUrl = '/background.jpg';
 
   const containerStyle = {
     backgroundImage: `url('${backgroundImageUrl}')`,
@@ -117,7 +117,7 @@ export default function FirstView()
                                     > <Login/> </li>
                                 </ul>
                             </div>
-                  <div className='text-base  text-gray-700 capitalize'> { Object.keys(localStorage).includes('username') ? localStorage.getItem('username') : "Not logged in" }</div>
+                  <div className='text-base  text-gray-700 capitalize'> { Object.keys(localStorage).includes('username') ? localStorage.getItem('username') : <Login/> }</div>
 
                 </div>
 
@@ -128,13 +128,13 @@ export default function FirstView()
             </div>
 
             <div className="flex flex-col">
-                <div className='w-50 pl-2 ml-14 h-72 flex flex-col pt-24 relative'> 
+                <div className='w-50 pl-2 ml-14 h-72 flex flex-col pt-24 relative animate-wiggle-more animate-infinite animate-duration-1000 animate-ease-in'> 
 
                     {/*
                     <img src='' alt='https://www.ilsc.com/hubfs/30yrs-Logo.svg' className='text-white w-40 h-40'/>
                     */}
-                    <p className='font-extrabold text-blue-800 text-3xl uppercase z-20'> bring your  Tommorow closer </p>
-                    <p className='font-extrabold text-blue-800 text-2xl ml-10 z-20'>"Enter to learn leave to achieve" </p>
+                    <p className='font-extrabold text-blue-800 text-3xl uppercase z-20 hover:text-4xl duration-700'> bring your  Tommorow closer </p>
+                    <p className='font-extrabold text-blue-800 text-2xl ml-10 z-20 hover:text-3xl duration-700'>"Enter to learn leave to achieve" </p>
                     <p className='font-extrabold ml-10 text-white text-2xl'></p>
 
                     <div className='bg-white h-72 absolute  top-0 w-full z-10 left-0 filter blur-3xl'></div>
@@ -160,16 +160,19 @@ export default function FirstView()
                         onClick={()=>{ localStorage.getItem('access') ?   navigate('/workspace/courses/1') : navigate('/login')}}>Language Test</button>
                         <button  onClick={()=>{scrollToPosition(7340)}} className="text-gray-900 bg-yellow-200 border-2 border-yellow-100 focus:outline-none
                         hover:bg-gray-100 focus:ring-4
-                        focus:ring-gray-200 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2
+                        focus:ring-gray-200 font-medium rounded-full text-sm pl-4 pr-2 py-2.5 me-2 mb-2
                         dark:bg-gray-800 dark:text-white dark:border-gray-600
-                        dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">Aplly now</button>
+                        dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">Aplly now 
+                        
+                        </button>
                         </div>
                         
 
                     </div>
                     <div className='grid grid-cols-1 pb-2'>
+                        <div className='h-10 w-full'></div>
                             <button type="button" onClick={()=>{scrollToPosition(7340)}} className="text-gray-900 bg-white border-2 border-blue-200 focus:outline-none
-                        hover:bg-gray-100 focus:ring-4
+                        hover:bg-gray-100 focus:ring-4 hover:px-7 duration-200 hover:h-17
                         focus:ring-gray-200 font-medium rounded-full text-base px-5 py-2.5 me-2 h-14
                         dark:bg-gray-800 dark:text-white dark:border-gray-600
                         dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">Liên hệ:   0345 578 573</button>

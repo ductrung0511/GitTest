@@ -99,13 +99,23 @@ export default function CreateOrUpdateResourses({addOrUpdateResource, resource =
   return (
     <>
       <div className=" flex items-center justify-center ">
-        <button
+        {resource.name === '' && 
+          <button
+            type="button"
+            onClick={openModal}
+            className="rounded-lg border-1 border-black text-black px-3 py-2 font-bold hover:bg-gray-200 transition-all ease-in-out duration-1000"
+          >
+           Add Resource!
+          </button>
+        }
+        {resource.name !== '' && 
+          <button className=" w-full hover:bg-gray-100 p-1 text-sm" 
           type="button"
           onClick={openModal}
-          className="rounded-lg border-1 border-black text-black px-3 py-2 font-bold hover:bg-gray-200 transition-all ease-in-out duration-1000"
-        >
-          Edit Resource!
-        </button>
+          >
+            Edit 
+          </button>
+        }
       </div>
 
       <Transition appear show={isOpen} as={Fragment}>
@@ -204,6 +214,8 @@ export default function CreateOrUpdateResourses({addOrUpdateResource, resource =
                 <textarea
                     name="url"
                     id="url"
+                    type="url"
+                    
                     placeholder="url"
                     value={resourceData.url}
                     onChange={handleInputChange}

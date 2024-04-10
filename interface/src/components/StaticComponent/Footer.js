@@ -3,38 +3,33 @@ import { NavLink } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 const content = { 
-    Company:[{name: "about", href:"#"}, 
-            {name: "career", href:"#"},
-            {name: "press", href:"#"},
-            {name: "blog", href:"#"}, 
-            {name: "Affiliates", href:"#"}, 
-            {name: "Partnerships", href:"#"}, 
+    Company:[{name: "About us", href:"https://www.facebook.com/anhngunewzealand"}, 
+            {name: "Career", href:"https://www.facebook.com/anhngunewzealand"},
+            {name: "Blog", href:"https://www.nzec.edu.vn/#/blog/"}, 
+            {name: "Partnerships", href:"https://www.facebook.com/anhngunewzealand"}, 
                     ],
-    Community:[{name: "team plans", href:"#"}, 
-            {name: "Refer to a friend", href:"#"},
-            {name: "Membership", href:"#"},
-            {name: "Scholarship", href:"#"}, 
-            {name: "Free classes", href:"#"}, 
+    Community:[{name: "Team plans", href:"#"}, 
+            {name: "Share", href:"https://www.nzec.edu.vn/"},
+            
                     ],
-    Teaching:[{name: "Become a Teacher", href:"#"}, 
-            {name: "Teacher Help Center", href:"#"},
-            {name: "Teacher Rules & Requirements", href:"#"},
+    Teaching:[{name: "Become a Teacher", href:"https://www.facebook.com/anhngunewzealand"}, 
+            {name: "Teacher Help Center", href:"https://www.facebook.com/anhngunewzealand"},
+            {name: "Rules & Requirements", href:"https://www.facebook.com/anhngunewzealand"},
                     ],
-    Testing:[{name: "Help Test Center", href:"#"}, 
-            {name: "Mock Test Service", href:"#"},
-            {name: "Test appeal", href:"#"},
-            {name: "Exercise", href:"#"}, 
-            {name: "Material", href:"#"}, 
-            {name: "Workshops", href:"#"}, 
+    Test:[{name: "Help Test Center", href:""}, 
+            {name: "Mock Test Service", href:"https://www.nzec.edu.vn/#/blog/"},
+            {name: "Test appeal", href:"https://www.nzec.edu.vn/#/blog/"},
+            {name: "Exercise", href:"https://www.nzec.edu.vn/#/workspace/dashboard/"}, 
+            {name: "Material", href:"https://www.nzec.edu.vn/#/workspace/resources/"}, 
+            {name: "Workshops", href:"https://www.nzec.edu.vn/"}, 
                     ],
                 };
-    const keys= ["Company", "Community", "Teaching", "Testing"];
-    const footerContent =  [{name: "Help", href:"#"}, 
-                        {name: "Privacy", href:"#"},
-                        {name: "Terms", href:"#"},
-                        {name: "Your Privacy", href:"#"}, 
+    const keys= ["Company", "Community", "Teaching", "Test"];
+    const footerContent =  [{name: "Help", href:"https://www.facebook.com/anhngunewzealand"}, 
+                        {name: "Privacy", href:'https://www.facebook.com/anhngunewzealand'},
+                        {name: "Terms", href:"https://www.facebook.com/anhngunewzealand"},
+                        {name: "Your Privacy", href:"https://www.facebook.com/anhngunewzealand"}, 
                                 ];
-    console.log(footerContent.map((item) =>{ return item.name}));
 
 
 export default function Footer()

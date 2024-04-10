@@ -109,20 +109,32 @@ export default function CreateOrUpdateExercise({addOrUpdateExercise ,sessionID =
     function openModal() {
         setIsOpen(true)
     }
+    
 
   return (
     <>
               
 
-      <div className=" flex items-center justify-center ">
-        <button
+      {exercise.name.length === 0 && 
+        <div className=" flex items-center justify-center ">
+          <button
+            type="button"
+            onClick={openModal}
+            className="rounded-lg border-1 border-black text-black px-3 py-2 font-bold"
+          >
+            Add  Exercise
+          </button>
+        </div>
+      }
+
+      {exercise.name.length !== 0 && 
+        <button className="hover:bg-gray-200 text-sm p-1 rounded-sm"
           type="button"
           onClick={openModal}
-          className="rounded-lg border-1 border-black text-black px-3 py-2 font-bold"
         >
-          Add or Update Exercise !
+        Update 
         </button>
-      </div>
+      }
 
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-40" onClose={closeModal}>
@@ -149,8 +161,8 @@ export default function CreateOrUpdateExercise({addOrUpdateExercise ,sessionID =
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-xl transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                        {
+                <Dialog.Panel className="w-full max-w-2xl transform  rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                    {
                     questionsEmpty && <div id="toast-default" className="flex bg-gray-300 flex-col gap-2 z-70 shadow-xl fixed bottom-20 right-3 items-center w-full max-w-xs p-4 text-gray-500  rounded-lg  dark:text-gray-400 dark:bg-gray-800" role="alert">
                     <div className="ms-3 text-sm  font-semibold text-black uppercase  ">Questions empty!</div>
                     
@@ -164,7 +176,50 @@ export default function CreateOrUpdateExercise({addOrUpdateExercise ,sessionID =
 
 
                     </div>   
-                }
+                    }
+                    <div className='fixed bottom-0 -right-80  rounded-lg z-40 bg-yellow-100 w-72 text-xs p-4 '>
+                    Questions for "multiple choice" questions will be in the form of:
+                    <br/>
+                    [
+                    questions objects : with "question","correct_answer" and "incorrect_answers"
+                    ]
+                    <br/>
+
+                    <br/>
+                    Questions for "vocabulary" questions will be in the form of:
+                    <br/>
+                    [
+                    questions objects : with "word" and "meaning" 
+                    ]
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    Example execution using Chatgpt (copy this text to Chatgpt):
+                    <br/>
+                    <br/>
+
+                    
+question1: "What is the largest ocean on Earth?"
+correct_answer: "Pacific Ocean"
+incorrect_answers: "Atlantic Ocean", "Indian Ocean", "Arctic Ocean"
+
+question2: "Who wrote the famous novel '1984'?"
+correct_answer: "George Orwell"
+incorrect_answers: "F. Scott Fitzgerald", "Ernest Hemingway", "J.K. Rowling"
+
+question3: "What is the chemical symbol for gold?"
+correct_answer: "Au"
+incorrect_answers: "Ag", "Fe", "Cu"
+
+question4: "...."
+correct_answer: "..."
+incorrect_answers: "...", "...", "..."
+
+<br/> Turn this questions data above to JSON in this formular [ questions objects : with "question","correct_answer" and "incorrect_answers" ] 
+
+                    </div>
+
                   <Dialog.Title
                     as="h3"
                     className="text-lg font-medium leading-6 text-gray-900"

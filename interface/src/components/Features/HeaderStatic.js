@@ -8,9 +8,9 @@ export default function HeaderStatic(props)
     console.log(color);
     const navigation = [
         { name: 'Home', href: '/' },
-        { name: 'Course', href: '/course', tip:'📖 Tham quan các khóa học của Trung tâm nào!' },
+        { name: 'Course', href: '/course', tip:'📖 Tham quan các khóa học của Trung tâm!' },
         // { name: 'Blog', href: '/blog' },
-        { name: 'Workspace', href: '/space', tip:'📁Theo dõi các Khóa học bạn đã đăng kí tại đây' },
+        { name: 'Workspace', href: '/space', tip:'📁Theo dõi các Khóa học đã đăng kí tại đây' },
         
       ];
     return(

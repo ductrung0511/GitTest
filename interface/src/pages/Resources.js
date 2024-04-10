@@ -8,6 +8,7 @@ import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import DeleteCountDown from "../components/Features/DeleteCountDown";
 import { Tooltip } from "react-tooltip";
+import DeleteCountDownUniversal from "../components/Features/DeleteCountDownUniversal";
 export default function Resources(){
 
     const [notFound, setNotFound] = useState(false);   
@@ -23,7 +24,6 @@ export default function Resources(){
     });
 
     const deleteResource=(resourceID) =>{
-
       async function deleteData() {
         const url = baseUrl + "api/resources/";
       try {
@@ -151,18 +151,26 @@ export default function Resources(){
     
     if(data.is_staff) return <div>
 
-                    <div className="grid grid-cols-2 gap-3 px-8 py-3 mx-7 mt-20 bg-transparent">
-                        {resources.map((resource, index) => {
-                        return <div key={index} className="rounded-lg h-44 shadow-lg bg-white flex flex-col overflow-hidden relative">
-                            
-                            <img className="h-4/5 w-full object-cover" src={resource.bgCardUrl} alt="bg"/>
-                            <Link to={resource.url} className="no-underline pt-2">
-                                <div className="px-2 h-1/5 mt-1 flex justify-between items-center">
 
+                    <div className="grid grid-cols-2 gap-3 px-8 py-3 mx-7 mt-20 bg-transparent">
+                        <Tooltip id='tooltip-resource' className="absolute z-30"/>
+                        {resources.map((resource, index) => {
+                        return <div key={index}
+                          className="rounded-lg h-48 shadow-lg  flex flex-col overflow-hidden relative"
+                          data-tooltip-content={resource.description}
+                          data-tooltip-id="tooltip-resource"
+                          >
+                            <Link to={resource.url} className="no-underline  h-4/5" >
+                              <img className=" w-full object-cover" src={resource.bgCardUrl} alt="bg"/>
+                            </Link>
+
+                            <Link to={resource.url} className=" bg-white no-underline h-1/5">
+                                <div className="px-2  mt-1 flex justify-between items-center">
                                     <p className="font-base text-gray-700 text-sm pt-2"> {resource.name}</p>
                                 <p className="font-base text-gray-700 text-sm pt-2">Serial: {resource.serial} </p>
                                 </div>
                             </Link>
+                            {/* ===>>> DELETE AND UPDATE RESOURCE
                             <div className="absolute top-2 left-2">
                                 
                               {role ===  'Administrator' && <CreateOrUpdateResourses addOrUpdateResource={updateRecourse} resource={resource}/> }  
@@ -176,12 +184,12 @@ export default function Resources(){
                                 // </button>
                                 <DeleteCountDown  original={resources} setOriginal={setResources} ID={resource.id} url={  baseUrl + "api/resources/" }/>
                              }
-                            </div>
+                            </div> */}
                             <div className="absolute top-2 right-2">
           
-                              <Menu as="div" className="relative inline-block text-left">
+                              <Menu as="div" className="relative inline-block  text-left">
                               <div>
-                                <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-full hover:bg-white hover:bg-opacity-30 p-2 text-sm font-semibold text-gray-900 shadow-sm  ">
+                                <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-full bg-gray-900 hover:bg-white hover:bg-opacity-30 p-2 text-sm font-semibold text-gray-900 shadow-sm">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
                                   </svg>
@@ -197,17 +205,21 @@ export default function Resources(){
                                 leaveFrom="transform opacity-100 scale-100"
                                 leaveTo="transform opacity-0 scale-95"
                               >
-                                <Menu.Items className="absolute right-0 z-10 mt-2 w-32 origin-top-right rounded-md   bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                                  <div className="py-1  flex flex-col justify-center rounded-full">
+                                <Menu.Items className="absolute right-0 z-10 p-2 mt-2 w-32 grid grid-cols-1 gap-1 justify-center origin-top-right rounded-md hover:rounded-md   bg-white shadow-lg">
                                     <Menu.Item> 
-                                      
-                                      <button onClick={ () => (handleCopyText(baseUrl + location.pathname.substring(1)))} className=" hover:bg-gray-100 p-2 text-sm ">
+                                      <button onClick={ () => (handleCopyText(baseUrl + location.pathname.substring(1)))} className=" hover:bg-gray-100 p-1 text-sm ">
                                         Copy
                                       </button>
                                       
                                     </Menu.Item>
-                                    
-                                  </div>
+
+                                    <Menu.Item className="items-center">
+                                      <DeleteCountDown original={resources} setOriginal={setResources} ID={resource.id} url={  baseUrl + "api/resources/" }/>
+                                    </Menu.Item>
+                                    <Menu.Item >
+                                      {role ===  'Administrator' && <CreateOrUpdateResourses addOrUpdateResource={updateRecourse} resource={resource}/> }  
+                                    </Menu.Item>
+                                                                       
                                 </Menu.Items>
                               </Transition>
                               </Menu>

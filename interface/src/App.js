@@ -20,6 +20,7 @@ import Resources from './pages/Resources';
 import InDevelopment from './pages/InDevelopment';
 import useFetch from './components/hook/useFetch';
 import Performance from './pages/Performance';
+import Testing from './pages/Testing';
 
 
 export const loginContext = createContext();
@@ -49,8 +50,9 @@ function App() {
         })
     }}
     refreshToken();
-    setInterval(refreshToken, minute * 4);
+    setInterval(refreshToken, minute * 13);
   }, []);
+  console.log(baseUrl, "url")
 
   const url = baseUrl + 'api/profile/';
   const { data , loading, error } =  useFetch(url, {
@@ -96,13 +98,13 @@ function App() {
 
         <Route path='/login' element={<Login/>} />
         <Route path='/register' element={<Register/>} />
-      
         <Route path="/course" element = {<Header className="bg-blue-300 text-white tracking-wider" threshold={0}><CourseHome/> </Header> }/>          
         {/* <Route path="/course/:name" element = {<Header className="bg-blue-300 text-white tracking-wider" threshold={0}> < /> </Header> }/>           */}
         <Route path="/blog" element = { <Header className="bg-blue-300 text-white tracking-wider"> <BlogHome/> </Header>}/>
         <Route path="/" element = { <Header className="bg-white text-white tracking-wider" threshold={10}>     <Home/> </Header>}/>
         <Route path="/blog/:id" element = { <Header className="bg-blue-300 text-white tracking-wider " threshold={0}> <Blog/>  </Header>}/>
-        <Route path="/testing" element = {  <StudentSpace><NewSessionLayout/></StudentSpace>  }/> 
+        <Route path="/testing" element = {  <Header className="bg-blue-300 text-white tracking-wider " threshold={10}> <Testing/>  </Header>  }/> 
+        
 
       </Routes>
 

@@ -2,9 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { baseUrl } from "../../Share";
 
-export default function DeleteCountDown({ID, original, setOriginal, url }){
+export default function DeleteCountDownUniversal({ID, original, setOriginal, url }){
     const isCancelled = useRef(false);
-    
     const [cancelled, setCancelled ] = useState(false);
     const [isShow, setIsShow] = useState(false);
     const [notFound, setNotFound] = useState(false);   
@@ -25,7 +24,6 @@ export default function DeleteCountDown({ID, original, setOriginal, url }){
     }, []);
     
 
-
     const deleteResource = () => {
       
         // Function to handle cancellation
@@ -35,7 +33,6 @@ export default function DeleteCountDown({ID, original, setOriginal, url }){
           try {
             // Pause for 3 seconds
             // await new Promise((resolve) => setTimeout(resolve, 3000)); //////////////
-      
             // Check if the delete operation is cancelled
             if (isCancelled.current) {
               setCancelled(true);
@@ -43,8 +40,7 @@ export default function DeleteCountDown({ID, original, setOriginal, url }){
               // alert('cancel', isCancelled.current);
               return;
             }
-      
-            const response = await fetch(url, {
+            const response = await fetch(url + ID, {
               method: "DELETE",
               headers: {
                 'Content-Type': 'application/json',
@@ -59,17 +55,17 @@ export default function DeleteCountDown({ID, original, setOriginal, url }){
                 state: { previousUrl: location.pathname }
               });
             } else if (!response.ok) {
-              console.error("Something went wrong" );
+              console.error("Something went wrong", response.body);
               return;
             } else if (response.ok) {
-              let newResources = original.filter((resource) => resource.id !== ID);
-              setOriginal(newResources);
+              console.log(original)
+              let newData = original.filter((data) => data.id !== ID);
+              setOriginal(newData);
             }
           } catch (error) {
             console.error("Error DELETE data:", error);
           }
         }
-      
         // Start the delete operation
         deleteData();
       
@@ -90,11 +86,8 @@ export default function DeleteCountDown({ID, original, setOriginal, url }){
     return( 
         <>
         
-        <button className=" hover:bg-gray-100 p-1 text-sm" onClick={()=>{setIsShow(true); setTimeout(deleteResource, 4200); setValue(4);    }} >
-            {/* <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-yellow-300">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-            </svg> */}
-            Delete
+        <button className="hover:bg-gray-200 text-sm p-1 rounded-sm" onClick={()=>{setIsShow(true); setTimeout(deleteResource, 4200); setValue(4);    }} >
+            Delete 
         </button>
         
         

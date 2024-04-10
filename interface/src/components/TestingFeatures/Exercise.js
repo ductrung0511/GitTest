@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment } from 'react'
 import { baseUrl } from '../../Share';
 import { Tooltip } from 'react-tooltip';
+import Alert from '../Features/Alert';
 function Exercise( { questionsData, instruction,  exerciseID}) {
     const [exerciseLog, setExerciseLog]  = useState( JSON.parse(localStorage.getItem("exerciseLog")));
     console.log(exerciseLog, "ExerciseLog in Exercise");
@@ -27,6 +28,10 @@ function Exercise( { questionsData, instruction,  exerciseID}) {
     const [correctScore, setCorrectScore] = useState(0);
     const [askedCount, setAskedCount] = useState(0);
     const totalQuestion = questionsData.length;
+
+    const [isAlert, setIsAlert] = useState(false);
+    const message = useRef('');
+    const [alertTime, setAlertTime] = useState(0);
     
 
 
@@ -55,14 +60,24 @@ function Exercise( { questionsData, instruction,  exerciseID}) {
 
     const checkAnswer = () => {
         if (selectedOption === null) {
-            alert('Please select an option!');
+            
+            setIsAlert(true);
+            message.current = "Please select an option!";
+            setAlertTime((prev) => prev + 1);
             return;
         }
         if (selectedOption === correctAnswer) {
             setCorrectScore(correctScore + 1);
-            alert('Correct Answer!');
+
+            setIsAlert(true);
+            message.current = "Correct Answer! " + question + " ==> "  + correctAnswer ;
+            setAlertTime((prev) => prev + 1);
+            
         } else {
-            alert(`Incorrect Answer! Correct Answer: ${correctAnswer}`);
+            // alert(`Incorrect Answer! Correct Answer: ${correctAnswer}`);
+            setIsAlert(true);
+            message.current = "Incorrect Answer!" + question + " ==> Correct Answer: " + correctAnswer ;
+            setAlertTime((prev) => prev + 1);
         }
         let realCount = askedCount + 1;
         setAskedCount(askedCount + 1);
@@ -105,7 +120,6 @@ function Exercise( { questionsData, instruction,  exerciseID}) {
                 console.log(response)
             }
         }).then((data) => {
-            
            setExerciseLog(dataPut);
            localStorage.setItem('exerciseLog',JSON.stringify(dataPut));
         })
@@ -114,7 +128,8 @@ function Exercise( { questionsData, instruction,  exerciseID}) {
     if(options.length === 0) {loadQuestion(0); return <div> loading</div>}
     else  return (
         <>
-          <div className=" flex items-center justify-center">
+            {isAlert && <Alert message={message.current} dataValue={4} alertTime={alertTime}   setIsAlert={setIsAlert}/>}
+            <div className=" flex items-center justify-center">
             <button
                 type="button"
                 onClick={openModal}

@@ -12,7 +12,6 @@ import { Tooltip } from 'react-tooltip'
 import { Disclosure } from '@headlessui/react'
 export default function CourseComponentSpace(props){
     const [course, setCourse] = useState(props.course);
-    
     const navigate = useNavigate();
     const location = useLocation();
     const [sessions, setSessions]  = useState(props.sessions);
@@ -316,7 +315,7 @@ export default function CourseComponentSpace(props){
                           } 
 
                         <div className= {`w-full h-[49vh] my-3 rounded-2xl bg-${course.color}-200 grid grid-cols-7 overflow-hidden hover:shadow-lg  cursor-pointer duration-700 `}>
-                            <div className="  relative bg-blue-400 col-span-3"> 
+                            <div className="  relative bg-white col-span-3"> 
                                 <img src={course.bgCardUrl} alt="bgIMG" className="object-cover h-full ">
                                 </img>
                             </div>
@@ -466,7 +465,7 @@ export default function CourseComponentSpace(props){
                                 return (<div className="grid grid-cols-8 gap-1 rounded-lg drop-shadow-lg my-2 bg-gray-200" >
                                             <div className="col-span-1 p-3" >
                                                 <Link to={ coursePerm.current ?  "/workspace/session/" + session.id : "#" }>
-                                                <button  className=" text-3xl p-2 font-extrabold text-color-secondary rounded-full">{(index + 1)<10 ? "0" + (index + 1) : (index + 1)  }</button>
+                                                <button  className=" text-3xl p-1 font-extrabold text-color-secondary rounded-full">{(index + 1)<10 ? "0" + (index + 1) : (index + 1)  }</button>
                                                 </Link>
     
                                             </div>
@@ -483,7 +482,7 @@ export default function CourseComponentSpace(props){
                                                 <p
                                                 data-tooltip-content='📜Session Overview'
                                                 data-tooltip-id="tooltip-student"
-                                                 className="text-xl font-extrabold text-color-secondary mt-4 mb-0">{session.overview}</p>
+                                                 className="text-xl font-extrabold text-color-secondary mt-2 mb-0">{session.overview}</p>
                                                 <p
                                                 data-tooltip-content=' 🎯Session Topics'
                                                 data-tooltip-id="tooltip-student"
@@ -500,7 +499,7 @@ export default function CourseComponentSpace(props){
                                             </button>
                                             
                                             {localStorage.getItem('role') === "Administrator" &&
-                                            <button onClick={() => {handleDeleteSession(session.id)}} className=" rounded-lg bg-gray-300 p-2 m-4 mt-4 border-color-primary-dark">Delete</button>
+                                            <button onClick={() => {handleDeleteSession(session.id)}} className=" rounded-lg bg-gray-300 p-1 m-4 mt-4 border-color-primary-dark">Delete</button>
                                              }
                                              <Tooltip id='tooltip-session'/>
                                              { (localStorage.getItem('role') !== "Administrator" && coursePerm.current) && 
@@ -542,22 +541,40 @@ export default function CourseComponentSpace(props){
                             </div> */}
                         </div>
                         <p className="text-sm my-4 font-extralight text-gray-200 text-left border-1 "> </p> 
-                        <div className=" bg-white shadow-lg ml-7 px-5  overflow-y-auto  h-[100vh] border-transparent  py-5 rounded-lg">
-                            <a
-                            data-tooltip-id="my-tooltip"
-                            data-tooltip-content="Hello world! This is my second update "
-                            data-tooltip-place="top"
-                            className="ml-8 no-underline text-gray-400"
-                            >
-                            ◕‿‿◕
-                            </a>
-                            <p className="font-bold text-xl text-black">Đôi Chút Về Khóa Học</p>
-                            <p>{textToParagraphs(course.description)}</p>
-                            <p>In this class you'll learn:</p>
-                            <ul>
+                        <div className=" bg-white shadow-lg ml-7 mr-7 px-4  py-4 overflow-y-auto  h-[100vh] border-transparent   rounded-lg">
+                            
+                            <p className="font-bold text-base text-black">Đôi Chút Về Khóa Học</p>
+                            <p className="text-xs">{textToParagraphs(course.description)}</p>
+                            <p className="text-xs" >In this class you'll learn:</p>
+                            <ul className="text-xs">
                                 {textToListItems(course.result)}
                             </ul>
-                            <p> {textToParagraphs(course.conclusion)}</p>
+                            <p className="text-xs"> {textToParagraphs(course.conclusion)}</p>
+                            <div className="flex flex-row">
+                                { (coursePerm.current || localStorage.getItem('role')=== 'Administrator') && 
+                                <div>
+                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    {/* Excluding unused groups (SVGRepo_bgCarrier and SVGRepo_tracerCarrier) */}
+                                    <g id="SVGRepo_iconCarrier">
+                                        <path
+                                        opacity="0.5"
+                                        d="M2 16C2 13.1716 2 11.7574 2.87868 10.8787C3.75736 10 5.17157 10 8 10H16C18.8284 10 20.2426 10 21.1213 10.8787C22 11.7574 22 13.1716 22 16C22 18.8284 22 20.2426 21.1213 21.1213C20.2426 22 18.8284 22 16 22H8C5.17157 22 3.75736 22 2.87868 21.1213C2 20.2426 2 18.8284 2 16Z"
+                                        fill="#1C274C"
+                                        />
+                                        <path d="M12 18C13.1046 18 14 17.1046 14 16C14 14.8954 13.1046 14 12 14C10.8954 14 10 14.8954 10 16C10 17.1046 10.8954 18 12 18Z" fill="#1C274C" />
+                                        <path
+                                        d="M6.75 8C6.75 5.10051 9.10051 2.75 12 2.75C14.4453 2.75 16.5018 4.42242 17.0846 6.68694C17.1879 7.08808 17.5968 7.32957 17.9979 7.22633C18.3991 7.12308 18.6405 6.7142 18.5373 6.31306C17.788 3.4019 15.1463 1.25 12 1.25C8.27208 1.25 5.25 4.27208 5.25 8V10.0546C5.68651 10.022 6.18264 10.0089 6.75 10.0036V8Z"
+                                        fill="#1C274C"
+                                        />
+                                    </g>
+                                    </svg>
+
+                                </div>
+                                
+                                
+                                }
+                                
+                            </div>
                         </div>
                         <p className="text-sm my-4 font-extralight text-gray-200 text-left border-1 "> </p> 
                         
@@ -598,7 +615,6 @@ export default function CourseComponentSpace(props){
                                                 
                                                     <div className=" relative flex flex-row gap-1 overflow-hidden">
                                                         <img className="peer h-[40vh] w-full rounded-lg object-cover " src={course.bgCardUrl} />
-                                                        <span className="absolute top-1 left-1 m-2 rounded-full bg-white/70 px-2 text-center text-xs font-medium text-gray-800">{course.sale}% OFF</span>
                                                 
                                                     </div>
                                                 </NavLink>

@@ -70,7 +70,7 @@ export default function HeaderSpace() {
                                 className="w-14 h-14 rounded-lg hover:opacity-30 duration-700" src="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcSx9yBvquZ3z_DsxhnCNx2PBb1AdzBOF5iyMOqtgZJWeIs6_k9m" alt="avatar"/>
                                 <ul tabIndex={0}
                                  
-                                className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
+                                className="dropdown-content z-40 menu p-2 shadow bg-base-100 rounded-box w-52">
                                     <li><button onClick={()=> {navigate("/workspace/performance/")}}>🎓 khóa học</button> </li>
                                     <li><button onClick={()=> {navigate("/workspace/resources/")}}> 📃 Tài liệu học tập</button> </li>
 

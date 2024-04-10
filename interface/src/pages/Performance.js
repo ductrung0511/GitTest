@@ -17,7 +17,7 @@ import { Disclosure } from "@headlessui/react";
 
 export default function Performance(){
     const [loading, setLoading ] = useState(true);
-    const [error, setError ] = useState(true);
+    const [error, setError] = useState(true);
     const [courses, setCourses] = useState([]);
     const [exerciseLog, setExerciseLog] = useState();
     const location = useLocation();
@@ -64,6 +64,7 @@ export default function Performance(){
 
     useEffect(() => {
         async function fetchData() {
+            // const url = "http://127.0.0.1:8000/api/dashboard/";
             const url = baseUrl + "api/performance/";
           try {
             const response = await fetch(url, {

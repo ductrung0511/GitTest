@@ -59,8 +59,6 @@ def courses(request):
                 for session in sessions:
                     exercises = session.exercise_set.all()
                     totalExercise += len(exercises)
-                    
-
 
         courses = ModelCourse.objects.all()
         coursesserializer = ModelCourseserializer(courses, many=True)
@@ -526,7 +524,59 @@ def performance(request):
 #     if request.method == "PUT":
 #         user = request.user
 #         profile  = Profile.objects.get(user= user)
-        
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def dashboard(request): 
+    if request.method == 'GET':
+        profile = Profile.objects.get(user= request.user)
+        courses = []
+        exerciseTotalCourses = 0
+
+        for i in profile.courseAuth.split('/'):
+            if i != '':
+                course = ModelCourse.objects.get(pk= i)
+                sessions =  course.modelsession_set.all()
+                totalSession = len(sessions)
+                totalExercise = 0
+                sessionsExercise = []
+
+                exerciseIDs = []
+                for session in sessions:
+                    exerciseDone = 0
+                    exercises = session.exercise_set.all()
+
+                    totalExercise += len(exercises)
+                    for exercise in exercises :
+                        exerciseIDs.append(exercise.id)
+                        # print(profile.exerciseLog.keys(),"keys")
+                        for key in profile.exerciseLog.keys():
+                            if exercise.id == int(key):
+                                exerciseDone += 1
+                                
+                    if(len(exercises) != 0 ):
+                        sessionsExercise.append({ 'name': session.overview, 'id':session.id, 'progress': exerciseDone/len(exercises)})
+                    else :
+                        sessionsExercise.append({ 'name': session.overview, 'id':session.id, 'progress': 0})
+
+                exerciseDone = {}
+                for lock in exerciseIDs :
+                    for key in profile.exerciseLog.keys():
+                        if lock == int(key):
+                            exerciseDone[key] =  profile.exerciseLog[key]
+
+                courseData = { **ModelCourseserializer(course).data, 'totalSession' :  totalSession, 'totalExercise': totalExercise, 'exerciseDone': exerciseDone,'sessionsExercise': sessionsExercise}
+                courses.append(courseData)
+                exerciseTotalCourses += totalExercise
+        log = {}
+        for key in profile.exerciseLog.keys():
+            try:
+                exercise = Exercise.objects.get(pk = key)
+                log[exercise.name] = profile.exerciseLog[key]
+            except:
+                print(key)
+        data = { 'courses' :courses, 'exerciseLog': log ,  'exerciseTotalCourses': exerciseTotalCourses}
+        return Response(data, status = status.HTTP_200_OK)
 
 
         

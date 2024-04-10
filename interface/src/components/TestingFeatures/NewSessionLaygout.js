@@ -5,17 +5,22 @@ import { ChevronUpIcon } from '@heroicons/react/20/solid'
 import CreateOrUpdateSession from "../Features/Create&UpdateSession";
 import CreateOrUpdateSection from "../Features/CreateOrUpdateSection";
 import { baseUrl } from "../../Share";
-import QuizAppInternal from "./QuizzAppInternalData";
 import Exercise from "./Exercise";
 import VocabFlashCard from "./VocabFlashCard";
 import CreateOrUpdateExercise from "../Features/CreateOrUpdateExercise";
 import { Tooltip } from "react-tooltip";
+import { Menu, Transition } from '@headlessui/react'
+import DeleteCountDownUniversal from "../Features/DeleteCountDownUniversal";
+import { Fragment } from "react";
+import { useLocation } from "react-router-dom";
+
+
 export default function NewSessionLayout({sessionData, sectionsData, sessionID, exercisesData}){
     const [session, setSession] = useState(sessionData);
     const [sections, setSections] = useState(sectionsData);
     const [exercises, setExercises] = useState(exercisesData);
+    const location = useLocation();
     useEffect(()=>{
-
 
         scrollToPosition(0);
 
@@ -98,19 +103,37 @@ export default function NewSessionLayout({sessionData, sectionsData, sessionID, 
 
     }
     //sections = props.sections;
-    const works = [
-        {name: "Vocab review", bgCardUrl:"https://img.freepik.com/premium-photo/full-shot-girl-learning-math-school_23-2150470852.jpg?w=826" , role:"after", content:{}},
-        {name: "Grammar Workshop", bgCardUrl:"https://img.freepik.com/free-photo/front-view-kids-cheating-school_23-2150256562.jpg?t=st=1708662637~exp=1708663237~hmac=97662325185a25662376590d356c1ba8631867e29dfb6e501d14b5d3e25044f9" , role:"after", content:{}},
-        {name: "Listening Upskill", bgCardUrl:"https://img.freepik.com/free-photo/workplace-with-open-notebook_1101-349.jpg?t=st=1709636664~exp=1709640264~hmac=e0b68f45114336a69e6d5ed40f4f271a4c89bb40012373021542a842501ac5bb&w=826" , role:"in", content:{}},
-    ];
+    // const works = [
+    //     {name: "Vocab review", bgCardUrl:"https://img.freepik.com/premium-photo/full-shot-girl-learning-math-school_23-2150470852.jpg?w=826" , role:"after", content:{}},
+    //     {name: "Grammar Workshop", bgCardUrl:"https://img.freepik.com/free-photo/front-view-kids-cheating-school_23-2150256562.jpg?t=st=1708662637~exp=1708663237~hmac=97662325185a25662376590d356c1ba8631867e29dfb6e501d14b5d3e25044f9" , role:"after", content:{}},
+    //     {name: "Listening Upskill", bgCardUrl:"https://img.freepik.com/free-photo/workplace-with-open-notebook_1101-349.jpg?t=st=1709636664~exp=1709640264~hmac=e0b68f45114336a69e6d5ed40f4f271a4c89bb40012373021542a842501ac5bb&w=826" , role:"in", content:{}},
+    // ];
     function textToParagraphs(text){
         return <React.Fragment>
             {text.split('\n').map((paragraph, index) => (
+             <p key={index} className="my-0 py-0">{paragraph}</p>
 
-             <p key={index}>{paragraph}</p>
           ))}
-          </React.Fragment>
+          </React.Fragment> 
     }
+    function TextToLinks(text){
+        return <React.Fragment>
+        {text.split('\n').map((paragraph, index) => {
+            if (paragraph.trim().startsWith('https://') || paragraph.trim().startsWith('http://')) {
+                // If the paragraph is a URL, return it as an anchor tag
+                return (
+                    <a key={index} href={paragraph.trim()} className="text-gray-700" target="_blank" rel="noopener noreferrer">
+                        NZEC Link
+                    </a>
+                );
+            } else {
+                return <p key={index} className="my-0 py-0">{paragraph}</p>;
+            }
+        })}
+    </React.Fragment> 
+        
+    }
+
     function textToListItems(text){
         return <React.Fragment>
             {text.split('\n').map((paragraph, index) => (
@@ -203,19 +226,11 @@ return(
                             <button onClick={() => scrollToPosition(800)}>
                                 <div className=" bg-gray-800 rounded-lg w-full font-bold text-lg px-4 py-2 text-white">  Exercise</div>
                             </button>
-
-
                             <button onClick={() => scrollToPosition(700)}>
                             <div 
                             data-tooltip-content='Nội dung của buổi học' data-tooltip-id="tooltip-session"
                              className=" bg-gray-800 rounded-lg w-full font-bold text-lg px-4 py-2 text-white">  Content</div>
-                            </button>
-                            {/* <button onClick={() => scrollToPosition(500)}>
-                            <div className=" bg-gray-800 rounded-lg w-full font-bold text-lg px-4 py-2 text-white">  Introduction</div>
-                            </button> */}
-                            
-                            
-                            
+                            </button> 
                         </div>
 
                         <div style={containerStyle} className={`m-2 col-span-3 relative rounded-lg bg-cover  pt-8 pb-2 bg-${session.color}-400 bg-green-200 grid grid-cols-3 overflow-hidden`} >
@@ -227,7 +242,7 @@ return(
                                 </div>
                                 }
                                 <div className="flex flex-row">
-                                        <Link to={session.CPTUrl} className="no-underline"> <button className="ml-2 my-2 p-2 text-md text-black font-semibold no-underline bg-white  rounded-lg"> Text Book (CPT)</button> </Link>
+                                        <Link to={session.CPTUrl} className="no-underline"> <button className="ml-2 my-2 p-2 text-md text-black font-semibold no-underline bg-white  rounded-lg"> Additional Resource </button> </Link>
                                 </div>
                             </div>
                             <div className=" z-20 absolute inset-0 bg-black opacity-40"></div>
@@ -256,7 +271,7 @@ return(
                                         } h-5 w-5 text-purple-500`}
                                         />
                                     </Disclosure.Button>
-                                    <Disclosure.Panel className=" bg-white  rounded-md px-4 pb-2 pt-4 text-sm text-gray-500 transition-all ease-in-out duration-1000">
+                                    <Disclosure.Panel className=" bg-white  rounded-md px-4 pb-2 pt-4 text-sm text-black transition-all ease-in-out duration-1000">
                                         
                                         <div className="flex flex-row justify-between">
                                             <div></div>
@@ -266,11 +281,16 @@ return(
                                                 </svg>
                                             </button>
                                         </div>
-                                        {textToParagraphs(section.content)}
-                                        <div className="flex flex-row gap-3"> 
+                                        {TextToLinks(section.content)}
+                                        <div className="flex flex-row gap-3 mt-3"> 
                                         {localStorage.getItem('role') === "Administrator" &&  
-                                        <button className="rounded-lg border-1 border-black text-black px-3 py-2 font-bold" onClick={() => deleteSection(section.id)}>Delete</button>
-                                         }
+                                            // <button className="rounded-lg border-1 border-black text-black px-3 py-2 font-bold" onClick={() => deleteSection(section.id)}>Delete</button>
+                                            <>
+                                                {/* <button className="rounded-lg border-1 border-black text-black px-3 py-2 font-bold" onClick={() => deleteSection(section.id)}>Delete now</button> */}
+                                                <DeleteCountDownUniversal original={sections} setOriginal={setSections} ID={section.id} url={  baseUrl + 'api/section/' }/>
+                                            </>
+                                           
+                                        }
 
                                         {localStorage.getItem('role') === "Administrator" &&  <CreateOrUpdateSection addOrUpdateSection={updateSection} sectionID={section.id} section={section} /> }
                                         
@@ -284,7 +304,9 @@ return(
                                 
                                 if (index >= 3 &&  (localStorage.getItem('role') === 'Administrator'  || localStorage.getItem('role') === 'Staff')) return(
 
-                                    <Disclosure key={section.index} className=" ">
+                                    <Disclosure
+                                    data-tooltip-content='Nội dung tiết học dành cho giáo viên' data-tooltip-id="tooltip-session"
+                                    key={section.index} className=" ">
                                     {({ open }) => (
                                         <>
                                         <Disclosure.Button  className="flex w-full px-5 my-1   shadow-lg justify-between rounded-lg   py-3 text-left text-md font-medium text-purple-900 hover:bg-yellow-100">
@@ -306,11 +328,17 @@ return(
                                                     </svg>
                                                 </button>
                                             </div>
-                                            {textToParagraphs(section.content)}
-                                            <div className="flex flex-row gap-3"> 
+
+                                            <div>
+                                                {textToParagraphs(section.content)}
+                                            </div>
+                                            <div className="flex flex-row gap-3 "> 
                                             {localStorage.getItem('role') === "Administrator" &&  
-                                            <button className="rounded-lg border-1 border-black text-black px-3 py-2 font-bold" onClick={() => deleteSection(section.id)}>Delete</button>
-                                             }
+                                            <>
+                                                {/* <button className="rounded-lg border-1 border-black text-black px-3 py-2 font-bold" onClick={() => deleteSection(section.id)}>Delete now</button> */}
+                                                <DeleteCountDownUniversal original={sections} setOriginal={setSections} ID={section.id} url={  baseUrl + 'api/section/' }/>
+                                            </> 
+                                            }
     
                                             {localStorage.getItem('role') === "Administrator" &&  <CreateOrUpdateSection addOrUpdateSection={updateSection} sectionID={section.id} section={section} /> }
                                             
@@ -352,14 +380,44 @@ return(
 
                             </div>
 
-                            {localStorage.getItem('role')=== "Administrator" && <CreateOrUpdateExercise addOrUpdateExercise={updateExecise} sessionID={sessionID} exerciseID={exercise.id} exercise={exercise} />}
-                            {localStorage.getItem('role')=== "Administrator" &&
-                                <button className="absolute top-2 left-2" onClick={()=>{deleteExercise(exercise.id)}} >
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-yellow-300">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                            
+                            <div className="absolute top-2 right-2">
+                                <Menu as="div" className="relative inline-block  text-left">
+                                <div>
+                                    <Menu.Button className="inline-flex w-full  justify-center gap-x-1.5 rounded-full bg-white bg-opacity-50 hover:bg-white hover:bg-opacity-30 p-2 text-sm font-semibold text-gray-900 shadow-sm">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
                                     </svg>
-                                </button>
-                            }
+                                    </Menu.Button>
+                                </div>
+
+                                <Transition
+                                    as={Fragment}
+                                    enter="transition ease-out duration-100"
+                                    enterFrom="transform opacity-0 scale-95"
+                                    enterTo="transform opacity-100 scale-100"
+                                    leave="transition ease-in duration-75"
+                                    leaveFrom="transform opacity-100 scale-100"
+                                    leaveTo="transform opacity-0 scale-95"
+                                >
+                                    <Menu.Items className="absolute  right-0 z-10 p-2 mt-2 w-32 grid grid-cols-1 gap-1 justify-center origin-top-right rounded-md hover:rounded-md   bg-white shadow-lg">
+                                        <Menu.Item> 
+                                            <button onClick={ () => (handleCopyText(baseUrl + location.pathname.substring(1)))} className=" hover:bg-gray-100 p-1 text-sm ">
+                                                Copy
+                                            </button>
+                                        </Menu.Item>
+
+                                        <Menu.Item className="items-center">
+                                            <DeleteCountDownUniversal original={exercises} setOriginal={setExercises} ID={exercise.id} url={ baseUrl + 'api/exercise_session/'}/>
+                                        </Menu.Item>
+                                        <Menu.Item >
+                                            {localStorage.getItem('role') === "Administrator" && <CreateOrUpdateExercise addOrUpdateExercise={updateExecise} sessionID={sessionID} exerciseID={exercise.id} exercise={exercise} />}
+                                        </Menu.Item>
+                                                                        
+                                    </Menu.Items>
+                                </Transition>
+                                </Menu>
+                            </div>
                             
                         </div>
 
@@ -371,12 +429,13 @@ return(
 
                     </div>
                     <div className="flex justify-center">
-
                         {localStorage.getItem('role')=== "Administrator" && <CreateOrUpdateExercise addOrUpdateExercise={addExercise} sessionID={sessionID} />}
                     </div>
-                    <div className="mt-10" >
+                    <div className="mt-10">
                         <h2 className="text-black font-bold text-3xl capitalize"> Explore Your Knowledge </h2>
-                        <p  className=" text-sm pr-4"> Take the next step on your creative journey. With these Skillshare classes, you can explore a range of topics, tools, and techniques, from photography and graphic design, to drawing and animation. Whether you’re looking for art classes for beginners or you’re an experienced professional, you can take your skills to the next level with online classes in software like Photoshop, Procreate and After Effects, or learning handmade techniques in painting, hand lettering, and illustration. Make a film, give your home a makeover, start a freelance business. There’s so much inspiration to explore on Skillshare, and you’ll get hands-on experience by completing and sharing your own projects.</p>
+                        <p  className=" text-sm pr-4">
+                        Take the next step on your creative journey with the NZEC Language Center. With our diverse range of classes, you can delve into various language topics, tools, and techniques. Whether you're interested in improving your language proficiency, mastering communication skills, or exploring cultural nuances, we offer classes tailored to your needs. Whether you're a beginner or an experienced learner, you can enhance your skills with courses in grammar, vocabulary expansion, conversation practice, and more. Immerse yourself in our virtual classrooms, where you can learn from experienced instructors and interact with fellow language enthusiasts. From mastering new language software to honing your speaking and writing abilities, the NZEC Language Center is your gateway to linguistic excellence. Start your language journey today and unlock a world of opportunities!
+                             </p>
                     </div>
     </>
 )}
