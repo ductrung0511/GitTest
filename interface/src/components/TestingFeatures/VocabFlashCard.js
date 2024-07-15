@@ -1,14 +1,50 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Dialog, Transition } from '@headlessui/react'
 import { Disclosure } from '@headlessui/react'
-import { ChevronUpIcon } from '@heroicons/react/20/solid'
 import { baseUrl } from '../../Share';
 import { Fragment } from 'react'
 import {v4 as uuidv4} from 'uuid'
 import { Tooltip } from 'react-tooltip';
-function VocabFlashCard( {vocabList, instruction, exerciseID}) {
+import Exercise from './Exercise';
+function VocabFlashCard( {vocabList, instruction, exerciseID, description}) {
     let [isOpen, setIsOpen] = useState(false);
     const [list, setList] = useState(vocabList);
+    const  wordList = useRef();
+    useEffect(()=>{
+      let exerciseList = [];
+      vocabList.map((vocab) => {
+          exerciseList.push(
+            {
+              question: vocab.word,
+              correct_answer: vocab.meaning.split('-')[1],
+              incorrect_answers: 
+              [
+                vocabList[ Math.ceil(Math.random() * (vocabList.length - 2) )].meaning.split('-')[1],
+                vocabList[ Math.ceil(Math.random() * (vocabList.length - 2) )].meaning.split('-')[1],
+                vocabList[ Math.ceil(Math.random() * (vocabList.length - 2) )].meaning.split('-')[1],
+               ]
+              ,
+            }
+            )
+         })
+         vocabList.map((vocab) => {
+          exerciseList.push(
+            {
+              question: vocab.word,
+              correct_answer: vocab.meaning.split('-')[0],
+              incorrect_answers: 
+              [
+                vocabList[ Math.ceil(Math.random() * (vocabList.length - 2) )].meaning.split('-')[0],
+                vocabList[ Math.ceil(Math.random() * (vocabList.length - 2) )].meaning.split('-')[0],
+                vocabList[ Math.ceil(Math.random() * (vocabList.length - 2) )].meaning.split('-')[0],
+               ]
+              ,
+            }
+            )
+         })
+      wordList.current = exerciseList.sort(() => Math.random() - 0.5);
+
+    }, [])
 
     const [done, setDone] = useState(false);
     const replay = useRef(0);
@@ -18,7 +54,7 @@ function VocabFlashCard( {vocabList, instruction, exerciseID}) {
     }
 
     function openModal() {
-        setIsOpen(true)
+        setIsOpen(true);
     }
     const handleSubmitVocab= () => {
 
@@ -50,8 +86,6 @@ function VocabFlashCard( {vocabList, instruction, exerciseID}) {
 
           }
       }).then((data) => {
-          
-        
       })
       
       closeModal();
@@ -163,48 +197,43 @@ function VocabFlashCard( {vocabList, instruction, exerciseID}) {
 
                     <div className='grid grid-cols-6 gap-1'>
 
-
-
-                    
-
-
                     <div className='col-span-4 grid  grid-cols-5 pt-4  gap-2 overflow-y-scroll h-screen py-10 px-4'>
                     {done &&
                       <div className='col-span-4'>
                         <div className="flex justify-center items-center min-h-screen">
-                        <div className="bg-white p-6 rounded-lg shadow-lg">
-                            <button className='text-white px-4 py-1 bg-gray-300 rounded-lg flex flex-row items-center gap-2 mb-4'> 
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-white">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-12.814a2.25 2.25 0 1 0 3.933-2.185 2.25 2.25 0 0 0-3.933 2.185Z" />
-                                </svg>
-                                Copy Exercise Link
-                            </button>
-                            <h1 className="text-2xl font-bold mb-4">Quiz Game</h1>
+                        <div className="bg-gray-400 p-6 rounded-lg shadow-lg">
+                            <h1 className="text-2xl font-bold mb-4">End of Vocab Preparation! </h1>
                             <div className='p-2' >
                                 <span className="text-right font-semibold mb-2 bg-purple-300 rounded-lg p-2"> 
-                                Your Score: { ( vocabList.length - (replay.current -vocabList.length)) }/{vocabList.length}
+                                Your Vocab Score: { ( vocabList.length - (replay.current -vocabList.length)) }/{vocabList.length}
                                 </span>
                             </div>
 
-                            <div className="mb-4" id="result"></div>
+                            <div className="my-4" id="result"> 
+                            <p className='text-sm'>- Click the black button to proceed to the "Word testing environment!"
+                              <br/>- But remember to notedown and understand everywords in the previous part before proceeding!
+                              <br/>- Click on "Play again" if you are not sure of the Vocabulary! 
+                            </p>
+                            </div>
                             <div className="flex justify-between">
-                                <button
+                                {/* <button
                                     onClick={handleSubmitVocab}
                                     type="button"
                                     className="bg-purple-500 text-purple-950 duration-500 px-4 py-2 border  border-transparent rounded-lg mr-2 hover:bg-green-300 hover:text-gray-800"
                                 >
                                     Submit!
-                                </button>
+                                </button> */}
+                                <Exercise questionsData={wordList.current} instruction={instruction} exerciseID={exerciseID} description={description} /> 
                                 <button
                                     type="button"
-                                    className="bg-purple-500 text-purple-900  duration-500 px-4 py-2  border border-transparent rounded-lg hover:bg-red-300 hover:text-gray-800"
+                                    className="bg-red-400 text-purple-900 mx-2  duration-500 px-4   border border-transparent rounded-lg hover:bg-red-300 hover:scale-95 hover:text-gray-800"
                                     onClick={restart}
                                 >
                                     Play Again!
                                 </button>
                             <button
                             type="button"
-                            className="inline-flex  ml-1 justify-center rounded-md duration-500 border border-transparent bg-blue-100 px-4 py-2 text-base  text-purple-900 hover:bg-yellow-300   "
+                            className="  ml-1 justify-center rounded-md duration-500 border border-transparent bg-blue-100 px-4  text-base  text-purple-900 hover:scale-95 hover:bg-yellow-300 "
                             onClick={closeModal}
                             >
                             Quit
@@ -214,14 +243,16 @@ function VocabFlashCard( {vocabList, instruction, exerciseID}) {
                         </div>
                     </div>
                     </div>}
+                    {done  && <>
+                    {console.log(wordList.current)}
+                    </>}
+                    
 
                      
                     {list.map((vocab)=>{
                             return(
-                              <div  key={uuidv4()} className= {`w-full py-2 px-2 max-h-72 bg-white shadow-lg my-2  rounded-lg col-span-${Math.ceil(Math.random() * 3)}`}>
-                                
+                              <div key={uuidv4()} className= {`w-full py-2 px-2 max-h-72 bg-white shadow-lg my-2  rounded-lg col-span-${Math.ceil(Math.random() * 3)}`}>
                                 <label className="swap swap-flip text-sm">
-                                
                                   <input type="checkbox" onChange={()=>{replay.current += 1; console.log(replay.current)}} />
                                   <div className="swap-off">{vocab.word}</div>
                                   <div className="swap-on flex flex-col justify-between items-baseline">
@@ -229,7 +260,7 @@ function VocabFlashCard( {vocabList, instruction, exerciseID}) {
                                       {vocab.meaning}
                                     </div>
                                     <div className='flex flex-row gap-1'>
-                                        <button className=" p-2 border-1 border-gray-400 rounded-xl mt-3" onClick={()=>{handleEasy(vocab.word)}}> Easy </button>
+                                        <button className=" p-2 border-1 border-gray-400 rounded-xl mt-3" onClick={()=>{handleEasy(vocab.word)}}> Done </button>
                                         <div className=" p-2 border-1 border-gray-400 rounded-xl mt-3 hover:bg-gray-300" > Replay   </div>
                                     </div>
                                     
@@ -260,8 +291,13 @@ function VocabFlashCard( {vocabList, instruction, exerciseID}) {
 
                     
                     <div className='col-span-2 mt-24 mx-3 overflow-y-scroll h-80  scroll-behavior-smooth scrollbar-thin scroll-hide'>
-                        <p className='text-base font-semibold text-purple-800'> Intruction:</p>
-                        <p className='text-sm font-semibold  text-purple-800' > {instruction}
+                        <p className='text-base font-semibold '> Description:</p>
+                        <p className='text-sm font-semibold ' > {description}
+                        </p>
+                        <div className="border-1 border-gray-200 w-1/2 my-4"> </div>
+
+                        <p className='text-base font-semibold '> Intruction:</p>
+                        <p className='text-sm font-semibold ' > {instruction}
                         </p>
                         <div className="border-1 border-gray-200 w-full my-4"> </div>
                         <p className='text-base font-semibold text-purple-800'> Your Previous History</p>
@@ -271,7 +307,6 @@ function VocabFlashCard( {vocabList, instruction, exerciseID}) {
                         JSON.parse(localStorage.getItem('exerciseLog'))[exerciseID].map((item, index) =>{
 
                             return(
-
                                 <p key={index} className='text-sm font-semibold mx-3 text-purple-400' > Attempt  number {index + 1}: {item}</p>
                             )
                         }) : <div>No attempts yet </div>

@@ -117,7 +117,6 @@ export default function CourseComponentSpace(props){
     
     
     function textToParagraphs(text){
-
         if(text) return <React.Fragment>
             {text.split('\n').map((paragraph, index) => (
 
@@ -138,7 +137,6 @@ export default function CourseComponentSpace(props){
           ))}
           </React.Fragment>
         else return;
-
     }
     const handleSaveCourse =(courseID) =>{
         const putData = {courseSave:  localStorage.getItem("courseSave")  + courseID    + '/' }  ;
@@ -322,7 +320,6 @@ export default function CourseComponentSpace(props){
 
                             {(localStorage.getItem('courseAuth').split('/').length<4 && localStorage.getItem('role') === 'Staff') && <Tooltip id="course-tooltip"/> }
                             
-
                             <div className="p-3 flex justify-between flex-col col-span-4">
                                 <div>
                                     <p className=" text-xl font-bold" 
@@ -459,7 +456,7 @@ export default function CourseComponentSpace(props){
                         </div>
                         </div>
 
-                        <div className="m-2 px-2 mt-2 rounded-xl bg-white/30 grid ">
+                        <div className="m-2 px-2 mt-2 rounded-xl  grid ">
                             
                             {sessions.map((session, index) => {
                                 return (<div className="grid grid-cols-8 gap-1 rounded-lg drop-shadow-lg my-2 bg-gray-200" >

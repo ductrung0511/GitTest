@@ -1,5 +1,5 @@
 import { Dialog, Transition } from '@headlessui/react'
-import { Fragment, useState, useEffect} from 'react'
+import { Fragment, useState} from 'react'
 import { baseUrl } from '../../Share';
 
 
@@ -12,15 +12,31 @@ export default function CreateOrUpdateSession({addOrUpdateSession ,courseID = 1 
   //section: [1],
   topics: '',
   level: '',
-
 }  }) { 
     let [isOpen, setIsOpen] = useState(false);
     const [sessionData, setSessionData] = useState(session);
+    const [error, setError ] = useState('')
     
 
     function handleAddSession() {
         // Send courseData to your backend to add the course
+        
+
         const postSessionData = {...sessionData, "course": courseID}
+        if(postSessionData.bgCardUrl.length === 0) {
+          postSessionData.bgCardUrl = "https://img.freepik.com/free-vector/flat-pattern-design-back-school-season_23-2150590728.jpg";
+        }
+        if(postSessionData.color.length === 0) {
+          postSessionData.color = 'red'
+        }
+        if(postSessionData.level.length === 0) {
+          postSessionData.level = 'Entry'
+        }
+        if( postSessionData.topics.length > 100) {
+          setError("Topics must not be shorter than 100 characters!")
+          return;
+        }
+
         const url = baseUrl + "api/session/" + courseID;
         fetch(url, {
           method: 'POST',
@@ -33,6 +49,7 @@ export default function CreateOrUpdateSession({addOrUpdateSession ,courseID = 1 
         .then(response => {
           console.log("status", response.status)
           if (!response.ok) {
+            console.log(response.error);
             throw new Error('Failed to add course');
           }
           
@@ -47,6 +64,7 @@ export default function CreateOrUpdateSession({addOrUpdateSession ,courseID = 1 
             topics: '',
             level: '',
           });
+          setError('')
           closeModal();
           return response.json();
         })
@@ -110,9 +128,9 @@ export default function CreateOrUpdateSession({addOrUpdateSession ,courseID = 1 
         <button
           type="button"
           onClick={openModal}
-          className="rounded-lg border-1 border-black text-black px-3 py-2 font-bold"
+          className="rounded-lg border-1 border-black text-black px-3 py-2 font-bold duration-500 hover:bg-gray-400 "
         >
-          Add or Update Session !
+          {session.overview === '' ? "Add Session" :  "Update Session"}
         </button>
       </div>
 
@@ -246,7 +264,9 @@ export default function CreateOrUpdateSession({addOrUpdateSession ,courseID = 1 
         />
     </div>
     <div>
-        <label htmlFor="topics" className="block text-sm font-medium text-gray-700">Topics</label>
+        <label htmlFor="topics" className="block text-sm font-medium text-gray-700">Topics
+          <span className='text-red-400 font-mono'> {error !== ''  ? '------': '' } { error } </span>
+        </label>
         <input
             type="text"
             name="topics"
@@ -262,23 +282,28 @@ export default function CreateOrUpdateSession({addOrUpdateSession ,courseID = 1 
 
 
                   <div className="mt-4">
+                    {session.overview === '' && 
                     <button
                       type="button"
                       onClick={handleAddSession}
-                      className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                      className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                     >
                     Add Your Session
                     </button>
+                    }
+                    {session.overview !== '' && 
                     <button
                       type="button"
                       onClick={handleUpdateSession}
-                      className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                      className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                     >
                     Update Your Session
                     </button>
+                    }
+
                     <button
                       type="button"
-                      className="inline-flex ml-2 justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                      className="inline-flex ml-2 justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-yellow-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                       onClick={closeModal}
                     >
                     Cancle and Close

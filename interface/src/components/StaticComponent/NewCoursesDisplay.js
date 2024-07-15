@@ -14,7 +14,6 @@ export default function NewCoursesDisplay({courseCategories}){
     const location = useLocation();
     const navigate= useNavigate();
     const [courseSaveList, setCourseSaveList] = useState(localStorage.getItem('courseSave')? localStorage.getItem('courseSave').split('/'): '')
-    const [selectedValue, setSelectedValue] = useState('');
     const [toast, setToast] = useState(false);
 
 
@@ -219,7 +218,7 @@ export default function NewCoursesDisplay({courseCategories}){
                     <p className="text-light text-xs text-black"> 
                     Chương trình Anh văn thiếu niên giúp học sinh phát triển sự tự tin, kích thích niềm say mê học hỏi thông qua các chủ đề mang tính thời sự và mang tính định hướng nghề nghiệp cho tương lai. Học sinh được trang bị kiến thức sẵn sàng cho các kỳ thi Chứng chỉ Cambridge KET, PET, FCE.
                     </p>
-                </button>
+                </button>   
             </div>
             <div className=" col-span-4 grid grid-cols-5 border border-transparent rounded-lg duration-700 bg-green-200 hover:shadow-lg hover:bg-green-300 w-full h-48 2xl:h-56">
                 <div className="flex flex-col col-span-2  justify-center items-center">

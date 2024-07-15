@@ -1,20 +1,18 @@
-import { useState, useEffect, useContext, useRef } from "react";
+import { useState, useRef } from "react";
 import { baseUrl } from "../Share";
 import { useLocation, useNavigate } from "react-router-dom";
-import { loginContext } from "../App";
 import Alert from "../components/Features/Alert";
 export default function Login(){
-    const [loggedIn, setLoggedIn] = useContext(loginContext);
     const [isWrongPassword, setIsWrongPassword] = useState(false);
     const[username , setUsername] = useState('');
     const [password, setPassword] = useState('');
     const location = useLocation();
     const navigate = useNavigate();
+    
     const [isAlert, setIsAlert] = useState(false);
     const message = useRef('');
     const [alertTime, setAlertTime] = useState(0);
 
-    // useEffect(()=> { console.log(location.state) });
     function login(e){
         e.preventDefault();
         const url = baseUrl + 'api/token/';
@@ -29,7 +27,7 @@ export default function Login(){
             })
             }).then((response)=> {
             if(response.status === 401) 
-            setLoggedIn(false);
+            console.log(response, 'response from DB')
             return response.json();
         }).then((data) => {
             if(data.access && data.refresh){
@@ -78,10 +76,7 @@ export default function Login(){
                         console.error('There was a problem with the fetch operation:', error);
                     });
                 navigate(location?.state?.previousUrl? location.state.previousUrl : "/" );
-
-
                 }
-
             }
             else if(data['detail'] === "No active account found with the given credentials"){
                 setIsWrongPassword(true);

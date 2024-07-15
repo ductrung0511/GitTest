@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Blog, Contact, Resource, ModelCourse, ModelSession, Question, Category, Profile, Section, Exercise
+from .models import Blog, Contact, Resource, ModelCourse, ModelSession, Question, Category, Profile, Section, Exercise, Assignment
 
 admin.site.register(Blog)
 admin.site.register(Contact)
@@ -11,6 +11,7 @@ admin.site.register(Section)
 admin.site.register(Profile)
 admin.site.register(Exercise)
 admin.site.register(Resource)
+admin.site.register(Assignment)
 
 
 

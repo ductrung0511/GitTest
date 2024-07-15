@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Blog, Contact, Resource, ModelCourse, Question, ModelSession, Section, Exercise, Profile
+from .models import Blog, Contact, Resource, ModelCourse, Question, ModelSession, Section, Exercise, Profile, Assignment
 
 class Blogserializer(serializers.ModelSerializer):
     class Meta: 
@@ -65,3 +65,9 @@ class ResourceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Resource
         fields = '__all__'
+
+class AssignmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Assignment
+        fields = '__all__'
+

@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { baseUrl } from "../Share";
 import { useLocation } from "react-router-dom";
 import useFetch from "../components/hook/useFetch";
@@ -8,7 +8,6 @@ import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import DeleteCountDown from "../components/Features/DeleteCountDown";
 import { Tooltip } from "react-tooltip";
-import DeleteCountDownUniversal from "../components/Features/DeleteCountDownUniversal";
 export default function Resources(){
 
     const [notFound, setNotFound] = useState(false);   
@@ -22,64 +21,6 @@ export default function Resources(){
         method:'GET', 
         headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + localStorage.getItem('access'),}
     });
-
-    const deleteResource=(resourceID) =>{
-      async function deleteData() {
-        const url = baseUrl + "api/resources/";
-      try {
-        const response = await fetch(url, {
-          method: "DELETE",
-          headers:{
-              'Content-Type': 'application/json',
-              Authorization: 'Bearer ' + localStorage.getItem('access'),
-          },
-          body: JSON.stringify({id: resourceID}),
-      });
-        if(response.status === 404) setNotFound(true);
-        if(response.status === 401) 
-        {
-          navigate("/login",{
-          state:{ previousUrl : location.pathname,}
-        });
-      }
-        else if (!response.ok) {
-          console.error("Something went wrong");
-          return;
-        }
-        else if(response.ok){
-          let newResources  = [];
-          for(let i of resources){
-            if(i.id !== resourceID){
-              newResources.push(i);
-            }
-          }
-          setResources(newResources);
-
-        }
-
-      } catch (error) {
-        console.error("Error DELETE data:", error);
-      }
-      }
-  
-      deleteData();
-
-    }
-
-    // const profile = useRef();
-    // const loadingProfile = useRef(); 
-    // const errorProfile = useRef(); 
-    // const works = [
-    //     {name: "IELTS Academic Writing E-Books - volumn 3", bgCardUrl:"https://img.freepik.com/free-photo/vibrant-portrait-person-bright-environment_23-2151078796.jpg?t=st=1709200466~exp=1709201066~hmac=4281526a3c9848a33e9e06221e4ed59286a702fb2d7346e3647c53db69544e342x.webp" , role:"Explorer", content:{}},
-    //     {name: "IElTS Academic Reading E-Books - volumn 2/3", bgCardUrl:"https://img.freepik.com/free-photo/vibrant-portrait-person-bright-environment_23-2151078775.jpg" , role:"Starter", content:{}},
-    //     {name: "Listening General E-Books - volumn 2", bgCardUrl:"https://mediablog.cdnpk.net/sites/9/2022/03/spring-pattern-collection.png?t=st=1709200466~exp=1709201066~hmac=f59cf8ee36d6b1a190966745b87d4991ad06faca819d734ec623a8a32db4bbb5" , role:"Flyer", content:{}},
-    //     {name: "IELTS Academic Writing E-Books - volumn 3", bgCardUrl:"https://img.freepik.com/free-photo/vibrant-portrait-person-bright-environment_23-2151078796.jpg?t=st=1709200466~exp=1709201066~hmac=4281526a3c9848a33e9e06221e4ed59286a702fb2d7346e3647c53db69544e342x.webp" , role:"Explorer", content:{}},
-    //     {name: "IElTS Academic Reading E-Books - volumn 2/3", bgCardUrl:"https://img.freepik.com/free-photo/vibrant-portrait-person-bright-environment_23-2151078775.jpg" , role:"Starter", content:{}},
-    //     {name: "Listening General E-Books - volumn 2", bgCardUrl:"https://mediablog.cdnpk.net/sites/9/2022/03/spring-pattern-collection.png?t=st=1709200466~exp=1709201066~hmac=f59cf8ee36d6b1a190966745b87d4991ad06faca819d734ec623a8a32db4bbb5" , role:"Flyer", content:{}},
-
-    // ];
-
-
 
     useEffect(() => {
         async function fetchData() {
@@ -112,7 +53,6 @@ export default function Resources(){
         }
       
         fetchData();
-        
          // Call the fetchData function when the component mounts
       }, []); // Empty dependency array to ensure it runs only once
     function addResource(newResource){
@@ -127,7 +67,6 @@ export default function Resources(){
             else newResources.push(resources[i]);
         }
         setResources(newResources);
-
     }
     const handleCopyText = async (text)=>{
       try {
@@ -253,3 +192,60 @@ export default function Resources(){
     
     
 }
+
+
+    // const deleteResource=(resourceID) =>{
+    //   async function deleteData() {
+    //     const url = baseUrl + "api/resources/";
+    //   try {
+    //     const response = await fetch(url, {
+    //       method: "DELETE",
+    //       headers:{
+    //           'Content-Type': 'application/json',
+    //           Authorization: 'Bearer ' + localStorage.getItem('access'),
+    //       },
+    //       body: JSON.stringify({id: resourceID}),
+    //   });
+    //     if(response.status === 404) setNotFound(true);
+    //     if(response.status === 401) 
+    //     {
+    //       navigate("/login",{
+    //       state:{ previousUrl : location.pathname,}
+    //     });
+    //   }
+    //     else if (!response.ok) {
+    //       console.error("Something went wrong");
+    //       return;
+    //     }
+    //     else if(response.ok){
+    //       let newResources  = [];
+    //       for(let i of resources){
+    //         if(i.id !== resourceID){
+    //           newResources.push(i);
+    //         }
+    //       }
+    //       setResources(newResources);
+
+    //     }
+
+    //   } catch (error) {
+    //     console.error("Error DELETE data:", error);
+    //   }
+    //   }
+  
+    //   deleteData();
+
+    // }
+
+    // const profile = useRef();
+    // const loadingProfile = useRef(); 
+    // const errorProfile = useRef(); 
+    // const works = [
+    //     {name: "IELTS Academic Writing E-Books - volumn 3", bgCardUrl:"https://img.freepik.com/free-photo/vibrant-portrait-person-bright-environment_23-2151078796.jpg?t=st=1709200466~exp=1709201066~hmac=4281526a3c9848a33e9e06221e4ed59286a702fb2d7346e3647c53db69544e342x.webp" , role:"Explorer", content:{}},
+    //     {name: "IElTS Academic Reading E-Books - volumn 2/3", bgCardUrl:"https://img.freepik.com/free-photo/vibrant-portrait-person-bright-environment_23-2151078775.jpg" , role:"Starter", content:{}},
+    //     {name: "Listening General E-Books - volumn 2", bgCardUrl:"https://mediablog.cdnpk.net/sites/9/2022/03/spring-pattern-collection.png?t=st=1709200466~exp=1709201066~hmac=f59cf8ee36d6b1a190966745b87d4991ad06faca819d734ec623a8a32db4bbb5" , role:"Flyer", content:{}},
+    //     {name: "IELTS Academic Writing E-Books - volumn 3", bgCardUrl:"https://img.freepik.com/free-photo/vibrant-portrait-person-bright-environment_23-2151078796.jpg?t=st=1709200466~exp=1709201066~hmac=4281526a3c9848a33e9e06221e4ed59286a702fb2d7346e3647c53db69544e342x.webp" , role:"Explorer", content:{}},
+    //     {name: "IElTS Academic Reading E-Books - volumn 2/3", bgCardUrl:"https://img.freepik.com/free-photo/vibrant-portrait-person-bright-environment_23-2151078775.jpg" , role:"Starter", content:{}},
+    //     {name: "Listening General E-Books - volumn 2", bgCardUrl:"https://mediablog.cdnpk.net/sites/9/2022/03/spring-pattern-collection.png?t=st=1709200466~exp=1709201066~hmac=f59cf8ee36d6b1a190966745b87d4991ad06faca819d734ec623a8a32db4bbb5" , role:"Flyer", content:{}},
+
+    // ];

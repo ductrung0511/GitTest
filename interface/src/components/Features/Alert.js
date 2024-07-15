@@ -1,9 +1,7 @@
-import { useEffect, useRef, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { baseUrl } from "../../Share";
+import { useEffect, useState } from "react";
+
 
 export default function Alert({ message, dataValue, setIsAlert, alertTime }){
-    const isCancelled = useRef(false);
     const [isShow, setIsShow] = useState(true);
     const [value, setValue] = useState(dataValue);
 
@@ -28,7 +26,7 @@ export default function Alert({ message, dataValue, setIsAlert, alertTime }){
 
     return( 
     <>
-        {isShow && <div id="toast-default" className="flex flex-col gap-2  z-30 shadow-xl fixed bottom-3 right-3 items-center w-full max-w-xs p-4 text-gray-500 bg-green-100 rounded-lg  dark:text-gray-400 dark:bg-gray-800" role="alert">
+    {isShow && <div id="toast-default" className="flex flex-col gap-2   shadow-xl z-50 fixed bottom-3 right-3 items-center w-full max-w-xs p-4 text-gray-500 bg-green-100 rounded-lg dark:bg-green-100  dark:text-gray-400 " role="alert">
                             <div className="ms-3 text-xs font-semibold text-black "> {message} </div>
                             <div className="flex flex-row shadow-lg  justify-between items-center px-6 hover:bg-gray-400  duration-700 w-full  text-black  rounded-lg dark:bg-blue-800 dark:text-blue-200">
                                 <span className="countdown font-mono text-6xl">

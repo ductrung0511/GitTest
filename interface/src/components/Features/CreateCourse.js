@@ -27,10 +27,13 @@ export default function CreateCourse({addOrUpdateCourse , id = 1, course = {
     const { name, value } = event.target;
     setCourseData({ ...courseData, [name]: value });
   }
+  let [error, setError] = useState('')
 
   function handleAddCourse(event) {
     event.preventDefault();
     // Send courseData to your backend to add the course
+    if(courseData.bgCardUrl.length  > 200 || courseData.bgCardUrlSecondary.length > 200 )
+      {setError('URL background must be shorter than 200 characters!')}
     const url = baseUrl + "api/courses/";
     fetch(url, {
       method: 'POST',
@@ -72,7 +75,6 @@ export default function CreateCourse({addOrUpdateCourse , id = 1, course = {
     .then((data) => {     
       addOrUpdateCourse(data);
       console.log(data, "data");
-      
     })
     .catch(error => {
       alert('Error adding course:', error);
@@ -124,9 +126,9 @@ export default function CreateCourse({addOrUpdateCourse , id = 1, course = {
         <button
           type="button"
           onClick={openModal}
-          className="rounded-md bg-blue-700 my-4 px-4 py-2 text-sm font-medium border-1 border-black text-black hover:bg-black/30 "
+          className="rounded-md bg-blue-700 my-4 px-4 py-2 text-sm font-medium border-1 border-black text-black hover:bg-black/30 duration-500 "
         >
-          Add or Update Course
+          {course.name === '' ? 'Create Course' : 'Edit Course Information'}
         </button>
       </div>
 
@@ -188,7 +190,9 @@ export default function CreateCourse({addOrUpdateCourse , id = 1, course = {
                       className="block w-full m-2 h-10 px-2 border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                     />
 
-                    <label htmlFor='bgCardUrl' className='text-sm font-semibold ' > Background Image Url </label>
+                    <label htmlFor='bgCardUrl' className='text-sm font-semibold ' > Background Image Url 
+                      <span className='text-red-400 font-mono'> {error !== ''  ? '------': '' } { error } </span>
+                    </label>
                     <input
                       type="text"
                       name="bgCardUrl"
@@ -200,7 +204,10 @@ export default function CreateCourse({addOrUpdateCourse , id = 1, course = {
                     />
 
 
-                    <label htmlFor='bgCardUrlSecondary' className='text-sm font-semibold ' >Secondary Background Image Url </label>
+
+                    <label htmlFor='bgCardUrlSecondary' className='text-sm font-semibold ' >Secondary Background Image Url
+                      <span className='text-red-400 font-mono'> {error !== ''  ? '------': '' } { error } </span>
+                     </label>
                     <input
                       type="text"
                       name="bgCardUrlSecondary"
@@ -386,23 +393,27 @@ export default function CreateCourse({addOrUpdateCourse , id = 1, course = {
                   </div>
 
                   <div className="mt-4">
+
+                    {course.name === '' && 
                     <button
                       type="button"
-                      className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                      className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 duration-500"
                       onClick={handleAddCourse}
                     >
-                    Add Course
+                    Create Course
                     </button>
+                    }
+                    {course.name !== '' && 
                     <button
                       type="button"
-                      className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                      className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 duration-500 "
                       onClick={handleUpdateCourse}
                     >
                     Update Course
-                    </button>
+                    </button>}
                     <button
                       type="button"
-                      className="inline-flex  ml-3  justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                      className="inline-flex  ml-3  justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-yellow-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                       onClick={closeModal}
                     >
                     Cancle

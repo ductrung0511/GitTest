@@ -16,9 +16,8 @@ export default function Session(){
 
 
     useEffect(() => {
-        async function fetchData() {
+      async function fetchData() {
             const url = baseUrl + "api/session/" + id;
-            console.log(url,"mock");
           try {
             const response = await fetch(url , {
               headers:{

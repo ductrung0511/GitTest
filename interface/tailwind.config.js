@@ -14,11 +14,7 @@ module.exports = {
         'color-secondary-dark': '#40916c',
         'color-accent' : '#0165FC',// //  #0165FC
         'color-vibrant' : '#ffc8dd'//  '#B74F6F',
-        
-
       }
-      
-
     },
     container:{
       center: true

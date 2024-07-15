@@ -1,11 +1,78 @@
-from .models import HomeDetails, Blog, ModelCourse, Question, Contact, ModelSession, Exercise, Section, Category, Profile, Resource
+from .models import  Blog, ModelCourse, Question, Contact, ModelSession, Exercise, Section, Category, Profile, Resource, Assignment
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import Blogserializer, ResourceSerializer, ModelSessionserializer, ProfileSerializer, ExerciseSerializer, UserSerializer, SectionSerializer, ContactSerializer,QuestionSerializer, CustomBlogSerializer, ModelCourseserializer
+from .serializers import Blogserializer, ResourceSerializer, ModelSessionserializer, ProfileSerializer, ExerciseSerializer, UserSerializer, SectionSerializer, ContactSerializer,QuestionSerializer, CustomBlogSerializer, ModelCourseserializer, AssignmentSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
-import json
+from django.contrib.auth.models import User
+
+
+
+
+
+@api_view(["POST", "GET", "PUT"])
+@permission_classes([IsAuthenticated])
+def assignment(request):
+    if request.method == "POST":
+        request.data["student"] = request.user.id
+        serializer = AssignmentSerializer(data = request.data )
+        if serializer.is_valid(): 
+            serializer.save()
+            return Response(serializer.data, status = status.HTTP_200_OK)
+        print(serializer.errors)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == "GET":
+        print(   request.data.get('id'), request.user.is_staff  )
+
+        if not request.user.is_staff and not request.data.get('id'):  #student and have no id of assignment in the request , for assignment dashboard of student
+            try:
+                assignments  = Assignment.objects.filter( student = request.user)
+                print(assignments)
+            except:
+                return Response({"error": "Assignment not found"},    status=status.HTTP_404_NOT_FOUND)
+            
+            data = AssignmentSerializer(assignments, many=True).data
+            for i in range(len(data)):
+                session = ModelSession.objects.get( pk=data[i]['session'] )
+                course = session.course.name
+                data[i]['session'] = str(session.id) + ' - ' + course
+                data[i]['student'] = request.user.username
+            return Response(data, status = status.HTTP_200_OK)
+
+        if request.data.get('id'):
+            try:
+                assignment = Assignment.objects.get(pk = request.data.get('id'))
+            except:
+                return Response({"error": "Assignment not found"},    status=status.HTTP_404_NOT_FOUND)
+            data = AssignmentSerializer(assignment, many=False).data
+            return Response(data, status = status.HTTP_200_OK)
+        else:
+            try:
+                assignments = Assignment.objects.all()
+            except:
+                return Response({"error": "Assignments not found"}, status=status.HTTP_404_NOT_FOUND)
+            data = AssignmentSerializer(assignments, many=True).data
+            for i in range(len(data)):
+                session = ModelSession.objects.get( pk=data[i]['session'] )
+                student = User.objects.get(pk = data[i]['student'])
+                course = session.course.name
+                data[i]['session'] = str(session.id) + ' - ' + course
+                data[i]['student'] = student.username
+            return Response(data, status = status.HTTP_200_OK)
+
+    elif request.method == "PUT":
+        try:
+            assignment = Assignment.objects.get(pk = request.data.get('id'))
+        except:
+            return Response({"error": "Assignment not found"}, status=status.HTTP_404_NOT_FOUND)
+        serializer = AssignmentSerializer(instance=assignment, data= request.data, partial=True)
+        if serializer.is_valid(): 
+            serializer.save() 
+            return Response(serializer.data,  status=status.HTTP_201_CREATED)
+        print(serializer.errors)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(["GET", "POST"])
 def index(request):
@@ -354,7 +421,6 @@ def exercise_session(request, id):
 @permission_classes([IsAuthenticated])
 def exercises(request): 
     if request.method  == "GET": 
-
         exercises = Exercise.objects.all()
         profile  = Profile.objects.get(user= request.user)
         postExercises = []
@@ -514,8 +580,11 @@ def performance(request):
                 exerciseTotalCourses += totalExercise
         log = {}
         for key in profile.exerciseLog.keys():
-            exercise = Exercise.objects.get(pk = key)
-            log[exercise.name] = profile.exerciseLog[key]
+            try:
+                exercise = Exercise.objects.get(pk = key)
+                log[exercise.name] = profile.exerciseLog[key]
+            except:
+                print("Query not exist")
         data = { 'courses' :courses, 'exerciseLog': log ,  'exerciseTotalCourses': exerciseTotalCourses}
         return Response(data, status = status.HTTP_200_OK)
         
@@ -579,7 +648,8 @@ def dashboard(request):
         return Response(data, status = status.HTTP_200_OK)
 
 
-        
+
+
 
 
 

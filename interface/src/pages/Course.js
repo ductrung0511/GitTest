@@ -8,7 +8,6 @@ export default function Course(){
     const [notFound, setNotFound] = useState(false);   
     const [course, setCourse] =useState();
     const [sessions, setSessions] =useState([]);
-    
     const navigate = useNavigate();
     const location = useLocation();
     useEffect(() => {
@@ -63,7 +62,7 @@ export default function Course(){
         return <div >Loading... the component</div>;
       }
     
-    return <CourseComponentSpace course={course} sessions={sessions} id={id} categoryID={course.category} />;
+    return <CourseComponentSpace course={course} sessions={sessions} id={id} categoryID={course.category}/>;
     
     
 }

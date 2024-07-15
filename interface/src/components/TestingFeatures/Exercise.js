@@ -4,9 +4,9 @@ import { Fragment } from 'react'
 import { baseUrl } from '../../Share';
 import { Tooltip } from 'react-tooltip';
 import Alert from '../Features/Alert';
-function Exercise( { questionsData, instruction,  exerciseID}) {
+function Exercise( { questionsData, instruction,  exerciseID, description}) {
     const [exerciseLog, setExerciseLog]  = useState( JSON.parse(localStorage.getItem("exerciseLog")));
-    console.log(exerciseLog, "ExerciseLog in Exercise");
+    console.log(exerciseLog, "ExerciseLog in Exercise"); 
 
     console.log("Exercise props Panel:",{ questionsData, instruction, exerciseLog, exerciseID});
 
@@ -28,6 +28,7 @@ function Exercise( { questionsData, instruction,  exerciseID}) {
     const [correctScore, setCorrectScore] = useState(0);
     const [askedCount, setAskedCount] = useState(0);
     const totalQuestion = questionsData.length;
+    const wrongAnswer = useRef([])
 
     const [isAlert, setIsAlert] = useState(false);
     const message = useRef('');
@@ -78,6 +79,7 @@ function Exercise( { questionsData, instruction,  exerciseID}) {
             setIsAlert(true);
             message.current = "Incorrect Answer!" + question + " ==> Correct Answer: " + correctAnswer ;
             setAlertTime((prev) => prev + 1);
+            wrongAnswer.current = [...wrongAnswer.current, questionsData[ askedCount ] ];
         }
         let realCount = askedCount + 1;
         setAskedCount(askedCount + 1);
@@ -103,7 +105,6 @@ function Exercise( { questionsData, instruction,  exerciseID}) {
             dataPut[exerciseID].push(Math.ceil((correctScore/totalQuestion) * 100));
         }
 
-        console.log(dataPut,  'hello data PUT');
         const url = baseUrl + 'api/profile/';
         fetch(url, {
             method: "PUT",
@@ -133,18 +134,15 @@ function Exercise( { questionsData, instruction,  exerciseID}) {
             <button
                 type="button"
                 onClick={openModal}
-                data-tooltip-content='Nhấp vào để làm bài trắc nghiệm thôi!'
+                data-tooltip-content='Nhấp vào để làm bài trắc nghiệm !'
                 data-tooltip-id="tooltip-exercise"
-              className="rounded-md bg-black px-4 py-2 text-sm font-medium text-white hover:bg-black/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75"
+              className="rounded-md bg-black px-4 py-2 text-sm font-medium text-white hover:bg-white hover:text-black  duration-500  hover:scale-95  "
             >
               View Question
             </button>
             <Tooltip id='tooltip-exercise' />
-
-
-
           </div>
-    
+          
           <Transition appear show={isOpen} as={Fragment}>
             <Dialog as="div" className="relative z-10" onClose={closeModal}>
               <Transition.Child
@@ -192,26 +190,26 @@ function Exercise( { questionsData, instruction,  exerciseID}) {
                     <div className='grid grid-cols-6 gap-1'>
 
 
-
-                    
-
+        
 
                     {
                         (askedCount >= totalQuestion) &&
                             <div className='col-span-4'>
-                                <div className="flex justify-center items-center min-h-screen">
-                                <div className="bg-white p-6 rounded-lg shadow-lg">
-                                    <button className='text-white px-4 py-1 bg-gray-300 rounded-lg flex flex-row items-center gap-2 mb-4'> 
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-white">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-12.814a2.25 2.25 0 1 0 3.933-2.185 2.25 2.25 0 0 0-3.933 2.185Z" />
-                                        </svg>
-                                        Copy Exercise Link
-                                    </button>
-                                    <h1 className="text-2xl font-bold mb-4">Quiz Game</h1>
+                                <div className="flex flex-col justify-center items-center overflow-scroll overflow-y-auto min-h-screen">
+                                <div className="bg-white p-6 rounded-lg  mt-32 shadow-lg">
+                                    
+                                        {console.log(wrongAnswer.current)}
+                                    <h1 className="text-2xl font-bold mb-4">End of Multiple Choice Questions! </h1>
                                     <div className='p-2' >
-                                        <span className="text-right font-semibold mb-2 bg-purple-300 rounded-lg p-2"> 
-                                        Correct answer: {correctScore}/{totalQuestion}
+                                        <span className="text-right font-semibold mb-2 bg-black text-white rounded-lg p-2"> 
+                                        Your Score: {correctScore}/{totalQuestion}
                                         </span>
+                                    </div>
+                                    <div className="my-4" id="result"> 
+                                        <p className='text-sm'>- Click the black button to proceed to the "Word testing environment!"
+                                        <br/>- But remember to notedown and understand everywords in the previous part before proceeding!
+                                        <br/>- Click on "Play again" if you are not sure of the Vocabulary! 
+                                        </p>
                                     </div>
                     
                                     <div className="mb-4" id="result"></div>
@@ -219,26 +217,43 @@ function Exercise( { questionsData, instruction,  exerciseID}) {
                                         <button
                                             onClick={handleSubmitExercise}
                                             type="button"
-                                            className="bg-purple-500 text-purple-950 duration-500 px-4 py-2 border  border-transparent rounded-lg mr-2 hover:bg-green-300 hover:text-gray-800"
+                                            className=" hover:scale-95 text-purple-950 duration-500 px-4 py-2 border  border-transparent rounded-lg mr-2 hover:bg-green-400 hover:text-gray-800"
                                         >
                                             Submit!
                                         </button>
                                         <button
                                             type="button"
-                                            className="bg-purple-500 text-purple-900  duration-500 px-4 py-2  border border-transparent rounded-lg hover:bg-red-300 hover:text-gray-800"
+                                            className=" text-purple-900 hover:scale-95  duration-500 px-4 py-2  border border-transparent rounded-lg hover:bg-red-300 hover:text-gray-800"
                                             onClick={restartQuiz}
                                         >
                                             Play Again!
                                         </button>
                                     <button
                                     type="button"
-                                    className="inline-flex  ml-1 justify-center rounded-md duration-500 border border-transparent bg-blue-100 px-4 py-2 text-base  text-purple-900 hover:bg-yellow-300   "
+                                    className="  hover:scale-95  ml-1 justify-center rounded-md duration-500 border border-transparent bg-blue-100 px-4 py-2 text-base  text-purple-900 hover:bg-yellow-300   "
                                     onClick={closeModal}
                                     >
                                     Quit
                                     </button>
                                 
                                     </div>
+                                </div>
+
+                                <div className='rounded-lg p-2   shadow-lg m-4 mt-10 '>
+                                    <div className='p-4 text-sm font-light text-gray-600 bg-gray-200'>
+
+                                        {wrongAnswer.current.length > 4 && <p> Oh no! You need to improve your vocabulary more. Below is the list of words you might need to learn again. Try hard to improve it next time!</p>}
+                                        {(wrongAnswer.current.length <= 4 && wrongAnswer.current.length > 0  ) && <p> Good job! Your vocabulary skill seem good today! But there might be some minor mistake. Check out the list of words you might need to learn again. Good luck!</p>}
+                                        {(wrongAnswer.current.length ===0 ) && <p>  Exellent!  You make no mistake in the test! </p>}
+                                    </div>
+                                    {wrongAnswer.current.map((item) => {return(
+
+                                        <div className='rounded-lg p-1 ml-7'>
+                                            <p>-{item.question}: <br/> {item.correct_answer}</p>
+                                        </div>
+                                    )})}
+
+
                                 </div>
                             </div>
                             </div>
@@ -251,31 +266,36 @@ function Exercise( { questionsData, instruction,  exerciseID}) {
                     { (askedCount < totalQuestion) &&
                     
                     <div className="flex  col-span-4 justify-center h-[90vh] items-center my-2 overflow-y-auto">
-                        <div className="bg-white p-6 rounded-lg shadow-lg">
-                            <h1 className="text-2xl font-bold mb-4">Quiz Game <span style={{"--value":180}} className='text-black'> hello</span></h1>
+                        <div className="bg-white min-w-full p-6 rounded-lg shadow-lg ">
+                            <div className="text-sm font-light mb-4 flex flex-row gap-1"> 
+                                <img className='w-3 h-3 mt-1' src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAd0lEQVR4nO3WMQoAIQwFUe9/6dluC0F2q5B850EKy0EiriVJE/Fz2iMt5MSQamw38vfcZfJDdu5INdKeX6aHSLpk2UkLOTGk+43QbF7XhrRFWggpzy/TQyRdsuykhZwYUo3Dp/Dr3GXyQ3buSDXSnl+mh0jSGuEBS8aecNn4VVgAAAAASUVORK5CYII="/>
+                                <span>
+                                    Multiple Choice Questions  
+                                </span>
+                            </div>
                             
                             <div className='flex flex-row gap-2'>
 
-                            <div className='p-2' >
-                                <span className="text-right font-semibold mb-2 bg-purple-300 rounded-lg p-2"> 
-                                Question number: {askedCount + 1} 
-                                </span>
+                                <div className='p-2' >
+                                    <span className="text-right font-semibold mb-2 bg-black text-white rounded-lg p-2"> 
+                                    Question {askedCount + 1}: 
+                                    </span>
+                                </div>
+                                {/* <div className='p-2' >
+                                    <span className="text-right font-semibold mb-2 bg-purple-300 rounded-lg p-2"> 
+                                    Correct answer: {correctScore}/{totalQuestion}
+                                    </span>
+                                </div> */}
                             </div>
-                            <div className='p-2' >
-                                <span className="text-right font-semibold mb-2 bg-purple-300 rounded-lg p-2"> 
-                                Correct answer: {correctScore}/{totalQuestion}
-                                </span>
-                            </div>
-                            </div>
-                            <h2 className="text-gray-900  text-base mb-4">{question}</h2>
+                            <h2 className="text-gray-900 ml-20  text-base my-4">{question}</h2>
                             <ul className="space-y-2 mb-4">
                                 {options.map((option, index) => (
                                     <li
                                         key={index}
                                         className={`py-2 px-4 rounded-lg border ${
                                             selectedOption === option
-                                                ? 'bg-gray-300 border-gray-300'
-                                                : 'bg-purple-500 text-white border-purple-500 hover:bg-gray-300 hover:border-gray-300 hover:text-gray-800'
+                                                ? 'bg-gray-300 border-gray-300 '
+                                                : 'bg-white text-black border-purple-500 hover:bg-gray-300 hover:border-gray-300 hover:text-gray-800'
                                         }`}
                                         onClick={() => selectOption(option)}
                                     >
@@ -283,39 +303,28 @@ function Exercise( { questionsData, instruction,  exerciseID}) {
                                     </li>
                                 ))}
                             </ul>
-                            <div className="flex justify-between">
+                            <div className="flex justify-between ml-10">
                                 <button
                                     type="button"
-                                    className="bg-purple-500 border border-transparent text-purple-900 px-4 py-2 rounded-lg mr-2 hover:bg-gray-300 hover:text-gray-800"
+                                    className="border border-transparent bg-gray-200 text-purple-900 px-4 py-2 rounded-lg mr-2 hover:bg-gray-300 hover:text-gray-800"
                                     onClick={checkAnswer}
                                 >
                                     Check Answer
                                 </button>
-                                <button
-                                    type="button"
-                                    className="bg-purple-500 border border-transparent text-purple-900 px-4 py-2 rounded-lg hover:bg-gray-300 hover:text-gray-800"
-                                    onClick={restartQuiz}
-                                >
-                                    Play Again!
-                                </button>
-                                <div className=" ml-1">
-                                    <button
-                                    type="button"
-                                    className="inline-flex h-full justify-center items-center rounded-md border border-transparent bg-blue-100 px-4  text-base  text-purple-900 hover:bg-blue-200 "
-
-                                    onClick={closeModal}
-                                    >
-                                    Cancel Work
-                                    </button>
-                                </div>
                             </div>
+
                         </div>
                                 </div>
 
                     }
                     <div className='col-span-2 mt-24 mx-3 overflow-y-scroll h-80  scroll-behavior-smooth scrollbar-thin scroll-hide'>
-                        <p className='text-base font-semibold text-purple-800'> Intruction for your Work</p>
-                        <p className='text-sm font-semibold  text-purple-800' > {instruction}
+                    <p className='text-base font-semibold '> Description:</p>
+                        <p className='text-sm font-semibold ' > {description}
+                        </p>
+                        <div className="border-1 border-gray-200 w-1/2 my-4"> </div>
+
+                        <p className='text-base font-semibold '> Intruction:</p>
+                        <p className='text-sm font-semibold ' > {instruction}
                         </p>
                         <div className="border-1 border-gray-200 w-full my-4"> </div>
                         <p className='text-base font-semibold text-purple-800'> Your attempts</p>

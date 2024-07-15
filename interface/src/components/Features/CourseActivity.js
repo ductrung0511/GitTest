@@ -14,6 +14,7 @@ export default function CourseActivity({profileData}){
     const addCourse = (newCourse) => {
         setCourses([...courses, newCourse]);
       };
+    
     const [addSuccessNotification, setAddSuccessNotification] = useState(false);
     const [addFailNotification, setAddFailNotification] = useState(false);
     const courseTotal = localStorage.getItem('courseAuth').split('/').filter( item => item !== '').length;

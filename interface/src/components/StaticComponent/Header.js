@@ -64,7 +64,7 @@ export default function Header(props) {
                           // data-tooltip-id ='my-tooltip'
                           // data-tooltip-content={item.tip}
                           // data-tooltip-place="bottom"
-                          {...((localStorage.getItem('courseAuth')?.split('/').length < 4 || !localStorage.getItem('courseAuth'))
+                          {...( ( (localStorage.getItem('courseAuth')? localStorage.getItem('courseAuth').split('/').length < 4 : true) || !localStorage.getItem('courseAuth'))
                                   ? {
                                       'data-tooltip-id': 'my-tooltip',
                                       'data-tooltip-content': item.tip,

@@ -254,7 +254,7 @@ export default function Performance(){
 
 
 
-        <div  data-tooltip-content='Khoá học đã đăng kí'   data-tooltip-id = 'tooltip-intro'  className="divider col-span-4 mt-4  text-2xl font-bold  text-gray-300">Your registerd courses</div> 
+        {/* <div  data-tooltip-content='Khoá học đã đăng kí'   data-tooltip-id = 'tooltip-intro'  className="divider col-span-4 mt-4  text-2xl font-bold  text-gray-300">Your registerd courses</div>  */}
 
         {courses?.map((course) => {
             return(
@@ -263,7 +263,7 @@ export default function Performance(){
                             <div className="  relative bg-white h-full"> 
                                 <NavLink to={'/workspace/courses/' + course.id} className='no-underline  h-full '>
 
-                                    <img src={course.bgCardUrl} alt="" className="object-cover h-full ">
+                                    <img src={course.bgCardUrl} alt="" className="object-cover h-full max-h-[43vh] ">
                                     </img>
                                 </NavLink>
                             </div>
@@ -327,7 +327,7 @@ export default function Performance(){
             {course?.sessionsExercise.map((session, index)=>{
                 return <div className="flex flex-col gap-2 m-1 p-2 rounded-lg shadow-lg  bg-white" key={uuidv4()}>
                     <NavLink  data-tooltip-content='xem tiết học và làm bài tập của mình nha bạn ơiﮩ٨ـﮩﮩ٨ـ ♡ ﮩ٨ـﮩﮩ٨ـ  ' data-tooltip-id="tooltip-course" data-tooltip-place="bottom" to={'/workspace/session/' + session.id} className='no-underline text-black'>
-                        <div className="text-sm font-light"> Session <span className="font-semibold ">{index} </span> : {session.name}</div>
+                        <div className="text-sm font-light"> Session <span className="font-semibold ">{index + 1} </span> : {session.name}</div>
                     </NavLink>
                     <progress className="progress progress-warning w-56 max-h-0.5" value={session.progress * 100 } max="100"></progress>
                 </div>

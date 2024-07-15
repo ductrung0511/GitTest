@@ -115,33 +115,11 @@ class Exercise(models.Model):
     def __str__(self):
         return f"{self.name} - {self.session.id}"
 
-    """
-[{"question": "In &quot;Call Of Duty: Zombies&quot;, you can upgrade the &quot;Apothicon Servant&quot; in the &quot;Shadows Of Evil&quot; map.", "correct_answer": "False", "incorrect_answers": ["True"]}, {"question": "In IronMan2 answer is True: Zombies&quot;, you can upgrade the &quot;Apothicon Servant&quot; in the &quot;Shadows Of Evil&quot; map.", "correct_answer": "True", "incorrect_answers": ["False"]}]
-"""
-
-    """
-class Course(models.Model):
-    model_course = models.ForeignKey(ModelCourse, on_delete=models.CASCADE)
-    teacher = models.CharField(max_length=100)
-    dateStart = models.DateField()
-    dateEnd = models.DateField()
-    gradeBookUrl = models.URLField()
-    attendanceExcelUrl = models.URLField()
-
-
-    
-    def __init__(self) :
-        return f"{self.name}"
-    """
-
 class HomeDetails(models.Model):
     backgroundImageUrl = models.CharField(max_length=200)
     firstViewLine = models.CharField(max_length=100)
     videoUrl =  models.CharField(max_length=200)
     courseBackgroundImageUrl = models.CharField(max_length=200)
-
-#class Teacher(models.Model):
-#    pass 
 
 class Blog(models.Model):
     title = models.CharField(max_length = 100)
@@ -196,4 +174,16 @@ class Question(models.Model):
     def __str__(self) -> str:
         return f"question: {self.id} {self.question}"
 
-
+class Assignment(models.Model):
+    name = models.CharField(max_length = 100, blank=False, null=False)
+    question  = models.TextField()
+    description = models.CharField(max_length = 200, default="")
+    bgCardUrl = models.URLField(null=True, blank=True, default = "https://img.freepik.com/free-photo/workplace-with-open-notebook_1101-349.jpg?t=st=1709636664~exp=1709640264~hmac=e0b68f45114336a69e6d5ed40f4f271a4c89bb40012373021542a842501ac5bb&w=826")
+    answer = models.TextField(null=True, blank=True)
+    images = models.TextField(null=True, blank=True)
+    score = models.IntegerField(null=True, blank=True)
+    comment = models.TextField(null=True, blank=True)
+    student = models.ForeignKey(User, on_delete=models.CASCADE)
+    session = models.IntegerField()
+    def __str__(self):
+        return f"{self.name} - {self.session} - {self.student.username}"

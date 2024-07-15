@@ -1,6 +1,6 @@
 import './index.css';
 import { createContext, useState, useEffect } from 'react';
-import { BrowserRouter, HashRouter, Route, Routes} from 'react-router-dom';
+import {  HashRouter, Route, Routes} from 'react-router-dom';
 import Header from './components/StaticComponent/Header';
 import Home from './pages/Index';
 import BlogHome from './pages/BlogHome';
@@ -8,19 +8,18 @@ import StudentSpace from './pages/StudentSpace';
 import CourseHome from './pages/CourseHome';
 import Blog from './pages/Blog';
 import Course from './pages/Course';
-import QuizApp from './components/TestingFeatures/MultiQuestionTesting';
 import Session from './pages/Session';
 import HomeSpace from './pages/HomeSpace';
 import Login from './pages/Login';
 import { baseUrl } from './Share';
 import Register from './pages/Register';
-import PopularPosts from './components/StaticComponent/PopularPost';
-import NewSessionLayout from './components/TestingFeatures/NewSessionLaygout';
 import Resources from './pages/Resources';
 import InDevelopment from './pages/InDevelopment';
 import useFetch from './components/hook/useFetch';
 import Performance from './pages/Performance';
 import Testing from './pages/Testing';
+import AssignmentTeacher from './components/Features/AssignmentTeacher';
+import AssignmentStudent from './components/Features/AssignmentStudent';
 
 
 export const loginContext = createContext();
@@ -93,7 +92,7 @@ function App() {
         <Route path="/workspace/session/:id" element = {<StudentSpace><Session/></StudentSpace> }/>    
         <Route path="/workspace/resources/" element = {<StudentSpace><Resources/></StudentSpace> }/>    
         <Route path="/workspace/calendar/" element = {<StudentSpace><InDevelopment/></StudentSpace> }/>    
-        <Route path="/workspace/assignment/" element = {<StudentSpace><InDevelopment/></StudentSpace> }/> 
+        <Route path="/workspace/assignment/" element = {<StudentSpace>   {localStorage.getItem('role') !== "Student" && <AssignmentTeacher/> } {localStorage.getItem('role') === "Student" && <AssignmentStudent/> }     </StudentSpace> }/> 
         <Route path="/workspace/performance/" element = {<StudentSpace> <HomeSpace/>  </StudentSpace> }/>    
 
         <Route path='/login' element={<Login/>} />
@@ -103,7 +102,7 @@ function App() {
         <Route path="/blog" element = { <Header className="bg-blue-300 text-white tracking-wider"> <BlogHome/> </Header>}/>
         <Route path="/" element = { <Header className="bg-white text-white tracking-wider" threshold={10}>     <Home/> </Header>}/>
         <Route path="/blog/:id" element = { <Header className="bg-blue-300 text-white tracking-wider " threshold={0}> <Blog/>  </Header>}/>
-        <Route path="/testing" element = {  <Header className="bg-blue-300 text-white tracking-wider " threshold={10}> <Testing/>  </Header>  }/> 
+        <Route path="/testing" element = {  <Header className="bg-blue-300 text-white tracking-wider " threshold={10}> <Testing/>  </Header>}/> 
         
 
       </Routes>

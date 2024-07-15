@@ -40,14 +40,10 @@ urlpatterns = [
     path("api/performance/", views.performance),
     path("api/category/<int:id>", views.category),
     path("api/exercise_session/<int:id>", views.exercise_session),
-    
-    
-
-    
+    path("api/assignment/", views.assignment),
     path("api/questions/", views.questionView, name="questionView"),
     #path("api/blog/", views.blog, name="blog"),
     path("api/dashboard/", views.dashboard),
-
     path("api/blog/<int:id>", views.blogDetails, name="blogDetails"),
     path( '', TemplateView.as_view(template_name= 'index.html')),
 
